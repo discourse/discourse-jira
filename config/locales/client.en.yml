@@ -1,0 +1,15 @@
+en:
+  js:
+    discourse_jira:
+      create_issue: "Create Issue"
+      create_form:
+        project: "Project"
+        issue_type: "Issue type"
+        title: "Issue title"
+        description: "Please provide a description of the issue"
+        continue: "Continue"
+      issue_creation_success: "Your issue %{issueKey} has been created! Click the issue number link below to view in Jira."
+      issue_creation_error: "There was a problem creating your issue. Please submit a issue via your local territory’s standard process."
+
+    action_codes:
+      jira_issue: "Jira issue created"

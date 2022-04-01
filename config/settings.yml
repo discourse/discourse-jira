@@ -1,0 +1,14 @@
+plugins:
+  discourse_jira_enabled:
+    default: false
+    client: true
+  discourse_jira_url:
+    default: ""
+  discourse_jira_username:
+    default: ""
+  discourse_jira_password:
+    default: ""
+    secret: true
+  discourse_jira_webhook_token:
+    default: ""
+    secret: true

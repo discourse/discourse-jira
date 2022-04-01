@@ -1,0 +1,61 @@
+{{#d-modal-body title="discourse_jira.create_issue"}}
+  {{#if issueKey}}
+    <p>{{i18n "discourse_jira.issue_creation_success" issueKey=issueKey}}</p>
+    <p><a href="{{issueUrl}}">{{issueKey}}</a></p>
+  {{else}}
+    <div class="form">
+      <section class="field">
+        <section class="field-item">
+          <label>{{i18n "discourse_jira.create_form.project"}}</label>
+          {{combo-box
+            name="project_key"
+            content=projects
+            valueProperty="key"
+            value=projectKey
+            onChange=(action (mut projectKey))
+          }}
+        </section>
+
+        <section class="field-item">
+          <label>{{i18n "discourse_jira.create_form.issue_type"}}</label>
+          {{combo-box
+            name="issue_type"
+            content=issueTypes
+            value=issueTypeId
+            onChange=(action (mut issueTypeId))
+          }}
+        </section>
+      </section>
+
+      <section class="field">
+        <label>{{i18n "discourse_jira.create_form.title"}}</label>
+        {{input value=title class="jira-title" autofocus="autofocus"}}
+      </section>
+
+      <section class="field">
+        <label>{{i18n "discourse_jira.create_form.description"}}</label>
+        {{d-textarea value=description class="jira-description" autofocus="autofocus"}}
+      </section>
+    </div>
+  {{/if}}
+{{/d-modal-body}}
+
+<div class="modal-footer">
+  {{#if createdIssue}}
+    {{d-button
+      class="btn-primary"
+      action=(action "cancel")
+      label="discourse_jira.create_form.continue"
+    }}
+  {{else}}
+    {{d-button
+      class="btn-primary"
+      action=(action "createIssue")
+      label="discourse_jira.create_issue"
+      disabled=disabled
+      isLoading=loading
+    }}
+
+    <a class="cancel-action" href {{action "cancel"}}>{{i18n "cancel"}}</a>
+  {{/if}}
+</div>

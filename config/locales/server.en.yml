@@ -1,0 +1,11 @@
+en:
+  discourse_jira:
+    issue_title: "[Discourse] %{description}"
+    bad_api_response: "Bad Jira API response code %{status_code}"
+
+  site_settings:
+    discourse_jira_enabled: "Enable Discourse-Jira integration"
+    discourse_jira_url: "URL to Jira instance (should end with a /)"
+    discourse_jira_username: "Username of the user creating issues"
+    discourse_jira_password: "API key assigned to the user creating issues. A password might works, but is unsafe and the API was deprecated by Atlassian"
+    discourse_jira_webhook_token: "This token must be passed in the 't' query parameter of the webhook. For example: https://example.com/discourse-jira/issues/webhook?t=supersecret"
