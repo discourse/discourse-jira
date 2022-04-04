@@ -41,13 +41,12 @@ module DiscourseJira
     def create
       raise Discourse::InvalidAccess if !SiteSetting.discourse_jira_enabled
 
-      truncated_description = params[:description].gsub(/\n/, ' ').gsub(/\ {2,}/, ' ').truncate(100, separator: /\s/)
-      short_description = I18n.t('discourse_jira.issue_title', description: truncated_description)
+      summary = I18n.t('discourse_jira.issue_title', title: params[:title])
 
       body_hash = {
         fields: {
           project: { key: params[:project_key] },
-          summary: short_description,
+          summary: summary,
           description: params[:description],
           issuetype: { id: params[:issue_type_id] }
         }
@@ -75,12 +74,16 @@ module DiscourseJira
           if current_user.guardian.can_create_post_on_topic?(topic)
             topic.add_moderator_post(
               current_user,
-              "A issue has been created: [#{short_description}](#{result[:issue_url]})",
+              I18n.t('discourse_jira.small_action', title: summary, url: result[:issue_url]),
               post_type: Post.types[:small_action],
               action_code: 'jira_issue'
             )
           end
         end
+
+        response = make_get_request(json[:self])
+        post.custom_fields['jira_issue'] = response.body
+        post.save_custom_fields
 
         render json: result
       end

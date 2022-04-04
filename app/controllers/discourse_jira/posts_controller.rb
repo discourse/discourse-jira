@@ -25,9 +25,6 @@ module DiscourseJira
         summary
       end
 
-      p params[:post_number].to_i
-      p last_post_number
-
       template = File.read(Rails.root.join(Rails.root, 'plugins/discourse-jira/lib/templates/topic_summary.mustache'))
       result = Mustache.render(template, args).strip
 

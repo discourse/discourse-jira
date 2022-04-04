@@ -7,7 +7,7 @@ module DiscourseJira
 
     config.after_initialize do
       Discourse::Application.routes.append do
-        mount ::DiscourseJira::Engine, at: '/discourse-jira'
+        mount ::DiscourseJira::Engine, at: '/jira'
       end
     end
   end

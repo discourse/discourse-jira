@@ -19,7 +19,7 @@ describe DiscourseJira::IssuesController do
     it 'should return a list of projects and issue types' do
       sign_in(admin)
 
-      get '/discourse-jira/issues/preflight.json'
+      get '/jira/issues/preflight.json'
       expect(response.parsed_body).to eq({
         'email' => admin.email,
         'projects' => [
@@ -38,7 +38,7 @@ describe DiscourseJira::IssuesController do
 
   describe '#create' do
     it 'requires user to be signed in' do
-      post '/discourse-jira/issues.json'
+      post '/jira/issues.json'
       expect(response.status).to eq(403)
     end
 
@@ -46,7 +46,7 @@ describe DiscourseJira::IssuesController do
       SiteSetting.discourse_jira_enabled = false
       sign_in(admin)
 
-      post '/discourse-jira/issues.json'
+      post '/jira/issues.json'
       expect(response.status).to eq(403)
     end
 
@@ -58,7 +58,7 @@ describe DiscourseJira::IssuesController do
         to_return(status: 201, body: '{"id":"10041","key":"DIS-42","self":"https://discoursetest.atlassian.net/rest/api/2/issue/10041"}', headers: {})
 
       expect do
-        post '/discourse-jira/issues.json', params: {
+        post '/jira/issues.json', params: {
           project_key: 'DIS',
           description: 'This is a bug',
           issue_type_id: '10001',

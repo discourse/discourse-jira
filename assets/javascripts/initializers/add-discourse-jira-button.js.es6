@@ -1,5 +1,12 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import showModal from "discourse/lib/show-modal";
+import PostCooked from "discourse/widgets/post-cooked";
+import {
+  iconNode,
+  registerIconRenderer,
+  replaceIcon,
+} from "discourse-common/lib/icon-library";
+import { iconHTML } from "discourse-common/lib/icon-library";
 
 export default {
   name: "discourse-jira",
@@ -16,8 +23,10 @@ export default {
           controller.fillDescription(this.model);
         });
 
-        api.addPostMenuButton("jira", () => {
-          if (currentUser.can_create_jira_issue) {
+        api.includePostAttributes("jira_issue");
+
+        api.addPostMenuButton("jira", (attrs) => {
+          if (currentUser.can_create_jira_issue && !attrs.jira_issue) {
             return {
               action: "createIssue",
               icon: "tag",
@@ -27,6 +36,39 @@ export default {
               position: "first",
             };
           }
+        });
+
+        api.decorateWidget("post-contents:after-cooked", (helper) => {
+          const postModel = helper.getModel();
+          if (!postModel || !postModel.jira_issue) {
+            return;
+          }
+
+          const jira = postModel.jira_issue;
+
+          const jiraUrl = jira.self.replace(
+            /\/rest\/api\/.*$/,
+            "/browse/" + jira.key
+          );
+
+          const cooked = `
+            <aside class='quote jira-issue' data-jira-key='${jira.key}'>
+              <div class='title'>
+                ${iconHTML("tag")}
+                <a href='${jiraUrl}'>${jira.fields.summary}</a>
+                <i>(${jira.key})</i>
+                <span class='jira-status jira-status-${jira.fields.status.id}'>
+                  ${jira.fields.status.name}
+                </span>
+              </div>
+              <blockquote>
+                ${jira.fields.description}
+              </blockquote>
+            </aside>
+          `;
+
+          const postCooked = new PostCooked({ cooked }, helper);
+          return helper.rawHtml(postCooked.init());
         });
       });
     }

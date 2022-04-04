@@ -25,4 +25,12 @@ after_initialize do
   add_to_serializer(:current_user, :include_can_create_jira_issue?) do
     scope.can_create_jira_issue?
   end
+
+  add_to_serializer(:post, :jira_issue, false) do
+    JSON.parse(object.custom_fields['jira_issue']) rescue nil
+  end
+
+  add_to_serializer(:post, :include_jira_issue?) do
+    scope.can_create_jira_issue? && object.custom_fields['jira_issue'].present?
+  end
 end

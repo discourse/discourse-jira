@@ -6,20 +6,32 @@ import { popupAjaxError } from "discourse/lib/ajax-error";
 import ModalFunctionality from "discourse/mixins/modal-functionality";
 
 export default Controller.extend(ModalFunctionality, {
-  requestedFor: "",
-  description: "",
-  createdFromPost: null,
-
   loading: false,
-  createdIssue: null,
-  preflightError: null,
+
+  projects: null,
+
+  topicId: null,
+  postNumber: null,
+  projectKey: null,
+  issueTypeId: null,
+  title: "",
+  description: "",
+
+  issueKey: null,
+  issueUrl: null,
 
   onShow() {
     this.setProperties({
-      createdIssue: null,
-      description: "",
       loading: false,
       projects: [],
+      topicId: null,
+      postNumber: null,
+      projectKey: null,
+      issueTypeId: null,
+      title: "",
+      description: "",
+      issueKey: null,
+      issueUrl: null,
     });
 
     this.preflightChecks();
@@ -27,7 +39,7 @@ export default Controller.extend(ModalFunctionality, {
 
   preflightChecks() {
     this.set("loading", true);
-    ajax("/discourse-jira/issues/preflight", {})
+    ajax("/jira/issues/preflight", {})
       .then((result) => {
         if (result.projects) {
           this.set("projects", result.projects);
@@ -40,7 +52,7 @@ export default Controller.extend(ModalFunctionality, {
   fillDescription(post) {
     this.set("loading", true);
 
-    ajax("/discourse-jira/posts", {
+    ajax("/jira/posts", {
       type: "PUT",
       data: { topic_id: post.topic_id, post_number: post.post_number },
     })
@@ -80,11 +92,12 @@ export default Controller.extend(ModalFunctionality, {
   createIssue() {
     this.set("loading", true);
 
-    ajax("/discourse-jira/issues", {
+    ajax("/jira/issues", {
       type: "POST",
       data: {
         project_key: this.projectKey,
         issue_type_id: this.issueTypeId,
+        title: this.title,
         description: this.description,
         topic_id: this.topicId,
         post_number: this.postNumber,

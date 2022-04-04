@@ -18,7 +18,7 @@ describe DiscourseJira::PostsController do
 
   describe '#formatted_post_history' do
     it 'requires user to be signed in' do
-      put '/discourse-jira/posts.json', params: { topic_id: topic.id, post_number: topic.posts.count }
+      put '/jira/posts.json', params: { topic_id: topic.id, post_number: topic.posts.count }
 
       expect(response.status).to eq(403)
     end
@@ -26,7 +26,7 @@ describe DiscourseJira::PostsController do
     it 'includes selected post history' do
       sign_in(admin)
 
-      put '/discourse-jira/posts.json', params: { topic_id: topic.id, post_number: 3 }
+      put '/jira/posts.json', params: { topic_id: topic.id, post_number: 3 }
       expect(response.parsed_body['formatted_post_history']).to include(topic.title)
       expect(response.parsed_body['formatted_post_history']).to include('first post')
       expect(response.parsed_body['formatted_post_history']).to include('second post')
@@ -39,7 +39,7 @@ describe DiscourseJira::PostsController do
       sign_in(admin)
       second_post.delete
 
-      put '/discourse-jira/posts.json', params: { topic_id: topic.id, post_number: 3 }
+      put '/jira/posts.json', params: { topic_id: topic.id, post_number: 3 }
 
       expect(response.parsed_body['formatted_post_history']).to include(topic.title)
       expect(response.parsed_body['formatted_post_history']).to include('first post')
