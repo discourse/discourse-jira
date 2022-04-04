@@ -27,7 +27,6 @@ describe DiscourseJira::PostsController do
       sign_in(admin)
 
       put '/jira/posts.json', params: { topic_id: topic.id, post_number: 3 }
-      expect(response.parsed_body['formatted_post_history']).to include(topic.title)
       expect(response.parsed_body['formatted_post_history']).to include('first post')
       expect(response.parsed_body['formatted_post_history']).to include('second post')
       expect(response.parsed_body['formatted_post_history']).to include('third post')
@@ -41,7 +40,6 @@ describe DiscourseJira::PostsController do
 
       put '/jira/posts.json', params: { topic_id: topic.id, post_number: 3 }
 
-      expect(response.parsed_body['formatted_post_history']).to include(topic.title)
       expect(response.parsed_body['formatted_post_history']).to include('first post')
       expect(response.parsed_body['formatted_post_history']).not_to include('second post')
       expect(response.parsed_body['formatted_post_history']).to include('third post')

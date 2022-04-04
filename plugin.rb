@@ -14,6 +14,10 @@ register_asset 'stylesheets/common/discourse-jira.scss'
 require_relative 'lib/discourse-jira/engine'
 
 after_initialize do
+  topic_view_post_custom_fields_allowlister do |user|
+    user&.staff? ? ['jira_issue_key', 'jira_issue'] : []
+  end
+
   add_to_class(:guardian, :can_create_jira_issue?) do
     SiteSetting.discourse_jira_enabled && is_staff?
   end
