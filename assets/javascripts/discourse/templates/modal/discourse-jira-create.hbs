@@ -34,7 +34,11 @@
 
       <section class="field">
         <label>{{i18n "discourse_jira.create_form.description"}}</label>
-        {{d-textarea value=description class="jira-description" autofocus="autofocus"}}
+        {{d-textarea
+          value=description
+          class="jira-description"
+          autofocus="autofocus"
+        }}
       </section>
     </div>
   {{/if}}
