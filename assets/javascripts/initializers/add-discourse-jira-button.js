@@ -1,11 +1,6 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import showModal from "discourse/lib/show-modal";
 import PostCooked from "discourse/widgets/post-cooked";
-import {
-  iconNode,
-  registerIconRenderer,
-  replaceIcon,
-} from "discourse-common/lib/icon-library";
 import { iconHTML } from "discourse-common/lib/icon-library";
 
 export default {
