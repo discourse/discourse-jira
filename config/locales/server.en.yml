@@ -10,3 +10,4 @@ en:
     discourse_jira_username: "Username of the user creating issues"
     discourse_jira_password: "API key assigned to the user creating issues. A password might works, but is unsafe and the API was deprecated by Atlassian"
     discourse_jira_webhook_token: "This token must be passed in the 't' query parameter of the webhook. For example: https://example.com/jira/issues/webhook?t=supersecret"
+    discourse_jira_verbose_log: "Enable verbose logging for Jira plugin"
