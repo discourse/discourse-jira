@@ -1,3 +1,2 @@
-/.byebug_history
-/api_test.rb
-.DS_Store
+node_modules
+/gems

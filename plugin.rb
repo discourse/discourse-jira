@@ -6,6 +6,7 @@
 # authors: Discourse
 # url: https://github.com/discourse/discourse-jira
 # required_version: 2.7.0
+# transpile_js: true
 
 enabled_site_setting :discourse_jira_enabled
 
