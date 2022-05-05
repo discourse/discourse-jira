@@ -13,6 +13,7 @@ module DiscourseJira
       hijack do
         projects_and_issue_types = Discourse.cache.fetch('discourse_jira_projects_and_issue_types', expires_in: 1.hour, force: true) do
           response = make_get_request('rest/api/2/project/search?expand=issueTypes')
+          log("Jira verbose log:\n API result = #{response.body}")
           raise Discourse::NotFound if response.code != '200'
 
           json = JSON.parse(response.body, symbolize_names: true)
@@ -55,7 +56,7 @@ module DiscourseJira
       hijack(info: "creating Jira issue for topic #{params[:topic_id]} and post_number #{params[:post_number]}") do
         response = make_post_request('rest/api/2/issue', body_hash)
         if response.code != '201'
-          Rails.logger.warn("Bad Jira response: #{response.body}")
+          log("Bad Jira response: #{response.body}")
           return render_json_error(I18n.t('discourse_jira.bad_api_response', status_code: response.code), status: 422)
         end
 
@@ -141,6 +142,10 @@ module DiscourseJira
 
         request
       end
+    end
+
+    def log(message)
+      Rails.logger.warn(message) if SiteSetting.discourse_jira_verbose_log
     end
   end
 end

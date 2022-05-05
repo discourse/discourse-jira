@@ -12,3 +12,5 @@ plugins:
   discourse_jira_webhook_token:
     default: ""
     secret: true
+  discourse_jira_verbose_log:
+    default: false
