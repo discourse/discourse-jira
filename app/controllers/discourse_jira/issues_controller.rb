@@ -12,13 +12,13 @@ module DiscourseJira
     def preflight
       hijack do
         projects_and_issue_types = Discourse.cache.fetch('discourse_jira_projects_and_issue_types', expires_in: 1.hour, force: true) do
-          response = make_get_request('rest/api/2/project/search?expand=issueTypes')
-          log("Jira verbose log:\n API result = #{response.body}")
+          response = make_get_request('rest/api/2/issue/createmeta?expand=projects.issuetypes')
+          log("API result = #{response.body}")
           raise Discourse::NotFound if response.code != '200'
 
           json = JSON.parse(response.body, symbolize_names: true)
-          json[:values].map do |project|
-            issue_types = project[:issueTypes].map do |issue_type|
+          json[:projects].map do |project|
+            issue_types = project[:issuetypes].map do |issue_type|
               next if issue_type[:subtask]
 
               { id: issue_type[:id], name: issue_type[:name] }
@@ -145,7 +145,7 @@ module DiscourseJira
     end
 
     def log(message)
-      Rails.logger.warn(message) if SiteSetting.discourse_jira_verbose_log
+      Rails.logger.warn("Jira verbose log:\n #{message}") if SiteSetting.discourse_jira_verbose_log
     end
   end
 end
