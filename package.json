@@ -1,0 +1,11 @@
+{
+  "name": "discourse-jira",
+  "version": "0.0.1",
+  "repository": "https://github.com/discourse/discourse-jira",
+  "author": "Discourse",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "eslint-config-discourse": "^3.1.0"
+  }
+}

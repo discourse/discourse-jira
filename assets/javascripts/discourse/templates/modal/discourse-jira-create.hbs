@@ -1,7 +1,7 @@
 {{#d-modal-body title="discourse_jira.create_issue"}}
   {{#if issueKey}}
     <p>{{i18n "discourse_jira.issue_creation_success" issueKey=issueKey}}</p>
-    <p><a href="{{issueUrl}}">{{issueKey}}</a></p>
+    <p><a href={{issueUrl}}>{{issueKey}}</a></p>
   {{else}}
     <div class="form">
       <section class="field">
@@ -34,7 +34,11 @@
 
       <section class="field">
         <label>{{i18n "discourse_jira.create_form.description"}}</label>
-        {{d-textarea value=description class="jira-description" autofocus="autofocus"}}
+        {{d-textarea
+          value=description
+          class="jira-description"
+          autofocus="autofocus"
+        }}
       </section>
     </div>
   {{/if}}
