@@ -1,7 +1,7 @@
 en:
   discourse_jira:
     issue_title: "[Discourse] %{title}"
-    small_action: "A issue has been created: [%{title}](%{url})"
+    small_action: "A ticket has been created: [%{title}](%{url})"
     bad_api_response: "Bad Jira API response code %{status_code}"
 
   site_settings:
