@@ -90,6 +90,47 @@ module DiscourseJira
       end
     end
 
+    def attach
+      raise Discourse::InvalidAccess if !SiteSetting.discourse_jira_enabled
+
+      hijack(info: "attaching Jira issue for topic #{params[:topic_id]} and post_number #{params[:post_number]}") do
+        response = make_get_request("rest/api/2/issue/#{params[:issue_key]}")
+
+        if response.code != '200'
+          log("Bad Jira response: #{response.body}")
+          return render_json_error(I18n.t('discourse_jira.bad_api_response', status_code: response.code), status: 422)
+        end
+
+        json = JSON.parse(response.body, symbolize_names: true)
+
+        result = success_json.merge({
+          issue_key: json[:key],
+          issue_url: URI.join(SiteSetting.discourse_jira_url, "browse/#{json[:key]}").to_s,
+        })
+
+        post = Post.find_by(topic_id: params[:topic_id], post_number: params[:post_number])
+        post.custom_fields['jira_issue_key'] = result[:issue_key]
+        post.save_custom_fields
+
+        if topic = Topic.find_by(id: params[:topic_id])
+          if current_user.guardian.can_create_post_on_topic?(topic)
+            topic.add_moderator_post(
+              current_user,
+              I18n.t('discourse_jira.small_action', title: json[:fields][:summary], url: result[:issue_url]),
+              post_type: Post.types[:small_action],
+              action_code: 'jira_issue'
+            )
+          end
+        end
+
+        response = make_get_request(json[:self])
+        post.custom_fields['jira_issue'] = response.body
+        post.save_custom_fields
+
+        render json: result
+      end
+    end
+
     def webhook
       if SiteSetting.discourse_jira_webhook_token.present?
         raise Discourse::InvalidAccess if !ActiveSupport::SecurityUtils.secure_compare(params[:t], SiteSetting.discourse_jira_webhook_token)

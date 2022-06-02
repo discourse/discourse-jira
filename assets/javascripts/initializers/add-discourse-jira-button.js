@@ -18,21 +18,41 @@ export default {
           controller.fillDescription(this.model);
         });
 
+        api.attachWidgetAction("post", "attachIssue", function () {
+          const controller = showModal("discourse-jira-attach");
+          controller.fillDescription(this.model);
+        });
+
+        api.attachWidgetAction("post-menu", "toggleJiraMenu", function () {
+          this.state.jiraVisible = !this.state.jiraVisible;
+        });
+
+        api.attachWidgetAction("post-menu", "closeJiraMenu", function () {
+          this.state.jiraVisible = false;
+        });
+
         api.includePostAttributes("jira_issue");
 
         api.addPostMenuButton("jira", (attrs) => {
           if (currentUser.can_create_jira_issue && !attrs.jira_issue) {
             return {
-              action: "createIssue",
+              action: "toggleJiraMenu",
               icon: "tag",
               className: "create-jira-issue",
-              title: "discourse_jira.create_issue",
-              label: "discourse_jira.create_issue",
+              title: "discourse_jira.issue",
+              label: "discourse_jira.issue",
               position: "first",
             };
           }
         });
 
+        api.decorateWidget("post-menu:before-extra-controls", (helper) => {
+          if (!helper.state.jiraVisible) {
+            return;
+          }
+
+          return helper.attach("post-jira-menu");
+        });
         api.decorateWidget("post-contents:after-cooked", (helper) => {
           const postModel = helper.getModel();
           if (!postModel || !postModel.jira_issue) {

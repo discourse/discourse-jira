@@ -1,12 +1,20 @@
 en:
   js:
     discourse_jira:
+      issue: "Issue"
       create_issue: "Create Issue"
+      attach_issue: "Attach Issue"
+      actions:
+        create_issue: "Create new issue"
+        attach_issue: "Attach existing issue"
       create_form:
         project: "Project"
         issue_type: "Issue type"
         title: "Issue title"
         description: "Please provide a description of the issue"
+        continue: "Continue"
+      attach_form:
+        issue_key: "Issue key"
         continue: "Continue"
       issue_creation_success: "Your issue %{issueKey} has been created! Click the issue number link below to view in Jira."
       issue_creation_error: "There was a problem creating your issue. Please submit a issue via your local territory’s standard process."

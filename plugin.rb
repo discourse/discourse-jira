@@ -12,6 +12,8 @@ enabled_site_setting :discourse_jira_enabled
 
 register_asset 'stylesheets/common/discourse-jira.scss'
 
+register_svg_icon "paperclip"
+
 require_relative 'lib/discourse-jira/engine'
 
 after_initialize do
