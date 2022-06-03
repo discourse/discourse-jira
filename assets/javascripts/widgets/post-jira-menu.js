@@ -12,14 +12,14 @@ export function buildManageButtons(attrs, currentUser) {
       icon: "plus",
       className: "popup-menu-button create-issue",
       label: "discourse_jira.actions.create_issue",
-      action: 'createIssue',
+      action: "createIssue",
     });
 
     contents.push({
       icon: "paperclip",
       className: "popup-menu-button attach-issue",
       label: "discourse_jira.actions.attach_issue",
-      action: 'attachIssue',
+      action: "attachIssue",
     });
   }
 
@@ -32,12 +32,10 @@ export default createWidget("post-jira-menu", {
   html() {
     const contents = [];
 
-    buildManageButtons(this.attrs, this.currentUser).forEach(
-      (b) => {
-        b.secondaryAction = "closeJiraMenu";
-        contents.push(this.attach("post-admin-menu-button", b));
-      }
-    );
+    buildManageButtons(this.attrs, this.currentUser).forEach((b) => {
+      b.secondaryAction = "closeJiraMenu";
+      contents.push(this.attach("post-admin-menu-button", b));
+    });
 
     return h("ul", contents);
   },
