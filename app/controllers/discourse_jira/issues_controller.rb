@@ -132,6 +132,8 @@ module DiscourseJira
     end
 
     def webhook
+      log(params.inspect)
+
       if SiteSetting.discourse_jira_webhook_token.present?
         raise Discourse::InvalidAccess if !ActiveSupport::SecurityUtils.secure_compare(params[:t], SiteSetting.discourse_jira_webhook_token)
       else
