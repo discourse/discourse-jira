@@ -4,10 +4,10 @@ module DiscourseJira
   class IssuesController < ::ApplicationController
     requires_plugin DiscourseJira
 
-    before_action :ensure_logged_in
-    before_action :ensure_can_create_jira_issue
+    before_action :ensure_logged_in, except: [:webhook]
+    before_action :ensure_can_create_jira_issue, except: [:webhook]
 
-    skip_before_action :check_xhr, :verify_authenticity_token, :ensure_logged_in, :ensure_can_create_jira_issue, only: [:webhook]
+    skip_before_action :check_xhr, :verify_authenticity_token, :redirect_to_login_if_required, :preload_json, only: [:webhook]
 
     def preflight
       hijack do
