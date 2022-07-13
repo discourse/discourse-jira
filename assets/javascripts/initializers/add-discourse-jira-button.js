@@ -71,13 +71,12 @@ export default {
               <div class='title'>
                 ${iconHTML("tag")}
                 <a href='${jiraUrl}'>${jira.fields.summary}</a>
+              </div>
+              <blockquote>
                 <i>(${jira.key})</i>
                 <span class='jira-status jira-status-${jira.fields.status.id}'>
                   ${jira.fields.status.name}
                 </span>
-              </div>
-              <blockquote>
-                ${jira.fields.description}
               </blockquote>
             </aside>
           `;
