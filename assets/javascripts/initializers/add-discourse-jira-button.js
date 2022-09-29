@@ -34,7 +34,7 @@ export default {
         api.includePostAttributes("jira_issue");
 
         api.addPostMenuButton("jira", (attrs) => {
-          if (currentUser.can_create_jira_issue && !attrs.jira_issue) {
+          if (currentUser?.can_create_jira_issue && !attrs.jira_issue) {
             return {
               action: "toggleJiraMenu",
               icon: "tag",
