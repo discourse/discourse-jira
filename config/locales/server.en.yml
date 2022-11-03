@@ -3,6 +3,7 @@ en:
     issue_title: "[Discourse] %{title}"
     small_action: "A ticket has been created: [%{title}](%{url})"
     bad_api_response: "Bad Jira API response code %{status_code}"
+    error_message: "Please resolve the following issues. %{errors}"
 
   site_settings:
     discourse_jira_enabled: "Enable Discourse-Jira integration"

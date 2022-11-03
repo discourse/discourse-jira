@@ -74,6 +74,24 @@ describe DiscourseJira::IssuesController do
       expect(response.parsed_body['issue_url']).to eq('https://example.com/browse/DIS-42')
       expect(post.reload.custom_fields['jira_issue_key']).to eq('DIS-42')
     end
+
+    it 'responds with proper error message' do
+      sign_in(admin)
+      post = Fabricate(:post)
+
+      stub_request(:post, 'https://example.com/rest/api/2/issue')
+        .to_return(status: 400, body: '{"errorMessages":[],"errors":{"versions":"Affects Version/s is required.","components":"Component/s is required."}}', headers: {})
+
+      post '/jira/issues.json', params: {
+        project_key: 'DIS',
+        description: 'This is a bug',
+        issue_type_id: '10001',
+        topic_id: post.topic_id,
+        post_number: post.post_number,
+      }
+
+      expect(response.parsed_body['errors'][0]).to eq(I18n.t('discourse_jira.error_message', errors: "Affects Version/s is required. Component/s is required."))
+    end
   end
 
   describe '#attach' do
