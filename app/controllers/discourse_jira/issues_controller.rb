@@ -55,12 +55,14 @@ module DiscourseJira
 
       hijack(info: "creating Jira issue for topic #{params[:topic_id]} and post_number #{params[:post_number]}") do
         response = make_post_request('rest/api/2/issue', body_hash)
+        json = JSON.parse(response.body, symbolize_names: true) rescue {}
+
         if response.code != '201'
           log("Bad Jira response: #{response.body}")
-          return render_json_error(I18n.t('discourse_jira.bad_api_response', status_code: response.code), status: 422)
+          errors = (json[:errors] || {}).values.join(" ")
+          error_message = errors.present? ? I18n.t('discourse_jira.error_message', errors: errors) : I18n.t('discourse_jira.bad_api_response', status_code: response.code)
+          return render_json_error(error_message, status: 422)
         end
-
-        json = JSON.parse(response.body, symbolize_names: true)
 
         result = success_json.merge({
           issue_key: json[:key],
