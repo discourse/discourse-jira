@@ -10,33 +10,10 @@ module DiscourseJira
     skip_before_action :check_xhr, :verify_authenticity_token, :redirect_to_login_if_required, :preload_json, only: [:webhook]
 
     def preflight
-      hijack do
-        projects_and_issue_types = Discourse.cache.fetch('discourse_jira_projects_and_issue_types', expires_in: 1.hour, force: true) do
-          response = Api.get('issue/createmeta?expand=projects.issuetypes')
-          log("API result = #{response.body}")
-          raise Discourse::NotFound if response.code != '200'
-
-          json = JSON.parse(response.body, symbolize_names: true)
-          json[:projects].map do |project|
-            issue_types = project[:issuetypes].map do |issue_type|
-              next if issue_type[:subtask]
-
-              { id: issue_type[:id], name: issue_type[:name] }
-            end.compact
-
-            {
-              key: project[:key],
-              name: project[:name],
-              issue_types: issue_types
-            }
-          end
-        end
-
-        render json: {
-          projects: projects_and_issue_types,
-          email: current_user.email
-        }
-      end
+      render json: {
+        projects: ActiveModel::ArraySerializer.new(Project.all, each_serializer: JiraProjectSerializer).as_json,
+        email: current_user.email
+      }
     end
 
     def create
