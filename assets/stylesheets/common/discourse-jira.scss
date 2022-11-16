@@ -14,9 +14,12 @@
   }
 }
 
-.discourse-jira-create-modal {
-  .jira-title {
+.modal-inner-container .create-issue {
+  input[type="text"] {
     width: 100%;
+  }
+  summary {
+    margin-bottom: 10px;
   }
 }
 
