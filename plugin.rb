@@ -14,7 +14,8 @@ register_asset 'stylesheets/common/discourse-jira.scss'
 
 register_svg_icon "paperclip"
 
-require_relative 'lib/discourse-jira/engine'
+require_relative 'lib/discourse_jira/api'
+require_relative 'lib/discourse_jira/engine'
 
 after_initialize do
   topic_view_post_custom_fields_allowlister do |user|

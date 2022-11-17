@@ -10,33 +10,10 @@ module DiscourseJira
     skip_before_action :check_xhr, :verify_authenticity_token, :redirect_to_login_if_required, :preload_json, only: [:webhook]
 
     def preflight
-      hijack do
-        projects_and_issue_types = Discourse.cache.fetch('discourse_jira_projects_and_issue_types', expires_in: 1.hour, force: true) do
-          response = make_get_request('rest/api/2/issue/createmeta?expand=projects.issuetypes')
-          log("API result = #{response.body}")
-          raise Discourse::NotFound if response.code != '200'
-
-          json = JSON.parse(response.body, symbolize_names: true)
-          json[:projects].map do |project|
-            issue_types = project[:issuetypes].map do |issue_type|
-              next if issue_type[:subtask]
-
-              { id: issue_type[:id], name: issue_type[:name] }
-            end.compact
-
-            {
-              key: project[:key],
-              name: project[:name],
-              issue_types: issue_types
-            }
-          end
-        end
-
-        render json: {
-          projects: projects_and_issue_types,
-          email: current_user.email
-        }
-      end
+      render json: {
+        projects: ActiveModel::ArraySerializer.new(Project.all, each_serializer: JiraProjectSerializer).as_json,
+        email: current_user.email
+      }
     end
 
     def create
@@ -54,7 +31,7 @@ module DiscourseJira
       }
 
       hijack(info: "creating Jira issue for topic #{params[:topic_id]} and post_number #{params[:post_number]}") do
-        response = make_post_request('rest/api/2/issue', body_hash)
+        response = Api.post('issue', body_hash)
         json = JSON.parse(response.body, symbolize_names: true) rescue {}
 
         if response.code != '201'
@@ -84,7 +61,7 @@ module DiscourseJira
           end
         end
 
-        response = make_get_request(json[:self])
+        response = Api.get(json[:self])
         post.custom_fields['jira_issue'] = response.body
         post.save_custom_fields
 
@@ -96,7 +73,7 @@ module DiscourseJira
       raise Discourse::InvalidAccess if !SiteSetting.discourse_jira_enabled
 
       hijack(info: "attaching Jira issue for topic #{params[:topic_id]} and post_number #{params[:post_number]}") do
-        response = make_get_request("rest/api/2/issue/#{params[:issue_key]}")
+        response = Api.get("issue/#{params[:issue_key]}")
 
         if response.code != '200'
           log("Bad Jira response: #{response.body}")
@@ -125,7 +102,7 @@ module DiscourseJira
           end
         end
 
-        response = make_get_request(json[:self])
+        response = Api.get(json[:self])
         post.custom_fields['jira_issue'] = response.body
         post.save_custom_fields
 
@@ -157,36 +134,6 @@ module DiscourseJira
 
     def ensure_can_create_jira_issue
       guardian.ensure_can_create_jira_issue!
-    end
-
-    def make_request(endpoint)
-      uri = URI.join(SiteSetting.discourse_jira_url, endpoint)
-
-      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
-        headers = {
-          'Content-Type' => 'application/json',
-          'Accept' => 'application/json',
-          'Authorization' => 'Basic ' + Base64.strict_encode64("#{SiteSetting.discourse_jira_username}:#{SiteSetting.discourse_jira_password}"),
-        }
-
-        request = yield(uri, headers)
-        http.request(request)
-      end
-    end
-
-    def make_get_request(endpoint)
-      make_request(endpoint) do |uri, headers|
-        Net::HTTP::Get.new(uri, headers)
-      end
-    end
-
-    def make_post_request(endpoint, body)
-      make_request(endpoint) do |uri, headers|
-        request = Net::HTTP::Post.new(uri, headers)
-        request.body = body.to_json
-
-        request
-      end
     end
 
     def log(message)
