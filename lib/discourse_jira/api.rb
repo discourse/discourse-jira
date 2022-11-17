@@ -4,8 +4,12 @@ module DiscourseJira
   class Api
 
     def self.make_request(endpoint)
-      endpoint = "rest/api/2/#{endpoint}" unless endpoint.start_with?("rest/api/2/")
-      uri = URI.join(SiteSetting.discourse_jira_url, endpoint)
+      if endpoint.start_with?('https://')
+        uri = URI(endpoint)
+      else
+        endpoint = "rest/api/2/#{endpoint}" unless endpoint.start_with?("rest/api/2/")
+        uri = URI.join(SiteSetting.discourse_jira_url, endpoint)
+      end
 
       Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
         headers = {

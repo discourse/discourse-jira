@@ -115,7 +115,7 @@ module DiscourseJira
           end
         end
 
-        response = make_get_request(json[:self])
+        response = Api.get(json[:self])
         post.custom_fields['jira_issue'] = response.body
         post.save_custom_fields
 
