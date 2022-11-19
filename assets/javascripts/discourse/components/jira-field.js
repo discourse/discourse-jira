@@ -18,5 +18,5 @@ export default Component.extend({
       default:
         return field_type;
     }
-  }
+  },
 });

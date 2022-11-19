@@ -77,9 +77,21 @@ export default Controller.extend(ModalFunctionality, {
     return project ? project.issue_types : [];
   },
 
-  @discourseComputed("loading", "projectKey", "issueTypeId", "description", "requiredFields.@each.value")
+  @discourseComputed(
+    "loading",
+    "projectKey",
+    "issueTypeId",
+    "description",
+    "requiredFields.@each.value"
+  )
   disabled(loading, projectKey, issueTypeId, description) {
-    return loading || !projectKey || !issueTypeId || !description || this.requiredFields.filter((f) => !f.value).length;
+    return (
+      loading ||
+      !projectKey ||
+      !issueTypeId ||
+      !description ||
+      this.requiredFields.filter((f) => !f.value).length
+    );
   },
 
   @discourseComputed("topicId")
