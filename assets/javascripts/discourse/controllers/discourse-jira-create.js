@@ -14,6 +14,7 @@ export default Controller.extend(ModalFunctionality, {
   postNumber: null,
   projectKey: null,
   issueTypeId: null,
+  fields: [],
   title: "",
   description: "",
 

@@ -39,6 +39,7 @@ module DiscourseJira
       }
 
       params[:fields].each do |_, field|
+        next if field.blank?
         next if field[:value].blank? && !field[:required]
         fields[field[:key]] = field[:value]
       end

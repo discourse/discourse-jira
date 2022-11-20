@@ -39,6 +39,8 @@ describe DiscourseJira::IssuesController do
   end
 
   describe '#create' do
+    let(:issue_type) { Fabricate(:jira_issue_type) }
+
     it 'requires user to be signed in' do
       post '/jira/issues.json'
       expect(response.status).to eq(403)
@@ -66,9 +68,10 @@ describe DiscourseJira::IssuesController do
         post '/jira/issues.json', params: {
           project_key: 'DIS',
           description: 'This is a bug',
-          issue_type_id: '10001',
+          issue_type_id: issue_type.id,
           topic_id: post.topic_id,
           post_number: post.post_number,
+          fields: [],
         }
       end.to change { Post.count }.by(1)
       expect(response.parsed_body['issue_key']).to eq('DIS-42')
@@ -86,9 +89,10 @@ describe DiscourseJira::IssuesController do
       post '/jira/issues.json', params: {
         project_key: 'DIS',
         description: 'This is a bug',
-        issue_type_id: '10001',
+        issue_type_id: issue_type.id,
         topic_id: post.topic_id,
         post_number: post.post_number,
+        fields: [],
       }
 
       expect(response.parsed_body['errors'][0]).to eq(I18n.t('discourse_jira.error_message', errors: "Affects Version/s is required. Component/s is required."))
