@@ -99,6 +99,22 @@ describe DiscourseJira::IssuesController do
     end
   end
 
+  describe '#fields' do
+    fab!(:issue_type) { Fabricate(:jira_issue_type) }
+    fab!(:field_1) { Fabricate(:jira_field, issue_type: issue_type, key: 'summary', name: 'Summary', required: true) }
+    fab!(:field_2) { Fabricate(:jira_field, issue_type: issue_type, key: 'description', name: 'Description') }
+
+    it 'returns a list of fields for a given issue type' do
+      sign_in(admin)
+
+      get "/jira/issues/#{issue_type.id}/fields.json"
+      expect(response.parsed_body["fields"]).to eq([
+        { 'field_type' => field_1.field_type, 'key' => field_1.key, 'name' => field_1.name, 'required' => field_1.required },
+        { 'field_type' => field_2.field_type, 'key' => field_2.key, 'name' => field_2.name, 'required' => field_2.required },
+      ])
+    end
+  end
+
   describe '#attach' do
     it 'requires user to be signed in' do
       post '/jira/issues/attach.json'
