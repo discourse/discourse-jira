@@ -40,6 +40,7 @@ describe DiscourseJira::IssuesController do
 
   describe '#create' do
     let(:issue_type) { Fabricate(:jira_issue_type) }
+    let(:field) { Fabricate(:jira_field, issue_type: issue_type) }
 
     it 'requires user to be signed in' do
       post '/jira/issues.json'
@@ -59,6 +60,9 @@ describe DiscourseJira::IssuesController do
       post = Fabricate(:post)
 
       stub_request(:post, 'https://example.com/rest/api/2/issue')
+        .with(
+          body: "{\"fields\":{\"project\":{\"key\":\"DIS\"},\"summary\":\"[Discourse] \",\"description\":\"This is a bug\",\"issuetype\":{\"id\":#{issue_type.uid}},\"#{field.key}\":\"value\"}}",
+        )
         .to_return(status: 201, body: '{"id":"10041","key":"DIS-42","self":"https://example.com/rest/api/2/issue/10041"}', headers: {})
 
       stub_request(:get, 'https://example.com/rest/api/2/issue/10041')
@@ -71,7 +75,9 @@ describe DiscourseJira::IssuesController do
           issue_type_id: issue_type.id,
           topic_id: post.topic_id,
           post_number: post.post_number,
-          fields: [],
+          fields: {
+            "0": { key: field.key, value: "value" },
+          },
         }
       end.to change { Post.count }.by(1)
       expect(response.parsed_body['issue_key']).to eq('DIS-42')
