@@ -10,7 +10,8 @@ export default Component.extend({
   component(key, field_type) {
     switch (field_type) {
       case "string":
-        if (key === "summary" || key === "description") {
+        const textAreaFields = ["description", "summary"];
+        if (textAreaFields.includes(key)) {
           return "textarea";
         }
 

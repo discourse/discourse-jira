@@ -38,10 +38,13 @@ module DiscourseJira
         issuetype: { id: issue_type.uid }
       }
 
-      params[:fields].each do |_, field|
+      params[:fields].each do |_, data|
+        next if data.blank?
+        field = Field.find_by(key: data[:key])
         next if field.blank?
-        next if field[:value].blank? && !field[:required]
-        fields[field[:key]] = field[:value]
+        next if data[:value].blank? && !field.required
+
+        fields[data[:key]] = data[:value]
       end
 
       hijack(info: "creating Jira issue for topic #{params[:topic_id]} and post_number #{params[:post_number]}") do
