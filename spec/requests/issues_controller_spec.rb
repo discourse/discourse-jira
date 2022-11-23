@@ -39,6 +39,9 @@ describe DiscourseJira::IssuesController do
   end
 
   describe '#create' do
+    let(:issue_type) { Fabricate(:jira_issue_type) }
+    let(:field) { Fabricate(:jira_field, issue_type: issue_type) }
+
     it 'requires user to be signed in' do
       post '/jira/issues.json'
       expect(response.status).to eq(403)
@@ -57,6 +60,9 @@ describe DiscourseJira::IssuesController do
       post = Fabricate(:post)
 
       stub_request(:post, 'https://example.com/rest/api/2/issue')
+        .with(
+          body: "{\"fields\":{\"project\":{\"key\":\"DIS\"},\"summary\":\"[Discourse] \",\"description\":\"This is a bug\",\"issuetype\":{\"id\":#{issue_type.uid}},\"#{field.key}\":\"value\"}}",
+        )
         .to_return(status: 201, body: '{"id":"10041","key":"DIS-42","self":"https://example.com/rest/api/2/issue/10041"}', headers: {})
 
       stub_request(:get, 'https://example.com/rest/api/2/issue/10041')
@@ -66,9 +72,12 @@ describe DiscourseJira::IssuesController do
         post '/jira/issues.json', params: {
           project_key: 'DIS',
           description: 'This is a bug',
-          issue_type_id: '10001',
+          issue_type_id: issue_type.id,
           topic_id: post.topic_id,
           post_number: post.post_number,
+          fields: {
+            "0": { key: field.key, value: "value" },
+          },
         }
       end.to change { Post.count }.by(1)
       expect(response.parsed_body['issue_key']).to eq('DIS-42')
@@ -86,12 +95,29 @@ describe DiscourseJira::IssuesController do
       post '/jira/issues.json', params: {
         project_key: 'DIS',
         description: 'This is a bug',
-        issue_type_id: '10001',
+        issue_type_id: issue_type.id,
         topic_id: post.topic_id,
         post_number: post.post_number,
+        fields: [],
       }
 
       expect(response.parsed_body['errors'][0]).to eq(I18n.t('discourse_jira.error_message', errors: "Affects Version/s is required. Component/s is required."))
+    end
+  end
+
+  describe '#fields' do
+    fab!(:issue_type) { Fabricate(:jira_issue_type) }
+    fab!(:field_1) { Fabricate(:jira_field, issue_type: issue_type, key: 'summary', name: 'Summary', required: true) }
+    fab!(:field_2) { Fabricate(:jira_field, issue_type: issue_type, key: 'description', name: 'Description') }
+
+    it 'returns a list of fields for a given issue type' do
+      sign_in(admin)
+
+      get "/jira/issues/#{issue_type.id}/fields.json"
+      expect(response.parsed_body["fields"]).to eq([
+        { 'field_type' => field_1.field_type, 'key' => field_1.key, 'name' => field_1.name, 'required' => field_1.required },
+        { 'field_type' => field_2.field_type, 'key' => field_2.key, 'name' => field_2.name, 'required' => field_2.required },
+      ])
     end
   end
 

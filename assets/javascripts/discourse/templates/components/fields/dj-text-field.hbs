@@ -1,0 +1,15 @@
+<section class="field text-field">
+  <div class="control-group">
+    {{fields/dj-field-label label=label field=field}}
+
+    <div class="controls">
+      <div class="field-wrapper">
+        {{input
+          value=field.value
+          required=field.required
+          input=(action (mut field.value) value="target.value")
+        }}
+      </div>
+    </div>
+  </div>
+</section>

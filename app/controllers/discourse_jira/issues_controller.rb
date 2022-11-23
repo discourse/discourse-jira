@@ -16,22 +16,39 @@ module DiscourseJira
       }
     end
 
+    def fields
+      issue_type_id = params[:issue_type_id]
+      fields = Field.where(issue_type_id: issue_type_id)
+      raise Discourse::NotFound if fields.blank?
+
+      render json: { fields: ActiveModel::ArraySerializer.new(fields, each_serializer: JiraFieldSerializer).as_json }
+    end
+
     def create
       raise Discourse::InvalidAccess if !SiteSetting.discourse_jira_enabled
 
       summary = I18n.t('discourse_jira.issue_title', title: params[:title])
+      issue_type = IssueType.find_by(id: params[:issue_type_id])
+      raise Discourse::NotFound if issue_type.blank?
 
-      body_hash = {
-        fields: {
-          project: { key: params[:project_key] },
-          summary: summary,
-          description: params[:description],
-          issuetype: { id: params[:issue_type_id] }
-        }
+      fields = {
+        project: { key: params[:project_key] },
+        summary: summary,
+        description: params[:description],
+        issuetype: { id: issue_type.uid }
       }
 
+      params[:fields].each do |_, data|
+        next if data.blank?
+        field = Field.find_by(key: data[:key])
+        next if field.blank?
+        next if data[:value].blank? && !field.required
+
+        fields[data[:key]] = data[:value]
+      end
+
       hijack(info: "creating Jira issue for topic #{params[:topic_id]} and post_number #{params[:post_number]}") do
-        response = Api.post('issue', body_hash)
+        response = Api.post('issue', { fields: fields })
         json = JSON.parse(response.body, symbolize_names: true) rescue {}
 
         if response.code != '201'

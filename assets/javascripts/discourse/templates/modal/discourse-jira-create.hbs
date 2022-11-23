@@ -3,7 +3,7 @@
     <p>{{i18n "discourse_jira.issue_creation_success" issueKey=issueKey}}</p>
     <p><a href={{issueUrl}}>{{issueKey}}</a></p>
   {{else}}
-    <div class="form">
+    <div class="create-issue form">
       <section class="field">
         <section class="field-item">
           <label>{{i18n "discourse_jira.create_form.project"}}</label>
@@ -38,8 +38,22 @@
           value=description
           class="jira-description"
           autofocus="autofocus"
+          maxlength="32767"
         }}
       </section>
+
+      {{#each requiredFields as |field|}}
+        {{jira-field field=field}}
+      {{/each}}
+
+      {{#if optionalFields}}
+        <details>
+          <summary>Optional Fields</summary>
+          {{#each optionalFields as |field|}}
+            {{jira-field field=field}}
+          {{/each}}
+        </details>
+      {{/if}}
     </div>
   {{/if}}
 {{/d-modal-body}}
