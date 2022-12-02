@@ -5,5 +5,6 @@ module DiscourseJira
     self.table_name = "jira_fields"
 
     belongs_to :issue_type
+    has_many :options, dependent: :destroy, class_name: 'DiscourseJira::FieldOption'
   end
 end
