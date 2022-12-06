@@ -20,7 +20,7 @@ module DiscourseJira
         next unless json[:operations].include?("set")
         next if DEFAULT_FIELDS.include?(key.to_s)
         next if type == "array" && json[:schema][:items] != "option"
-        next if type == "option" && json[:allowedValues].blank?
+        next if ["array", "option"].include?(type) && json[:allowedValues].blank?
 
         field = self.fields.find_or_create_by(key: key) do |f|
           f.name = json[:name]

@@ -18,10 +18,10 @@ module DiscourseJira
 
     def fields
       issue_type_id = params[:issue_type_id]
-      fields = Field.where(issue_type_id: issue_type_id)
+      fields = Field.includes(:options).where(issue_type_id: issue_type_id)
       raise Discourse::NotFound if fields.blank?
 
-      render json: { fields: ActiveModel::ArraySerializer.new(fields, each_serializer: JiraFieldSerializer).as_json }
+      render_serialized(fields, JiraFieldSerializer, root: "fields")
     end
 
     def create
