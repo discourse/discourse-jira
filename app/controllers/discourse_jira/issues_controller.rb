@@ -44,12 +44,21 @@ module DiscourseJira
         next if field.blank?
         next if data[:value].blank? && !field.required
 
-        fields[data[:key]] = data[:value]
+        case field.field_type
+        when 'array'
+          fields[data[:key]] = data[:value].map { |v| { id: v } }
+        when 'option'
+          fields[data[:key]] = { id: data[:value] }
+        else
+          fields[data[:key]] = data[:value]
+        end
       end
+      log(fields.inspect)
 
       hijack(info: "creating Jira issue for topic #{params[:topic_id]} and post_number #{params[:post_number]}") do
         response = Api.post('issue', { fields: fields })
         json = JSON.parse(response.body, symbolize_names: true) rescue {}
+        log(json.inspect)
 
         if response.code != '201'
           log("Bad Jira response: #{response.body}")
