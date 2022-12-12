@@ -11,4 +11,8 @@ class JiraFieldSerializer < ApplicationSerializer
   def field_options
     object.options
   end
+
+  def include_field_options?
+    object.options.present?
+  end
 end
