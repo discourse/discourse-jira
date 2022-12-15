@@ -15,8 +15,10 @@
 }
 
 .modal-inner-container .create-issue {
-  input[type="text"] {
+  input[type="text"],
+  .select-kit {
     width: 100%;
+    min-width: 220px;
   }
   summary {
     margin-bottom: 10px;

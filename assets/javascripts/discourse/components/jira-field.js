@@ -16,6 +16,10 @@ export default Component.extend({
         }
 
         return "text";
+      case "array":
+        return "multiselect";
+      case "option":
+        return "dropdown";
       default:
         return field_type;
     }

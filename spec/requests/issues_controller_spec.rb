@@ -40,7 +40,10 @@ describe DiscourseJira::IssuesController do
 
   describe '#create' do
     let(:issue_type) { Fabricate(:jira_issue_type) }
-    let(:field) { Fabricate(:jira_field, issue_type: issue_type) }
+    let(:field_1) { Fabricate(:jira_field, issue_type: issue_type) }
+    let(:field_2) { Fabricate(:jira_field, issue_type: issue_type, field_type: 'option') }
+    let!(:option_1) { Fabricate(:jira_field_option, field: field_2) }
+    let!(:option_2) { Fabricate(:jira_field_option, field: field_2) }
 
     it 'requires user to be signed in' do
       post '/jira/issues.json'
@@ -61,7 +64,7 @@ describe DiscourseJira::IssuesController do
 
       stub_request(:post, 'https://example.com/rest/api/2/issue')
         .with(
-          body: "{\"fields\":{\"project\":{\"key\":\"DIS\"},\"summary\":\"[Discourse] \",\"description\":\"This is a bug\",\"issuetype\":{\"id\":#{issue_type.uid}},\"#{field.key}\":\"value\"}}",
+          body: "{\"fields\":{\"project\":{\"key\":\"DIS\"},\"summary\":\"[Discourse] \",\"description\":\"This is a bug\",\"issuetype\":{\"id\":#{issue_type.uid}},\"#{field_1.key}\":\"value\",\"#{field_2.key}\":{\"id\":\"#{option_2.jira_id}\"}}}",
         )
         .to_return(status: 201, body: '{"id":"10041","key":"DIS-42","self":"https://example.com/rest/api/2/issue/10041"}', headers: {})
 
@@ -76,7 +79,8 @@ describe DiscourseJira::IssuesController do
           topic_id: post.topic_id,
           post_number: post.post_number,
           fields: {
-            "0": { key: field.key, value: "value" },
+            "0": { key: field_1.key, value: "value" },
+            "1": { key: field_2.key, value: option_2.jira_id },
           },
         }
       end.to change { Post.count }.by(1)
@@ -108,7 +112,8 @@ describe DiscourseJira::IssuesController do
   describe '#fields' do
     fab!(:issue_type) { Fabricate(:jira_issue_type) }
     fab!(:field_1) { Fabricate(:jira_field, issue_type: issue_type, key: 'summary', name: 'Summary', required: true) }
-    fab!(:field_2) { Fabricate(:jira_field, issue_type: issue_type, key: 'description', name: 'Description') }
+    fab!(:field_2) { Fabricate(:jira_field, issue_type: issue_type, key: 'platform', name: 'Platform', field_type: 'option') }
+    fab!(:option) { Fabricate(:jira_field_option, field: field_2) }
 
     it 'returns a list of fields for a given issue type' do
       sign_in(admin)
@@ -116,7 +121,7 @@ describe DiscourseJira::IssuesController do
       get "/jira/issues/#{issue_type.id}/fields.json"
       expect(response.parsed_body["fields"]).to eq([
         { 'field_type' => field_1.field_type, 'key' => field_1.key, 'name' => field_1.name, 'required' => field_1.required },
-        { 'field_type' => field_2.field_type, 'key' => field_2.key, 'name' => field_2.name, 'required' => field_2.required },
+        { 'field_type' => field_2.field_type, 'key' => field_2.key, 'name' => field_2.name, 'options' => [{ 'id' => option.jira_id, 'value' => option.value }], 'required' => field_2.required },
       ])
     end
   end
