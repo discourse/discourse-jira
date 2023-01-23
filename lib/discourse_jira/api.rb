@@ -2,20 +2,23 @@
 
 module DiscourseJira
   class Api
-
     def self.make_request(endpoint)
-      if endpoint.start_with?('https://')
+      if endpoint.start_with?("https://")
         uri = URI(endpoint)
       else
         endpoint = "rest/api/2/#{endpoint}" unless endpoint.start_with?("rest/api/2/")
         uri = URI.join(SiteSetting.discourse_jira_url, endpoint)
       end
 
-      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
         headers = {
-          'Content-Type' => 'application/json',
-          'Accept' => 'application/json',
-          'Authorization' => 'Basic ' + Base64.strict_encode64("#{SiteSetting.discourse_jira_username}:#{SiteSetting.discourse_jira_password}"),
+          "Content-Type" => "application/json",
+          "Accept" => "application/json",
+          "Authorization" =>
+            "Basic " +
+              Base64.strict_encode64(
+                "#{SiteSetting.discourse_jira_username}:#{SiteSetting.discourse_jira_password}",
+              ),
         }
 
         request = yield(uri, headers)
@@ -24,9 +27,7 @@ module DiscourseJira
     end
 
     def self.get(endpoint)
-      make_request(endpoint) do |uri, headers|
-        Net::HTTP::Get.new(uri, headers)
-      end
+      make_request(endpoint) { |uri, headers| Net::HTTP::Get.new(uri, headers) }
     end
 
     def self.post(endpoint, body)
@@ -37,6 +38,5 @@ module DiscourseJira
         request
       end
     end
-
   end
 end

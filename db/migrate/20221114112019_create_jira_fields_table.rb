@@ -10,7 +10,7 @@ class CreateJiraFieldsTable < ActiveRecord::Migration[6.0]
       t.boolean :required, null: false, default: false
       t.timestamps
 
-      t.index [:issue_type_id, :key], unique: true
+      t.index %i[issue_type_id key], unique: true
     end
   end
 end
