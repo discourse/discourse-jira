@@ -31,12 +31,7 @@ module DiscourseJira
       end
 
       template =
-        File.read(
-          Rails.root.join(
-            Rails.root,
-            "plugins/discourse-jira/lib/templates/topic_summary.mustache",
-          ),
-        )
+        File.read(Rails.root.join("plugins/discourse-jira/lib/templates/topic_summary.mustache"))
       result = Mustache.render(template, args).strip
 
       render json: { formatted_post_history: result }
