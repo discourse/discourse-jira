@@ -15,13 +15,12 @@ RSpec.describe DiscourseJira::IssueType do
 
   describe ".sync!" do
     it "syncs issue types from Jira" do
-      issue_types = [
-        { id: 100, name: "Task" },
-        { id: 101, name: "Bug" }
-      ]
+      issue_types = [{ id: 100, name: "Task" }, { id: 101, name: "Bug" }]
 
-      stub_request(:get, "https://jira.example.com/rest/api/2/issue/createmeta/#{project.key}/issuetypes")
-        .to_return(status: 200, body: { values: issue_types }.to_json)
+      stub_request(
+        :get,
+        "https://jira.example.com/rest/api/2/issue/createmeta/#{project.key}/issuetypes",
+      ).to_return(status: 200, body: { values: issue_types }.to_json)
 
       expect { described_class.sync! }.to change { described_class.count }.from(0).to(2)
 

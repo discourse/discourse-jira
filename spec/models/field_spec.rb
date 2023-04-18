@@ -17,16 +17,38 @@ RSpec.describe DiscourseJira::Field do
   describe ".sync!" do
     it "syncs fields from Jira" do
       fields = [
-        { id: 100, name: "Platform", schema: { type: "string" }, operations: ["set"], fieldId: "platform", required: true },
-        { id: 101, name: "Device", schema: { type: "string" }, operations: ["set"], fieldId: "device", required: false }
+        {
+          id: 100,
+          name: "Platform",
+          schema: {
+            type: "string",
+          },
+          operations: ["set"],
+          fieldId: "platform",
+          required: true,
+        },
+        {
+          id: 101,
+          name: "Device",
+          schema: {
+            type: "string",
+          },
+          operations: ["set"],
+          fieldId: "device",
+          required: false,
+        },
       ]
 
-      stub_request(:get, "https://jira.example.com/rest/api/2/issue/createmeta/#{project.key}/issuetypes/#{issue_type.uid}")
-        .to_return(status: 200, body: JSON.dump(values: fields))
+      stub_request(
+        :get,
+        "https://jira.example.com/rest/api/2/issue/createmeta/#{project.key}/issuetypes/#{issue_type.uid}",
+      ).to_return(status: 200, body: JSON.dump(values: fields))
 
       expect { described_class.sync! }.to change { described_class.count }.from(0).to(2)
 
-      expect(described_class.pluck(:key, :name, :field_type)).to eq(fields.map { |f| [f[:fieldId], f[:name], f[:schema][:type]] })
+      expect(described_class.pluck(:key, :name, :field_type)).to eq(
+        fields.map { |f| [f[:fieldId], f[:name], f[:schema][:type]] },
+      )
     end
   end
 end

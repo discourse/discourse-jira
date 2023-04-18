@@ -15,11 +15,13 @@ RSpec.describe DiscourseJira::Project do
     it "syncs projects from Jira" do
       projects = [
         { id: 100, key: "TEST", name: "Test Project" },
-        { id: 101, key: "TEST2", name: "Test Project 2" }
+        { id: 101, key: "TEST2", name: "Test Project 2" },
       ]
 
-      stub_request(:get, "https://jira.example.com/rest/api/2/project")
-        .to_return(status: 200, body: projects.to_json)
+      stub_request(:get, "https://jira.example.com/rest/api/2/project").to_return(
+        status: 200,
+        body: projects.to_json,
+      )
 
       expect { described_class.sync! }.to change { described_class.count }.from(0).to(2)
 

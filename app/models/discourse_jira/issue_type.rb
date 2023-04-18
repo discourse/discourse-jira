@@ -17,7 +17,7 @@ module DiscourseJira
       end
 
       if Api.get_version! >= 9
-        fields.each { |json| sync_field!(json[:fieldId], json)}
+        fields.each { |json| sync_field!(json[:fieldId], json) }
       else
         fields.each { |key, json| sync_field!(key, json) }
       end
@@ -37,8 +37,8 @@ module DiscourseJira
         f.name = data[:name]
         f.required = data[:required]
         f.field_type = type
-        (data[:allowedValues] || []).each do |data|
-          f.options.find_or_create_by(jira_id: data[:id]) { |o| o.value = data[:value] }
+        (data[:allowedValues] || []).each do |option|
+          f.options.find_or_create_by(jira_id: option[:id]) { |o| o.value = option[:value] }
         end
         f.save!
       end
