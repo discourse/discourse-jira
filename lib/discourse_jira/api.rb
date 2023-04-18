@@ -2,6 +2,15 @@
 
 module DiscourseJira
   class Api
+    def self.get_version!
+      if SiteSetting.discourse_jira_api_version.blank?
+        data = JSON.parse(get("serverInfo"))
+        SiteSetting.discourse_jira_api_version = data["version"]
+      end
+
+      SiteSetting.discourse_jira_api_version.split(".").first.to_i
+    end
+
     def self.make_request(endpoint)
       if endpoint.start_with?("https://")
         uri = URI(endpoint)
