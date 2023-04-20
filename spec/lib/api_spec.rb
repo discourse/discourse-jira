@@ -19,12 +19,12 @@ RSpec.describe ::DiscourseJira::Api do
           version: "9.4.3",
           versionNumbers: [9, 4, 3],
           deploymentType: "Server",
-          buildNumber: 940003,
+          buildNumber: 940_003,
           buildDate: "2023-02-14T00:00:00.000+0000",
-          databaseBuildNumber: 940003,
+          databaseBuildNumber: 940_003,
           serverTime: "2023-04-20T09:37:42.687+0000",
           scmInfo: "274jf279485112dfg846632b627916e8cd84833fe47f7e7",
-          serverTitle: "Provider"
+          serverTitle: "Provider",
         }.to_json,
       )
 
