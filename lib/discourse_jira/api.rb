@@ -4,7 +4,7 @@ module DiscourseJira
   class Api
     def self.get_version!
       if SiteSetting.discourse_jira_api_version == 0
-        data = JSON.parse(get("serverInfo"))
+        data = JSON.parse(get("serverInfo").body)
         SiteSetting.discourse_jira_api_version = data["versionNumbers"][0]
       end
 
