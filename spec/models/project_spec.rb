@@ -8,7 +8,7 @@ RSpec.describe DiscourseJira::Project do
     SiteSetting.discourse_jira_url = "https://jira.example.com"
     SiteSetting.discourse_jira_username = "jira"
     SiteSetting.discourse_jira_password = "password"
-    SiteSetting.discourse_jira_api_version = "9.4.3"
+    SiteSetting.discourse_jira_api_version = 9
   end
 
   describe ".sync!" do

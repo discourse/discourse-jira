@@ -15,5 +15,5 @@ plugins:
   discourse_jira_verbose_log:
     default: false
   discourse_jira_api_version:
-    default: ""
+    default: 0
     hidden: true

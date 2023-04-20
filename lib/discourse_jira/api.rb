@@ -3,12 +3,12 @@
 module DiscourseJira
   class Api
     def self.get_version!
-      if SiteSetting.discourse_jira_api_version.blank?
+      if SiteSetting.discourse_jira_api_version == 0
         data = JSON.parse(get("serverInfo"))
-        SiteSetting.discourse_jira_api_version = data["version"]
+        SiteSetting.discourse_jira_api_version = data["versionNumbers"][0]
       end
 
-      SiteSetting.discourse_jira_api_version.split(".").first.to_i
+      SiteSetting.discourse_jira_api_version
     end
 
     def self.make_request(endpoint)

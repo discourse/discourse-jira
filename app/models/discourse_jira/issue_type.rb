@@ -48,7 +48,7 @@ module DiscourseJira
       return unless SiteSetting.discourse_jira_enabled
       return if ::DiscourseJira::Api.get_version! < 9
 
-      projects = DiscourseJira::Project.order(:synced_at).limit(100)
+      projects = DiscourseJira::Project.order("synced_at ASC NULLS FIRST").limit(100)
       projects.each do |project|
         project.sync_issue_types!
         project.synced_at = Time.zone.now
