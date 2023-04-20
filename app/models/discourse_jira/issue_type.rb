@@ -12,8 +12,8 @@ module DiscourseJira
 
     def sync_fields!(fields = nil)
       if fields.blank?
-        response = Api.get("issue/createmeta/#{self.project.key}/issuetypes/#{self.uid}")
-        fields = JSON.parse(response.body, symbolize_names: true)[:values]
+        data = Api.getJSON("issue/createmeta/#{self.project.key}/issuetypes/#{self.uid}")
+        fields = data[:values] || []
       end
 
       if Api.get_version! >= 9

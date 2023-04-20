@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
 module DiscourseJira
+  class InvalidApiResponse < ::StandardError
+  end
+
   class Api
+    INVALID_RESPONSE = "Invalid response from Jira API server"
+
     def self.get_version!
       if SiteSetting.discourse_jira_api_version == 0
         data = JSON.parse(get("serverInfo").body)
@@ -37,6 +42,19 @@ module DiscourseJira
 
     def self.get(endpoint)
       make_request(endpoint) { |uri, headers| Net::HTTP::Get.new(uri, headers) }
+    end
+
+    def self.getJSON(endpoint)
+      response = get(endpoint)
+
+      if response.code != "200"
+        e = InvalidApiResponse.new(response.body.presence || "")
+        e.set_backtrace(caller)
+        Discourse.warn_exception(e, message: INVALID_RESPONSE, env: { endpoint: endpoint })
+        return { error: INVALID_RESPONSE }
+      end
+
+      JSON.parse(response.body, symbolize_names: true)
     end
 
     def self.post(endpoint, body)

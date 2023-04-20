@@ -10,8 +10,8 @@ module DiscourseJira
       return unless SiteSetting.discourse_jira_enabled
 
       if issue_types.blank?
-        response = Api.get("issue/createmeta/#{self.key}/issuetypes")
-        issue_types = JSON.parse(response.body, symbolize_names: true)[:values]
+        data = Api.getJSON("issue/createmeta/#{self.key}/issuetypes")
+        issue_types = data[:values] || []
       end
 
       issue_types.each do |json|
@@ -35,11 +35,10 @@ module DiscourseJira
       projects = []
 
       if ::DiscourseJira::Api.get_version! >= 9
-        response = Api.get("project")
-        projects = JSON.parse(response.body, symbolize_names: true)
+        projects = Api.getJSON("project")
       else
-        response = Api.get("issue/createmeta?expand=projects.issuetypes.fields")
-        projects = JSON.parse(response.body, symbolize_names: true)[:projects]
+        data = Api.getJSON("issue/createmeta?expand=projects.issuetypes.fields")
+        projects = data[:projects] || []
       end
 
       projects.each do |json|
