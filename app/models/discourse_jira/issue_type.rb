@@ -16,7 +16,7 @@ module DiscourseJira
         fields = data[:values] || []
       end
 
-      if Api.get_version! >= 9
+      if Api.createmeta_restricted?
         fields.each { |json| sync_field!(json[:fieldId], json) }
       else
         fields.each { |key, json| sync_field!(key, json) }
@@ -46,7 +46,7 @@ module DiscourseJira
 
     def self.sync!
       return unless SiteSetting.discourse_jira_enabled
-      return if ::DiscourseJira::Api.get_version! < 9
+      return unless Api.createmeta_restricted?
 
       projects = DiscourseJira::Project.order("synced_at ASC NULLS FIRST").limit(100)
       projects.each do |project|

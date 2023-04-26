@@ -34,7 +34,7 @@ module DiscourseJira
 
       projects = []
 
-      if ::DiscourseJira::Api.get_version! >= 9
+      if Api.createmeta_restricted?
         projects = Api.getJSON("project")
       else
         data = Api.getJSON("issue/createmeta?expand=projects.issuetypes.fields")
