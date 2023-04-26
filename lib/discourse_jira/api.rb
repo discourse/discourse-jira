@@ -16,6 +16,11 @@ module DiscourseJira
       SiteSetting.discourse_jira_api_version
     end
 
+    def self.createmeta_restricted?
+      api_version = get_version!
+      api_version >= 9 && api_version < 1000
+    end
+
     def self.make_request(endpoint)
       if endpoint.start_with?("https://")
         uri = URI(endpoint)

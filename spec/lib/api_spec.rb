@@ -29,6 +29,7 @@ RSpec.describe ::DiscourseJira::Api do
       )
 
       expect(described_class.get_version!).to eq(9)
+      expect(described_class.createmeta_restricted?).to be_truthy
       expect(SiteSetting.discourse_jira_api_version).to eq(9)
     end
   end

@@ -9,7 +9,7 @@ module DiscourseJira
 
     def self.sync!
       return unless SiteSetting.discourse_jira_enabled
-      return if ::DiscourseJira::Api.get_version! < 9
+      return unless Api.createmeta_restricted?
 
       issue_types = DiscourseJira::IssueType.order("synced_at ASC NULLS FIRST").limit(100)
       issue_types.each do |issue_type|
