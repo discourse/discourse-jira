@@ -37,6 +37,27 @@ RSpec.describe DiscourseJira::Field do
           fieldId: "device",
           required: false,
         },
+        {
+          id: 102,
+          name: "Browser",
+          schema: {
+            type: "option",
+            items: "string",
+          },
+          operations: ["set"],
+          fieldId: "browser",
+          required: false,
+          allowedValues: [
+            {
+              id: "chrome",
+              value: "Chrome",
+            },
+            {
+              id: "firefox",
+              value: "Firefox",
+            },
+          ],
+        }
       ]
 
       stub_request(
@@ -44,7 +65,7 @@ RSpec.describe DiscourseJira::Field do
         "https://jira.example.com/rest/api/2/issue/createmeta/#{project.key}/issuetypes/#{issue_type.uid}",
       ).to_return(status: 200, body: JSON.dump(values: fields))
 
-      expect { described_class.sync! }.to change { described_class.count }.from(0).to(2)
+      expect { described_class.sync! }.to change { described_class.count }.from(0).to(3)
 
       expect(described_class.pluck(:key, :name, :field_type)).to eq(
         fields.map { |f| [f[:fieldId], f[:name], f[:schema][:type]] },
