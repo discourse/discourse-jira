@@ -47,17 +47,8 @@ RSpec.describe DiscourseJira::Field do
           operations: ["set"],
           fieldId: "browser",
           required: false,
-          allowedValues: [
-            {
-              id: "chrome",
-              value: "Chrome",
-            },
-            {
-              id: "firefox",
-              value: "Firefox",
-            },
-          ],
-        }
+          allowedValues: [{ id: "chrome", value: "Chrome" }, { id: "firefox", value: "Firefox" }],
+        },
       ]
 
       stub_request(
