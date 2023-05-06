@@ -38,7 +38,7 @@ module DiscourseJira
         f.required = data[:required]
         f.field_type = type
         (data[:allowedValues] || []).each do |option|
-          f.options.find_or_create_by(jira_id: option[:id]) { |o| o.value = option[:value] }
+          f.options.find_or_initialize_by(jira_id: option[:id]) { |o| o.value = option[:value] }
         end
         f.save!
       end
