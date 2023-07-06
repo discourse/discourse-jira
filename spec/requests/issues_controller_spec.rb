@@ -58,7 +58,7 @@ describe DiscourseJira::IssuesController do
       sign_in(admin)
 
       post "/jira/issues.json"
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(404)
     end
 
     it "create a Jira issue and " do
@@ -193,7 +193,7 @@ describe DiscourseJira::IssuesController do
       sign_in(admin)
 
       post "/jira/issues/attach.json"
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(404)
     end
 
     it "attach an existing Jira issue to post" do

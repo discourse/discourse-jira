@@ -2,7 +2,7 @@
 
 module DiscourseJira
   class IssuesController < ::ApplicationController
-    requires_plugin DiscourseJira
+    requires_plugin DiscourseJira::PLUGIN_NAME
 
     before_action :ensure_logged_in, except: [:webhook]
     before_action :ensure_can_create_jira_issue, except: [:webhook]
@@ -33,8 +33,6 @@ module DiscourseJira
     end
 
     def create
-      raise Discourse::InvalidAccess if !SiteSetting.discourse_jira_enabled
-
       summary = I18n.t("discourse_jira.issue_title", title: params[:title])
       issue_type = IssueType.find_by(id: params[:issue_type_id])
       raise Discourse::NotFound if issue_type.blank?

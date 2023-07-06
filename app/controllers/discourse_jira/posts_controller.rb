@@ -2,7 +2,7 @@
 
 module DiscourseJira
   class PostsController < ::ApplicationController
-    requires_plugin DiscourseJira
+    requires_plugin DiscourseJira::PLUGIN_NAME
 
     before_action :ensure_logged_in
     before_action :ensure_can_create_jira_issue
