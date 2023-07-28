@@ -1,0 +1,50 @@
+{
+  "projects": [
+    {
+      "id": 100,
+      "issuetypes": [
+        {
+          "id": 1,
+          "name": "Bug",
+          "fields": {
+            "os": {
+              "name": "OS",
+              "required": true,
+              "operations": ["set"],
+              "schema": {
+                "type": "string"
+              }
+            },
+            "description": {
+              "name": "Description",
+              "required": true,
+              "operations": ["set"],
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 101,
+      "issuetypes": [
+        {
+          "id": 2,
+          "name": "Task",
+          "fields": {
+            "browser": {
+              "name": "Browser",
+              "required": true,
+              "operations": ["set"],
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

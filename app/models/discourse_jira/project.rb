@@ -27,32 +27,31 @@ module DiscourseJira
           i.save!
         end
       end
+
+      synced_at = Time.zone.now
     end
 
     def self.sync!
       return unless SiteSetting.discourse_jira_enabled
 
-      projects = []
+      project_ids = []
 
-      if Api.createmeta_restricted?
-        projects = Api.getJSON("project")
-      else
-        data = Api.getJSON("issue/createmeta?expand=projects.issuetypes.fields")
-        projects = data[:projects] || []
-      end
-
-      projects.each do |json|
-        project = find_or_initialize_by(uid: json[:id])
-        project.tap do |p|
-          p.name = json[:name]
-          p.key = json[:key]
-          if json[:issuetypes].present?
-            p.sync_issue_types!(json[:issuetypes])
-            p.synced_at = Time.zone.now
+      Api
+        .getJSON("project")
+        .each do |json|
+          find_or_initialize_by(uid: json[:id]).tap do |p|
+            p.name = json[:name]
+            p.key = json[:key]
+            if json[:issuetypes].present?
+              p.sync_issue_types!(json[:issuetypes])
+            elsif p.synced_at.blank? && !Api.createmeta_restricted?
+              project_ids << p.uid
+            end
+            p.save!
           end
-          p.save!
         end
-      end
+
+      IssueType.sync_by_project_ids!(project_ids)
     end
   end
 end

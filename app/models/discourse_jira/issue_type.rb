@@ -46,13 +46,38 @@ module DiscourseJira
 
     def self.sync!
       return unless SiteSetting.discourse_jira_enabled
-      return unless Api.createmeta_restricted?
 
       projects = DiscourseJira::Project.order("synced_at ASC NULLS FIRST").limit(100)
-      projects.each do |project|
-        project.sync_issue_types!
-        project.synced_at = Time.zone.now
-        project.save!
+
+      if Api.createmeta_restricted?
+        projects.each do |project|
+          project.sync_issue_types!
+          project.synced_at = Time.zone.now
+          project.save!
+        end
+      else
+        sync_by_project_ids!(projects.pluck(:uid))
+      end
+    end
+
+    def self.sync_by_project_ids!(project_ids)
+      project_ids.each_slice(10) do |ids|
+        data =
+          Api.getJSON(
+            "issue/createmeta?expand=projects.issuetypes.fields&projectIds=#{ids.join(",")}",
+          )
+
+        (data[:projects] || []).each do |json|
+          if json[:issuetypes].present?
+            Project
+              .find_by(uid: json[:id])
+              .tap do |p|
+                next if p.blank?
+                p.sync_issue_types!(json[:issuetypes])
+                p.save!
+              end
+          end
+        end
       end
     end
   end
