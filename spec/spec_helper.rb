@@ -2,12 +2,7 @@
 
 module Helpers
   def get_jira_response(filename)
-    FileUtils.mkdir_p("#{Rails.root}/tmp/spec") unless Dir.exist?("#{Rails.root}/tmp/spec")
-    FileUtils.cp(
-      "#{Rails.root}/plugins/discourse-jira/spec/fixtures/#{filename}",
-      "#{Rails.root}/tmp/spec/#{filename}",
-    )
-    File.new("#{Rails.root}/tmp/spec/#{filename}").read
+    File.new("#{Rails.root}/plugins/discourse-jira/spec/fixtures/#{filename}").read
   end
 end
 
