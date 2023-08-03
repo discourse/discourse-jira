@@ -109,7 +109,7 @@ module DiscourseJira
             topic.add_moderator_post(
               current_user,
               I18n.t("discourse_jira.small_action", title: summary, url: result[:issue_url]),
-              post_type: Post.types[:small_action],
+              post_type: Post.types[:whisper],
               action_code: "jira_issue",
             )
           end
@@ -165,7 +165,7 @@ module DiscourseJira
                 title: json[:fields][:summary],
                 url: result[:issue_url],
               ),
-              post_type: Post.types[:small_action],
+              post_type: Post.types[:whisper],
               action_code: "jira_issue",
             )
           end

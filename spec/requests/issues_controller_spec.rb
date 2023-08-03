@@ -103,6 +103,7 @@ describe DiscourseJira::IssuesController do
       expect(response.parsed_body["issue_key"]).to eq("DIS-42")
       expect(response.parsed_body["issue_url"]).to eq("https://example.com/browse/DIS-42")
       expect(post.reload.custom_fields["jira_issue_key"]).to eq("DIS-42")
+      expect(Post.last.post_type).to eq(Post.types[:whisper])
     end
 
     it "responds with proper error message" do
@@ -220,6 +221,7 @@ describe DiscourseJira::IssuesController do
       expect(response.parsed_body["issue_key"]).to eq("DIS-42")
       expect(response.parsed_body["issue_url"]).to eq("https://example.com/browse/DIS-42")
       expect(post.reload.custom_fields["jira_issue_key"]).to eq("DIS-42")
+      expect(Post.last.post_type).to eq(Post.types[:whisper])
     end
   end
 end
