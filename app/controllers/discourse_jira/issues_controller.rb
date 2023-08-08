@@ -25,11 +25,15 @@ module DiscourseJira
     end
 
     def fields
-      issue_type_id = params[:issue_type_id]
-      fields = Field.includes(:options).where(issue_type_id: issue_type_id)
-      raise Discourse::NotFound if fields.blank?
+      params.require(:project_id)
+      params.require(:issue_type_id)
 
-      render_serialized(fields, JiraFieldSerializer, root: "fields")
+      fields = ProjectIssueType.find_by(
+        project_id: params[:project_id].to_i,
+        issue_type_id: params[:issue_type_id].to_i,
+      ).fetch_fields
+
+      render json: { fields: fields }
     end
 
     def create
@@ -50,11 +54,9 @@ module DiscourseJira
 
       params[:fields].each do |_, data|
         next if data.blank?
-        field = Field.find_by(key: data[:key])
-        next if field.blank?
-        next if data[:value].blank? && !field.required
+        next if data[:value].blank? && !data[:required]
 
-        case field.field_type
+        case data[:field_type]
         when "array"
           fields[data[:key]] = data[:value].map { |v| { id: v } }
         when "option"

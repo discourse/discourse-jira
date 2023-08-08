@@ -8,11 +8,11 @@
         <section class="field-item">
           <label>{{i18n "discourse_jira.create_form.project"}}</label>
           {{combo-box
-            name="project_key"
+            name="project_id"
             content=projects
-            valueProperty="key"
-            value=projectKey
-            onChange=(action (mut projectKey))
+            valueProperty="id"
+            value=projectId
+            onChange=(action (mut projectId))
           }}
         </section>
 

@@ -3,82 +3,23 @@
 module DiscourseJira
   class IssueType < ::ActiveRecord::Base
     self.table_name = "jira_issue_types"
+    
+    # TODO (vinothkannans): use `HasDeprecatedColumns` concern  on 1 September 2023
+    self.ignored_columns = ["project_id"]
 
-    belongs_to :project
-    has_many :fields, dependent: :destroy
-
-    SUPPORTED_FIELD_TYPES ||= %w[string date array option].freeze
-    DEFAULT_FIELDS ||= %w[summary description].freeze
-
-    def sync_fields!(fields = nil)
-      if fields.blank?
-        data = Api.getJSON("issue/createmeta/#{self.project.key}/issuetypes/#{self.uid}")
-        fields = data[:values] || []
-      end
-
-      if Api.createmeta_restricted?
-        fields.each { |json| sync_field!(json[:fieldId], json) }
-      else
-        fields.each { |key, json| sync_field!(key, json) }
-      end
-    end
-
-    def sync_field!(key, data)
-      type = data[:schema][:type]
-
-      return unless SUPPORTED_FIELD_TYPES.include?(type)
-      return unless data[:operations].include?("set")
-      return if DEFAULT_FIELDS.include?(key.to_s)
-      return if type == "array" && data[:schema][:items] != "option"
-      return if %w[array option].include?(type) && data[:allowedValues].blank?
-
-      field = self.fields.find_or_initialize_by(key: key)
-      field.tap do |f|
-        f.name = data[:name]
-        f.required = data[:required]
-        f.field_type = type
-        (data[:allowedValues] || []).each do |option|
-          f.options.find_or_initialize_by(jira_id: option[:id]) { |o| o.value = option[:value] }
-        end
-        f.save!
-      end
-    end
+    has_many :project_issue_types, dependent: :destroy
+    has_many :projects, through: :project_issue_types
 
     def self.sync!
-      return unless SiteSetting.discourse_jira_enabled
-
-      projects = DiscourseJira::Project.order("synced_at ASC NULLS FIRST").limit(100)
-
-      if Api.createmeta_restricted?
-        projects.each do |project|
-          project.sync_issue_types!
-          project.synced_at = Time.zone.now
-          project.save!
-        end
-      else
-        sync_by_project_ids!(projects.pluck(:uid))
-      end
-    end
-
-    def self.sync_by_project_ids!(project_ids)
-      project_ids.each_slice(10) do |ids|
-        data =
-          Api.getJSON(
-            "issue/createmeta?expand=projects.issuetypes.fields&projectIds=#{ids.join(",")}",
-          )
-
-        (data[:projects] || []).each do |json|
-          if json[:issuetypes].present?
-            Project
-              .find_by(uid: json[:id])
-              .tap do |p|
-                next if p.blank?
-                p.sync_issue_types!(json[:issuetypes])
-                p.save!
-              end
+      Api
+        .getJSON("issuetype")
+        .each do |data|
+          next if data[:subtask]
+          find_or_initialize_by(uid: data[:id]).tap do |i|
+            i.name = data[:name]
+            i.save!
           end
         end
-      end
     end
   end
 end

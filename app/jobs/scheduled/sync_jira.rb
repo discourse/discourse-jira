@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 module ::Jobs
-  class SyncJiraFields < ::Jobs::Scheduled
-    every 6.hours
+  class SyncJira < ::Jobs::Scheduled
+    every 4.hours
 
     def execute(args)
       return unless SiteSetting.discourse_jira_enabled
 
-      ::DiscourseJira::Field.sync!
+      ::DiscourseJira::IssueType.sync!
+      ::DiscourseJira::Project.sync!
     end
   end
 end

@@ -23,7 +23,7 @@ RSpec.describe DiscourseJira::Project do
     end
 
     before do
-      stub_request(:get, "#{api_url}/project").to_return(status: 200, body: projects.to_json)
+      stub_request(:get, "#{api_url}/project?expand=issueTypes").to_return(status: 200, body: projects.to_json)
     end
 
     it "syncs projects from Jira" do
@@ -32,18 +32,18 @@ RSpec.describe DiscourseJira::Project do
       expect(described_class.pluck(:uid, :key, :name)).to eq(projects.pluck(:id, :key, :name))
     end
 
-    it "syncs projects from Jira using createmeta" do
-      SiteSetting.discourse_jira_api_version = 8
+    it "syncs issue types and projects relationship" do
+      project = Fabricate(:jira_project, uid: 10000)
+      Fabricate(:jira_issue_type, uid: 1)
+      Fabricate(:jira_issue_type, uid: 3)
+
       stub_request(
         :get,
-        "#{api_url}/issue/createmeta?expand=projects.issuetypes.fields&projectIds=100,101",
-      ).to_return(status: 200, body: get_jira_response("createmeta.json"))
+        "#{api_url}/project/#{project.uid}?expand=issueTypes",
+      ).to_return(status: 200, body: get_jira_response("project.json"))
 
-      described_class.sync!
-
-      expect(described_class.pluck(:uid, :key, :name)).to eq(projects.pluck(:id, :key, :name))
-      expect(DiscourseJira::IssueType.pluck(:uid, :name)).to eq([[1, "Bug"], [2, "Task"]])
-      expect(DiscourseJira::Field.pluck(:key)).to eq(%w[os browser])
+      expect { project.sync! }.to change { project.issue_types.count }.from(0).to(2)
+      expect(project.issue_types.pluck(:uid)).to eq([1, 3])
     end
   end
 end
