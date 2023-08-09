@@ -118,11 +118,14 @@ export default Controller.extend(ModalFunctionality, {
     ajax("/jira/issue/createmeta", {
       type: "GET",
       data: { project_id: this.projectId, issue_type_id: this.issueTypeId },
-    }).then((result) => {
-      if (result.fields) {
-        this.set("fields", result.fields);
-      }
-    }).catch(popupAjaxError).finally(() => this.set("loading", false));
+    })
+      .then((result) => {
+        if (result.fields) {
+          this.set("fields", result.fields);
+        }
+      })
+      .catch(popupAjaxError)
+      .finally(() => this.set("loading", false));
   },
 
   @action

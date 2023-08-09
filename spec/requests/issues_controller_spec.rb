@@ -143,7 +143,10 @@ describe DiscourseJira::IssuesController do
       sign_in(admin)
 
       DiscourseJira::ProjectIssueType.create!(project: project, issue_type: issue_type)
-      stub_request(:get, "https://example.com/rest/api/2/issue/createmeta?expand=projects.issuetypes.fields&issuetypeIds=#{issue_type.uid}&projectIds=#{project.uid}").to_return(
+      stub_request(
+        :get,
+        "https://example.com/rest/api/2/issue/createmeta?expand=projects.issuetypes.fields&issuetypeIds=#{issue_type.uid}&projectIds=#{project.uid}",
+      ).to_return(
         status: 200,
         body: {
           projects: [
@@ -165,16 +168,7 @@ describe DiscourseJira::IssuesController do
                         type: "option",
                       },
                       name: "Platform",
-                      allowedValues: [
-                        {
-                          id: 5,
-                          value: "Windows",
-                        },
-                        {
-                          id: 6,
-                          value: "Mac",
-                        }
-                      ],
+                      allowedValues: [{ id: 5, value: "Windows" }, { id: 6, value: "Mac" }],
                       operations: ["set"],
                     },
                   },
@@ -199,7 +193,7 @@ describe DiscourseJira::IssuesController do
             "field_type" => "option",
             "key" => "platform",
             "name" => "Platform",
-            "options" => [{"id" => 5, "value" => "Windows"}, {"id" => 6, "value" => "Mac"}],
+            "options" => [{ "id" => 5, "value" => "Windows" }, { "id" => 6, "value" => "Mac" }],
             "required" => false,
           },
         ],

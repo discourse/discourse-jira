@@ -28,9 +28,7 @@ module DiscourseJira
     def self.sync!
       Api
         .getJSON("project?expand=issueTypes")
-        .each do |data|
-          find_or_initialize_by(uid: data[:id]).sync!(data)
-        end
+        .each { |data| find_or_initialize_by(uid: data[:id]).sync!(data) }
     end
   end
 end

@@ -3,7 +3,7 @@
 module DiscourseJira
   class IssueType < ::ActiveRecord::Base
     self.table_name = "jira_issue_types"
-    
+
     # TODO (vinothkannans): use `HasDeprecatedColumns` concern  on 1 September 2023
     self.ignored_columns = ["project_id"]
 

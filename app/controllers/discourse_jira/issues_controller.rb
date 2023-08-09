@@ -28,10 +28,11 @@ module DiscourseJira
       params.require(:project_id)
       params.require(:issue_type_id)
 
-      fields = ProjectIssueType.find_by(
-        project_id: params[:project_id].to_i,
-        issue_type_id: params[:issue_type_id].to_i,
-      ).fetch_fields
+      fields =
+        ProjectIssueType.find_by(
+          project_id: params[:project_id].to_i,
+          issue_type_id: params[:issue_type_id].to_i,
+        ).fetch_fields
 
       render json: { fields: fields }
     end

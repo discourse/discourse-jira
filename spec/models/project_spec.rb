@@ -23,7 +23,10 @@ RSpec.describe DiscourseJira::Project do
     end
 
     before do
-      stub_request(:get, "#{api_url}/project?expand=issueTypes").to_return(status: 200, body: projects.to_json)
+      stub_request(:get, "#{api_url}/project?expand=issueTypes").to_return(
+        status: 200,
+        body: projects.to_json,
+      )
     end
 
     it "syncs projects from Jira" do
@@ -33,14 +36,14 @@ RSpec.describe DiscourseJira::Project do
     end
 
     it "syncs issue types and projects relationship" do
-      project = Fabricate(:jira_project, uid: 10000)
+      project = Fabricate(:jira_project, uid: 10_000)
       Fabricate(:jira_issue_type, uid: 1)
       Fabricate(:jira_issue_type, uid: 3)
 
-      stub_request(
-        :get,
-        "#{api_url}/project/#{project.uid}?expand=issueTypes",
-      ).to_return(status: 200, body: get_jira_response("project.json"))
+      stub_request(:get, "#{api_url}/project/#{project.uid}?expand=issueTypes").to_return(
+        status: 200,
+        body: get_jira_response("project.json"),
+      )
 
       expect { project.sync! }.to change { project.issue_types.count }.from(0).to(2)
       expect(project.issue_types.pluck(:uid)).to eq([1, 3])

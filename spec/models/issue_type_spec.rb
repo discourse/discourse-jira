@@ -17,10 +17,7 @@ RSpec.describe DiscourseJira::IssueType do
     it "syncs issue types from Jira" do
       issue_types = [{ id: 100, name: "Task" }, { id: 101, name: "Bug" }]
 
-      stub_request(:get, "#{api_url}/issuetype").to_return(
-        status: 200,
-        body: issue_types.to_json,
-      )
+      stub_request(:get, "#{api_url}/issuetype").to_return(status: 200, body: issue_types.to_json)
 
       expect { described_class.sync! }.to change { described_class.count }.from(0).to(2)
 
