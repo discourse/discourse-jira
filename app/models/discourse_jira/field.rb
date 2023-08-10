@@ -1,11 +1,49 @@
 # frozen_string_literal: true
 
 module DiscourseJira
-  class Field < ::ActiveRecord::Base
-    self.table_name = "jira_fields"
+  class Field
+    SUPPORTED_TYPES ||= %w[string date array option].freeze
+    DEFAULT_FIELDS ||= %w[summary description].freeze
 
-    belongs_to :issue_type
-    has_many :options, dependent: :destroy, class_name: "DiscourseJira::FieldOption"
+    def self.fetch(project_id, issue_type_id)
+      fields = []
+
+      if Api.createmeta_restricted?
+        data = Api.getJSON("issue/createmeta/#{project_id}/issuetypes/#{issue_type_id}")
+        fields = data[:values] if data[:values].present?
+      else
+        data =
+          Api.getJSON(
+            "issue/createmeta?projectIds=#{project_id}&issuetypeIds=#{issue_type_id}&expand=projects.issuetypes.fields",
+          )
+        data[:projects].first[:issuetypes].first[:fields].each do |key, json|
+          json[:fieldId] = key
+          fields << json
+        end
+      end
+
+      fields
+        .select do |field|
+          type = field[:schema][:type]
+
+          next unless SUPPORTED_TYPES.include?(type)
+          next unless field[:operations].include?("set")
+          next if DEFAULT_FIELDS.include?(field[:fieldId].to_s)
+          next if type == "array" && field[:schema][:items] != "option"
+          next if %w[array option].include?(type) && field[:allowedValues].blank?
+
+          true
+        end
+        .map do |field|
+          {
+            key: field[:fieldId],
+            name: field[:name],
+            required: field[:required],
+            field_type: field[:schema][:type],
+            options: field[:allowedValues]&.map { |o| { id: o[:id], value: o[:value] } },
+          }
+        end
+    end
 
     def self.sync!
       return unless SiteSetting.discourse_jira_enabled

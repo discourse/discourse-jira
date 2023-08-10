@@ -12,7 +12,7 @@ export default Controller.extend(ModalFunctionality, {
 
   topicId: null,
   postNumber: null,
-  projectKey: null,
+  projectId: null,
   issueTypeId: null,
   fields: [],
   title: "",
@@ -27,7 +27,7 @@ export default Controller.extend(ModalFunctionality, {
       projects: [],
       topicId: null,
       postNumber: null,
-      projectKey: null,
+      projectId: null,
       issueTypeId: null,
       fields: [],
       title: "",
@@ -72,23 +72,23 @@ export default Controller.extend(ModalFunctionality, {
       .finally(() => this.set("loading", false));
   },
 
-  @discourseComputed("projects", "projectKey")
-  issueTypes(projects, projectKey) {
-    const project = projects.findBy("key", projectKey);
+  @discourseComputed("projects", "projectId")
+  issueTypes(projects, projectId) {
+    const project = projects.findBy("id", projectId);
     return project ? project.issue_types : [];
   },
 
   @discourseComputed(
     "loading",
-    "projectKey",
+    "projectId",
     "issueTypeId",
     "description",
     "requiredFields.@each.value"
   )
-  disabled(loading, projectKey, issueTypeId, description) {
+  disabled(loading, projectId, issueTypeId, description) {
     return (
       loading ||
-      !projectKey ||
+      !projectId ||
       !issueTypeId ||
       !description ||
       this.requiredFields.filter((f) => !f.value).length
@@ -115,7 +115,10 @@ export default Controller.extend(ModalFunctionality, {
   @observes("issueTypeId")
   getFields() {
     this.set("loading", true);
-    ajax(`/jira/issues/${this.issueTypeId}/fields`, {})
+    ajax("/jira/issue/createmeta", {
+      type: "GET",
+      data: { project_id: this.projectId, issue_type_id: this.issueTypeId },
+    })
       .then((result) => {
         if (result.fields) {
           this.set("fields", result.fields);
@@ -132,7 +135,7 @@ export default Controller.extend(ModalFunctionality, {
     ajax("/jira/issues", {
       type: "POST",
       data: {
-        project_key: this.projectKey,
+        project_id: this.projectId,
         issue_type_id: this.issueTypeId,
         title: this.title,
         description: this.description,

@@ -4,54 +4,31 @@ module DiscourseJira
   class Project < ::ActiveRecord::Base
     self.table_name = "jira_projects"
 
-    has_many :issue_types, dependent: :destroy
+    has_many :project_issue_types, dependent: :destroy
+    has_many :issue_types, through: :project_issue_types
 
-    def sync_issue_types!(issue_types = nil)
-      return unless SiteSetting.discourse_jira_enabled
+    def sync!(data = nil)
+      data ||= Api.getJSON("project/#{self.uid}?expand=issueTypes")
 
-      if issue_types.blank?
-        data = Api.getJSON("issue/createmeta/#{self.key}/issuetypes")
-        issue_types = data[:values] || []
+      self.name = data[:name]
+      self.key = data[:key]
+      if data[:issueTypes].present?
+        issue_type_uids = data[:issueTypes].filter { |it| !it[:subtask] }.map { |it| it[:id].to_i }
+        self.issue_types.where.not(uid: issue_type_uids).destroy_all
+
+        issue_type_uids -= self.issue_types.pluck(:uid)
+        self.issue_types.push(IssueType.where(uid: issue_type_uids))
+      else
+        self.issue_types.destroy_all
       end
-
-      issue_types.each do |json|
-        next if json[:subtask]
-
-        issue_type = self.issue_types.find_or_initialize_by(uid: json[:id])
-        issue_type.tap do |i|
-          i.name = json[:name]
-          if json[:fields].present?
-            i.sync_fields!(json[:fields])
-            i.synced_at = Time.zone.now
-          end
-          i.save!
-        end
-      end
-
-      synced_at = Time.zone.now
+      self.synced_at = Time.zone.now
+      save!
     end
 
     def self.sync!
-      return unless SiteSetting.discourse_jira_enabled
-
-      project_ids = []
-
       Api
-        .getJSON("project")
-        .each do |json|
-          find_or_initialize_by(uid: json[:id]).tap do |p|
-            p.name = json[:name]
-            p.key = json[:key]
-            if json[:issuetypes].present?
-              p.sync_issue_types!(json[:issuetypes])
-            elsif p.synced_at.blank? && !Api.createmeta_restricted?
-              project_ids << p.uid
-            end
-            p.save!
-          end
-        end
-
-      IssueType.sync_by_project_ids!(project_ids)
+        .getJSON("project?expand=issueTypes")
+        .each { |data| find_or_initialize_by(uid: data[:id]).sync!(data) }
     end
   end
 end

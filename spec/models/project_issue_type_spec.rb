@@ -2,9 +2,9 @@
 
 require "rails_helper"
 
-RSpec.describe DiscourseJira::Field do
+RSpec.describe DiscourseJira::ProjectIssueType do
   fab!(:project) { Fabricate(:jira_project) }
-  fab!(:issue_type) { Fabricate(:jira_issue_type, project: project) }
+  fab!(:issue_type) { Fabricate(:jira_issue_type) }
 
   before do
     SiteSetting.discourse_jira_enabled = true
@@ -12,11 +12,12 @@ RSpec.describe DiscourseJira::Field do
     SiteSetting.discourse_jira_username = "jira"
     SiteSetting.discourse_jira_password = "password"
     SiteSetting.discourse_jira_api_version = 9
+    DiscourseJira::ProjectIssueType.create!(project: project, issue_type: issue_type)
   end
 
-  describe ".sync!" do
-    it "syncs fields from Jira" do
-      fields = [
+  describe ".fetch_fields" do
+    it "get fields from Jira" do
+      data = [
         {
           id: 100,
           name: "Platform",
@@ -53,13 +54,14 @@ RSpec.describe DiscourseJira::Field do
 
       stub_request(
         :get,
-        "https://jira.example.com/rest/api/2/issue/createmeta/#{project.key}/issuetypes/#{issue_type.uid}",
-      ).to_return(status: 200, body: JSON.dump(values: fields))
+        "https://jira.example.com/rest/api/2/issue/createmeta/#{project.uid}/issuetypes/#{issue_type.uid}",
+      ).to_return(status: 200, body: JSON.dump(values: data))
 
-      expect { described_class.sync! }.to change { described_class.count }.from(0).to(3)
+      fields = DiscourseJira::ProjectIssueType.last.fetch_fields
 
-      expect(described_class.pluck(:key, :name, :field_type)).to eq(
-        fields.map { |f| [f[:fieldId], f[:name], f[:schema][:type]] },
+      expect(fields.size).to eq(3)
+      expect(fields.pluck(:key, :name, :field_type)).to eq(
+        data.map { |f| [f[:fieldId], f[:name], f[:schema][:type]] },
       )
     end
   end

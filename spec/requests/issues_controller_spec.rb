@@ -11,6 +11,7 @@ describe DiscourseJira::IssuesController do
   before do
     SiteSetting.discourse_jira_enabled = true
     SiteSetting.discourse_jira_url = "https://example.com/"
+    SiteSetting.discourse_jira_api_version = 8
   end
 
   describe "#preflight" do
@@ -43,10 +44,6 @@ describe DiscourseJira::IssuesController do
 
   describe "#create" do
     let(:issue_type) { Fabricate(:jira_issue_type) }
-    let(:field_1) { Fabricate(:jira_field, issue_type: issue_type) }
-    let(:field_2) { Fabricate(:jira_field, issue_type: issue_type, field_type: "option") }
-    let!(:option_1) { Fabricate(:jira_field_option, field: field_2) }
-    let!(:option_2) { Fabricate(:jira_field_option, field: field_2) }
 
     it "requires user to be signed in" do
       post "/jira/issues.json"
@@ -67,7 +64,7 @@ describe DiscourseJira::IssuesController do
 
       stub_request(:post, "https://example.com/rest/api/2/issue").with(
         body:
-          "{\"fields\":{\"project\":{\"key\":\"DIS\"},\"summary\":\"[Discourse] \",\"description\":\"This is a bug\",\"issuetype\":{\"id\":#{issue_type.uid}},\"#{field_1.key}\":\"value\",\"#{field_2.key}\":{\"id\":\"#{option_2.jira_id}\"}}}",
+          "{\"fields\":{\"project\":{\"key\":\"DIS\"},\"summary\":\"[Discourse] \",\"description\":\"This is a bug\",\"issuetype\":{\"id\":#{issue_type.uid}},\"software\":\"value\",\"platform\":{\"id\":\"windows\"}}}",
       ).to_return(
         status: 201,
         body: '{"id":"10041","key":"DIS-42","self":"https://example.com/rest/api/2/issue/10041"}',
@@ -90,12 +87,13 @@ describe DiscourseJira::IssuesController do
                post_number: post.post_number,
                fields: {
                  "0": {
-                   key: field_1.key,
+                   key: "software",
                    value: "value",
                  },
                  "1": {
-                   key: field_2.key,
-                   value: option_2.jira_id,
+                   key: "platform",
+                   value: "windows",
+                   field_type: "option",
                  },
                },
              }
@@ -138,45 +136,65 @@ describe DiscourseJira::IssuesController do
   end
 
   describe "#fields" do
-    fab!(:issue_type) { Fabricate(:jira_issue_type) }
-    fab!(:field_1) do
-      Fabricate(
-        :jira_field,
-        issue_type: issue_type,
-        key: "summary",
-        name: "Summary",
-        required: true,
-      )
-    end
-    fab!(:field_2) do
-      Fabricate(
-        :jira_field,
-        issue_type: issue_type,
-        key: "platform",
-        name: "Platform",
-        field_type: "option",
-      )
-    end
-    fab!(:option) { Fabricate(:jira_field_option, field: field_2) }
+    fab!(:project) { Fabricate(:jira_project, uid: 2) }
+    fab!(:issue_type) { Fabricate(:jira_issue_type, uid: 7) }
 
     it "returns a list of fields for a given issue type" do
       sign_in(admin)
 
-      get "/jira/issues/#{issue_type.id}/fields.json"
+      DiscourseJira::ProjectIssueType.create!(project: project, issue_type: issue_type)
+      stub_request(
+        :get,
+        "https://example.com/rest/api/2/issue/createmeta?expand=projects.issuetypes.fields&issuetypeIds=#{issue_type.uid}&projectIds=#{project.uid}",
+      ).to_return(
+        status: 200,
+        body: {
+          projects: [
+            {
+              issuetypes: [
+                {
+                  fields: {
+                    software: {
+                      required: true,
+                      schema: {
+                        type: "string",
+                      },
+                      name: "Software",
+                      operations: ["set"],
+                    },
+                    platform: {
+                      required: false,
+                      schema: {
+                        type: "option",
+                      },
+                      name: "Platform",
+                      allowedValues: [{ id: 5, value: "Windows" }, { id: 6, value: "Mac" }],
+                      operations: ["set"],
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        }.to_json,
+      )
+
+      get "/jira/issue/createmeta.json?project_id=#{project.id}&issue_type_id=#{issue_type.id}"
       expect(response.parsed_body["fields"]).to eq(
         [
           {
-            "field_type" => field_1.field_type,
-            "key" => field_1.key,
-            "name" => field_1.name,
-            "required" => field_1.required,
+            "field_type" => "string",
+            "key" => "software",
+            "name" => "Software",
+            "options" => nil,
+            "required" => true,
           },
           {
-            "field_type" => field_2.field_type,
-            "key" => field_2.key,
-            "name" => field_2.name,
-            "options" => [{ "id" => option.jira_id, "value" => option.value }],
-            "required" => field_2.required,
+            "field_type" => "option",
+            "key" => "platform",
+            "name" => "Platform",
+            "options" => [{ "id" => 5, "value" => "Windows" }, { "id" => 6, "value" => "Mac" }],
+            "required" => false,
           },
         ],
       )
