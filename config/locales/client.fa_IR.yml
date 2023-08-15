@@ -8,6 +8,7 @@ fa_IR:
   js:
     discourse_jira:
       create_form:
+        project: "پروژه"
         continue: "ادامه"
       attach_form:
         continue: "ادامه"

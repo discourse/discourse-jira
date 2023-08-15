@@ -7,7 +7,22 @@
 he:
   js:
     discourse_jira:
+      issue: "סוגיה"
+      create_issue: "יצירת סוגיה"
+      attach_issue: "צירוף סוגיה"
+      actions:
+        create_issue: "יצירת סוגיה חדשה"
+        attach_issue: "צירוף סוגיה קיימת"
       create_form:
+        project: "מיזם"
+        issue_type: "סוג סוגיה"
+        title: "כותרת סוגיה"
+        description: "נא לספק תיאור לסוגיה"
         continue: "המשך"
       attach_form:
+        issue_key: "מפתח סוגיה"
         continue: "המשך"
+      issue_creation_success: "הסוגיה שלך %{issueKey} נוצרה! נא ללחוץ על קישור מספר הסוגיה שלהלן כדי לצפות ב־Jira."
+      issue_creation_error: "אירעה תקלה ביצירת הסוגיה שלך. נא להגיש סוגיה דרך התהליך הרגיל של הנגישות המקומית שלך."
+    action_codes:
+      jira_issue: "נוצרה סוגיה ב־Jira"
