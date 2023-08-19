@@ -6,6 +6,14 @@ module DiscourseJira
     DEFAULT_FIELDS ||= %w[summary description].freeze
 
     def self.fetch(project_id, issue_type_id)
+      Discourse
+        .cache
+        .fetch("jira-createmeta-#{project_id}-#{issue_type_id}", expires_in: 6.hours) do
+          Field.fetch_from_jira(project_id, issue_type_id)
+        end
+    end
+
+    def self.fetch_from_jira(project_id, issue_type_id)
       fields = []
 
       if Api.createmeta_restricted?
