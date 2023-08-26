@@ -8,7 +8,9 @@ module DiscourseJira
     has_many :issue_types, through: :project_issue_types
 
     def sync!(data = nil)
-      data ||= Api.getJSON("project/#{self.uid}?expand=issueTypes")
+      if data.blank? || data[:issueTypes].blank?
+        data = Api.getJSON("project/#{self.uid}?expand=issueTypes")
+      end
 
       self.name = data[:name]
       self.key = data[:key]
