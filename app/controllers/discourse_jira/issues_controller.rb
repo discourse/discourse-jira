@@ -38,13 +38,14 @@ module DiscourseJira
     end
 
     def create
+      params.require(:project_id)
       summary = I18n.t("discourse_jira.issue_title", title: params[:title])
       issue_type = IssueType.find_by(id: params[:issue_type_id])
       raise Discourse::NotFound if issue_type.blank?
 
       fields = {
         project: {
-          key: params[:project_key],
+          key: project.key,
         },
         summary: summary,
         description: params[:description],
@@ -53,7 +54,7 @@ module DiscourseJira
         },
       }
 
-      params[:fields].each do |_, data|
+      (params[:fields] || []).each do |_, data|
         next if data.blank?
         next if data[:value].blank? && !data[:required]
 
@@ -214,6 +215,10 @@ module DiscourseJira
     end
 
     private
+
+    def project
+      @project ||= Project.find_by(id: params[:project_id])
+    end
 
     def ensure_can_create_jira_issue
       guardian.ensure_can_create_jira_issue!
