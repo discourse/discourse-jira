@@ -26,17 +26,21 @@ after_initialize do
     SiteSetting.discourse_jira_enabled && is_staff?
   end
 
-  add_to_serializer(:current_user, :can_create_jira_issue, false) { true }
-
-  add_to_serializer(:current_user, :include_can_create_jira_issue?) { scope.can_create_jira_issue? }
-
-  add_to_serializer(:post, :jira_issue, false) do
+  add_to_class(:post, :jira_issue) do
     begin
-      JSON.parse(object.custom_fields["jira_issue"])
+      JSON.parse(custom_fields["jira_issue"])
     rescue StandardError
       nil
     end
   end
+
+  add_to_class(:post, :has_jira_issue?) { custom_fields["jira_issue"].present? }
+
+  add_to_serializer(:current_user, :can_create_jira_issue, false) { true }
+
+  add_to_serializer(:current_user, :include_can_create_jira_issue?) { scope.can_create_jira_issue? }
+
+  add_to_serializer(:post, :jira_issue, false) { object.jira_issue }
 
   add_to_serializer(:post, :include_jira_issue?) do
     scope.can_create_jira_issue? && object.custom_fields["jira_issue"].present?
