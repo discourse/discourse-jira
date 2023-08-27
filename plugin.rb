@@ -34,17 +34,13 @@ after_initialize do
     end
   end
 
-  add_to_class(:post, :has_jira_issue?) do
-    custom_fields["jira_issue"].present?
-  end
+  add_to_class(:post, :has_jira_issue?) { custom_fields["jira_issue"].present? }
 
   add_to_serializer(:current_user, :can_create_jira_issue, false) { true }
 
   add_to_serializer(:current_user, :include_can_create_jira_issue?) { scope.can_create_jira_issue? }
 
-  add_to_serializer(:post, :jira_issue, false) do
-    object.jira_issue
-  end
+  add_to_serializer(:post, :jira_issue, false) { object.jira_issue }
 
   add_to_serializer(:post, :include_jira_issue?) do
     scope.can_create_jira_issue? && object.custom_fields["jira_issue"].present?

@@ -6,7 +6,7 @@ module DiscourseJira
 
     before_action :ensure_logged_in, except: [:webhook]
     before_action :ensure_can_create_jira_issue, except: [:webhook]
-    before_action :ensure_can_add_jira_issue_to_post, only: [:create, :attach]
+    before_action :ensure_can_add_jira_issue_to_post, only: %i[create attach]
 
     skip_before_action :check_xhr,
                        :verify_authenticity_token,
