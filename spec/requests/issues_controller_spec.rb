@@ -243,4 +243,37 @@ describe DiscourseJira::IssuesController do
       expect(Post.last.post_type).to eq(Post.types[:whisper])
     end
   end
+
+  describe "#webhook" do
+    fab!(:topic) { Fabricate(:topic) }
+    fab!(:post2) { Fabricate(:post, topic: topic, post_number: 1) }
+
+    before do
+      post2.custom_fields["jira_issue_key"] = "DIS-42"
+      post2.save_custom_fields
+      SiteSetting.discourse_jira_webhook_token = "secret"
+      SiteSetting.discourse_jira_close_topic_on_resolve = true
+    end
+
+    it "closes the topic when the issue has resolution" do
+      post "/jira/issues/webhook.json",
+           params: {
+             t: "secret",
+             issue_event_type_name: "issue_generic",
+             timestamp: "1536083559131",
+             webhookEvent: "jira:issue_updated",
+             issue: {
+               id: "10041",
+               key: "DIS-42",
+               fields: {
+                 resolution: {
+                   name: "Fixed",
+                 },
+               },
+             },
+           }
+
+      expect(topic.reload.closed).to eq(true)
+    end
+  end
 end

@@ -17,3 +17,5 @@ plugins:
   discourse_jira_api_version:
     default: 0
     hidden: true
+  discourse_jira_close_topic_on_resolve:
+    default: false
