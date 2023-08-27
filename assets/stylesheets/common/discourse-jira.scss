@@ -1,15 +1,15 @@
 .post-controls {
-  .create-jira-issue {
-    .d-button-label {
-      margin-left: 7px;
-    }
-  }
 
   .actions {
     position: relative;
 
-    .post-jira-menu .btn {
-      color: var(--primary);
+    .post-jira-menu {
+      position: absolute;
+      bottom: auto;
+
+      .btn {
+        color: var(--primary);
+      }
     }
   }
 }

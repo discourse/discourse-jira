@@ -11,14 +11,14 @@ export function buildManageButtons(attrs, currentUser) {
     contents.push({
       icon: "plus",
       className: "popup-menu-button create-issue",
-      label: "discourse_jira.actions.create_issue",
+      label: "discourse_jira.menu.create_issue",
       action: "createIssue",
     });
 
     contents.push({
       icon: "paperclip",
       className: "popup-menu-button attach-issue",
-      label: "discourse_jira.actions.attach_issue",
+      label: "discourse_jira.menu.attach_issue",
       action: "attachIssue",
     });
   }
@@ -27,7 +27,7 @@ export function buildManageButtons(attrs, currentUser) {
 }
 
 export default createWidget("post-jira-menu", {
-  tagName: "div.post-jira-menu.post-admin-menu.popup-menu",
+  tagName: "div.post-jira-menu.popup-menu",
 
   html() {
     const contents = [];
