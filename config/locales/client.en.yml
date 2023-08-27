@@ -4,7 +4,8 @@ en:
       issue: "Issue"
       create_issue: "Create Issue"
       attach_issue: "Attach Issue"
-      actions:
+      menu:
+        title: "Jira menu"
         create_issue: "Create new issue"
         attach_issue: "Attach existing issue"
       create_form:

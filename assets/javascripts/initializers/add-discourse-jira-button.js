@@ -37,10 +37,9 @@ export default {
           if (currentUser?.can_create_jira_issue && !attrs.jira_issue) {
             return {
               action: "toggleJiraMenu",
-              icon: "tag",
-              className: "create-jira-issue",
-              title: "discourse_jira.issue",
-              label: "discourse_jira.issue",
+              icon: "fab-jira",
+              className: "jira-menu",
+              title: "discourse_jira.menu.title",
               position: "first",
             };
           }

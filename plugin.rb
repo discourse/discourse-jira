@@ -12,7 +12,7 @@ enabled_site_setting :discourse_jira_enabled
 
 register_asset "stylesheets/common/discourse-jira.scss"
 
-register_svg_icon "paperclip"
+%w[paperclip fab-jira].each { |icon| register_svg_icon icon }
 
 require_relative "lib/discourse_jira/api"
 require_relative "lib/discourse_jira/engine"
