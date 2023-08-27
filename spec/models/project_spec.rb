@@ -16,10 +16,7 @@ RSpec.describe DiscourseJira::Project do
 
   describe ".sync!" do
     let(:issue_types) do
-      [
-        { id: "3", name: "Task", subtask: false },
-        { id: "1", name: "Bug", subtask: false }
-      ]
+      [{ id: "3", name: "Task", subtask: false }, { id: "1", name: "Bug", subtask: false }]
     end
     let(:projects) do
       [
