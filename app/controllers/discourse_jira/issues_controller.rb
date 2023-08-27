@@ -6,6 +6,7 @@ module DiscourseJira
 
     before_action :ensure_logged_in, except: [:webhook]
     before_action :ensure_can_create_jira_issue, except: [:webhook]
+    before_action :ensure_can_add_jira_issue_to_post, only: [:create, :attach]
 
     skip_before_action :check_xhr,
                        :verify_authenticity_token,
@@ -103,7 +104,6 @@ module DiscourseJira
             },
           )
 
-        post = Post.find_by(topic_id: params[:topic_id], post_number: params[:post_number])
         post.custom_fields["jira_issue_key"] = result[:issue_key]
         post.save_custom_fields
 
@@ -155,7 +155,6 @@ module DiscourseJira
             },
           )
 
-        post = Post.find_by(topic_id: params[:topic_id], post_number: params[:post_number])
         post.custom_fields["jira_issue_key"] = result[:issue_key]
         post.save_custom_fields
 
@@ -217,6 +216,21 @@ module DiscourseJira
 
     def ensure_can_create_jira_issue
       guardian.ensure_can_create_jira_issue!
+    end
+
+    def ensure_can_add_jira_issue_to_post
+      if post.blank?
+        raise Discourse::NotFound
+      elsif post.has_jira_issue?
+        log "Post #{post.id} already has a Jira issue"
+        raise Discourse::InvalidAccess
+      end
+    end
+
+    def post
+      params.require(:topic_id)
+      params.require(:post_number)
+      @post ||= Post.find_by(topic_id: params[:topic_id], post_number: params[:post_number])
     end
 
     def log(message)
