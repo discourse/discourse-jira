@@ -198,17 +198,25 @@ module DiscourseJira
         )
       end
 
+      issue = params[:issue]
       post =
         Post.joins(:_custom_fields).find_by(
           _custom_fields: {
             name: "jira_issue_key",
-            value: params[:issue][:key],
+            value: issue[:key],
           },
         )
       raise Discourse::NotFound if post.blank?
 
-      post.custom_fields["jira_issue"] = params[:issue].to_json
+      post.custom_fields["jira_issue"] = issue.to_json
       post.save_custom_fields
+
+      if SiteSetting.discourse_jira_close_topic_on_resolve && issue[:fields][:resolution].present?
+        topic = post.topic
+        if post.post_number == 1 && topic&.open?
+          topic.update_status("closed", true, Discourse.system_user)
+        end
+      end
 
       render json: success_json
     end
