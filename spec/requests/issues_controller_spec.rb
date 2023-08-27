@@ -44,6 +44,7 @@ describe DiscourseJira::IssuesController do
 
   describe "#create" do
     let(:issue_type) { Fabricate(:jira_issue_type) }
+    let(:project) { Fabricate(:jira_project) }
 
     it "requires user to be signed in" do
       post "/jira/issues.json"
@@ -64,7 +65,7 @@ describe DiscourseJira::IssuesController do
 
       stub_request(:post, "https://example.com/rest/api/2/issue").with(
         body:
-          "{\"fields\":{\"project\":{\"key\":\"DIS\"},\"summary\":\"[Discourse] \",\"description\":\"This is a bug\",\"issuetype\":{\"id\":#{issue_type.uid}},\"software\":\"value\",\"platform\":{\"id\":\"windows\"}}}",
+          "{\"fields\":{\"project\":{\"key\":\"#{project.key}\"},\"summary\":\"[Discourse] \",\"description\":\"This is a bug\",\"issuetype\":{\"id\":#{issue_type.uid}},\"software\":\"value\",\"platform\":{\"id\":\"windows\"}}}",
       ).to_return(
         status: 201,
         body: '{"id":"10041","key":"DIS-42","self":"https://example.com/rest/api/2/issue/10041"}',
@@ -80,7 +81,7 @@ describe DiscourseJira::IssuesController do
       expect do
         post "/jira/issues.json",
              params: {
-               project_key: "DIS",
+               project_id: project.id,
                description: "This is a bug",
                issue_type_id: issue_type.id,
                topic_id: post.topic_id,
@@ -118,7 +119,7 @@ describe DiscourseJira::IssuesController do
 
       post "/jira/issues.json",
            params: {
-             project_key: "DIS",
+             project_id: project.id,
              description: "This is a bug",
              issue_type_id: issue_type.id,
              topic_id: post.topic_id,
