@@ -2,7 +2,7 @@
 
 # name: discourse-jira
 # about: Allow creation of JIRA issues from Discourse
-# version: 0.0.1
+# version: 0.0.2
 # authors: Discourse
 # url: https://github.com/discourse/discourse-jira
 # required_version: 2.7.0
