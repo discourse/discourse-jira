@@ -94,7 +94,8 @@ module DiscourseJira
                 I18n.t("discourse_jira.bad_api_response", status_code: response.code)
               end
             )
-          return render_json_error(error_message, status: 422)
+          render_json_error(error_message, status: 422)
+          break
         end
 
         result =
@@ -138,12 +139,11 @@ module DiscourseJira
 
         if response.code != "200"
           log("Bad Jira response: #{response.body}")
-          return(
-            render_json_error(
-              I18n.t("discourse_jira.bad_api_response", status_code: response.code),
-              status: 422,
-            )
+          render_json_error(
+            I18n.t("discourse_jira.bad_api_response", status_code: response.code),
+            status: 422,
           )
+          break
         end
 
         json = JSON.parse(response.body, symbolize_names: true)
