@@ -59,6 +59,7 @@ module DiscourseJira
             name: field[:name],
             required: field[:required],
             field_type: field[:schema][:type],
+            hidden: DISCOURSE_FIELDS.keys.include?(field[:name]),
             options: field[:allowedValues]&.map { |o| { id: o[:id], value: o[:value] } },
           }
         end
