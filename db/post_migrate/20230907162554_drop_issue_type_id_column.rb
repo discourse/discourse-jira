@@ -3,6 +3,7 @@
 require "migration/column_dropper"
 
 class DropIssueTypeIdColumn < ActiveRecord::Migration[7.0]
+  disable_ddl_transaction!
   DROPPED_COLUMNS ||= { jira_fields: %i[issue_type_id required] }
 
   def up
