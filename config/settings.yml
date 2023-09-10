@@ -19,3 +19,5 @@ plugins:
     hidden: true
   discourse_jira_close_topic_on_resolve:
     default: false
+  discourse_jira_add_fields_to_default_screen:
+    default: false

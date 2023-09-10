@@ -6,6 +6,15 @@ module DiscourseJira
 
     SUPPORTED_TYPES ||= %w[string date array option].freeze
     DEFAULT_FIELDS ||= %w[summary description].freeze
+    DISCOURSE_FIELDS ||= {
+      post_url: "url",
+      post_view_count: "float",
+      post_reply_count: "float",
+      post_created_at: "datetime",
+      post_updated_at: "datetime",
+      user_email: "textfield",
+      profile_url: "url"
+    }.freeze
 
     def self.fetch(project_id, issue_type_id)
       Discourse
@@ -57,13 +66,46 @@ module DiscourseJira
 
     def self.sync!
       return unless SiteSetting.discourse_jira_enabled
-      return unless Api.createmeta_restricted?
+      
+      Api.getJSON("field").each do |json|
+        find_or_initialize_by(key: json[:id]).tap do |field|
+          field.name = json[:name]
+          field.field_type = json[:schema][:type]
+          field.custom = json[:custom]
+          field.save!
+        end
+      end
+    end
 
-      issue_types = DiscourseJira::IssueType.order("synced_at ASC NULLS FIRST").limit(100)
-      issue_types.each do |issue_type|
-        issue_type.sync_fields!
-        issue_type.synced_at = Time.zone.now
-        issue_type.save!
+    def self.create_discourse_fields!
+      return unless SiteSetting.discourse_jira_enabled
+      return if where(discourse_field: true).count == DISCOURSE_FIELDS.count
+
+      DISCOURSE_FIELDS.each do |field_name, field_type|
+        data = {
+          name: "Discourse #{field_name}".humanize,
+          type: "com.atlassian.jira.plugin.system.customfieldtypes:#{field_type}"
+        }
+
+        DiscourseJira::Field.find_or_initialize_by(name: data[:name]).tap do |field|
+          next unless field.new_record?
+
+          response = Api.post("field", data)
+          json =
+            begin
+              JSON.parse(response.body, symbolize_names: true)
+            rescue StandardError
+              {}
+            end
+      
+          field.key = json[:id]
+          field.field_type = field_type
+          field.custom = true
+          field.discourse_field = true
+          field.save!
+
+          Api.post("screens/addToDefault/#{field_id}", {}) if SiteSetting.discourse_jira_add_fields_to_default_screen
+        end
       end
     end
   end
