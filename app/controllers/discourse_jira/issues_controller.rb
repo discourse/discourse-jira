@@ -221,7 +221,8 @@ module DiscourseJira
           end
         end
 
-        if SiteSetting.discourse_jira_sync_issue_comments && issue_event == "issue_commented" && post.is_first_post?
+        if SiteSetting.discourse_jira_sync_issue_comments && issue_event == "issue_commented" &&
+             post.is_first_post?
           topic = post.topic
           comment = params[:comment]
 

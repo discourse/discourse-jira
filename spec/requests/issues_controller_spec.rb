@@ -279,23 +279,23 @@ describe DiscourseJira::IssuesController do
 
     it "creates reply to topic when the issue is commented" do
       SiteSetting.discourse_jira_sync_issue_comments = true
-      
+
       expect {
         post "/jira/issues/webhook.json",
-          params: {
-            t: "secret",
-            issue_event_type_name: "issue_commented",
-            timestamp: "1536083559131",
-            webhookEvent: "jira:issue_updated",
-            issue: {
-              id: "10041",
-              key: "DIS-42"
-            },
-            comment: {
-              id: "10041",
-              body: "This is a comment"
-            }
-          }
+             params: {
+               t: "secret",
+               issue_event_type_name: "issue_commented",
+               timestamp: "1536083559131",
+               webhookEvent: "jira:issue_updated",
+               issue: {
+                 id: "10041",
+                 key: "DIS-42",
+               },
+               comment: {
+                 id: "10041",
+                 body: "This is a comment",
+               },
+             }
       }.to change { topic.reload.posts.count }.by(1)
 
       expect(topic.posts.last.raw).to eq("This is a comment")
