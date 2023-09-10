@@ -36,6 +36,16 @@ after_initialize do
 
   add_to_class(:post, :has_jira_issue?) { custom_fields["jira_issue"].present? }
 
+  add_to_class(:post, :jira_issue_key=) do |key|
+    custom_fields["jira_issue_key"] = key
+    save_custom_fields
+
+    if is_first_post?
+      topic.custom_fields["jira_issue_key"] = key
+      topic.save_custom_fields
+    end
+  end
+
   add_to_serializer(:current_user, :can_create_jira_issue, false) { true }
 
   add_to_serializer(:current_user, :include_can_create_jira_issue?) { scope.can_create_jira_issue? }
