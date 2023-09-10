@@ -44,6 +44,7 @@ module DiscourseJira
       issue_type = IssueType.find_by(id: params[:issue_type_id])
       raise Discourse::NotFound if issue_type.blank?
 
+      topic = post.topic
       fields = {
         project: {
           key: project.key,
@@ -57,15 +58,34 @@ module DiscourseJira
 
       (params[:fields] || []).each do |_, data|
         next if data.blank?
-        next if data[:value].blank? && !data[:required]
+        next if data[:value].blank? && !data[:required] && !data[:hidden]
 
-        case data[:field_type]
-        when "array"
-          fields[data[:key]] = data[:value].map { |v| { id: v } }
-        when "option"
-          fields[data[:key]] = { id: data[:value] }
+        if data[:hidden]
+          case data[:name]
+          when "Discourse post url"
+            fields[data[:key]] = post.full_url
+          when "Discourse post view count"
+            fields[data[:key]] = topic.views
+          when "Discourse post reply count"
+            fields[data[:key]] = topic.posts_count - 1
+          when "Discourse post created at"
+            fields[data[:key]] = post.created_at
+          when "Discourse post updated at"
+            fields[data[:key]] = post.updated_at
+          when "Discourse user email"
+            fields[data[:key]] = post.user.email
+          when "Discourse user profile url"
+            fields[data[:key]] = post.user.full_url
+          end
         else
-          fields[data[:key]] = data[:value]
+          case data[:field_type]
+          when "array"
+            fields[data[:key]] = data[:value].map { |v| { id: v } }
+          when "option"
+            fields[data[:key]] = { id: data[:value] }
+          else
+            fields[data[:key]] = data[:value]
+          end
         end
       end
       log(fields.inspect)
