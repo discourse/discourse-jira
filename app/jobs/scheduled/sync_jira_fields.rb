@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ::Jobs
-  class SyncJira < ::Jobs::Scheduled
+  class SyncJiraFields < ::Jobs::Scheduled
     every 8.hours
 
     def execute(args)
