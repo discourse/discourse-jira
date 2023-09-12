@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module DiscourseJira
-  class Field
+  class Field < ::ActiveRecord::Base
+    self.table_name = "jira_fields"
+
     SUPPORTED_TYPES ||= %w[string date array option].freeze
     DEFAULT_FIELDS ||= %w[summary description].freeze
 
