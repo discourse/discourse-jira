@@ -185,6 +185,7 @@ describe DiscourseJira::IssuesController do
         [
           {
             "field_type" => "string",
+            "hidden" => false,
             "key" => "software",
             "name" => "Software",
             "options" => nil,
@@ -192,6 +193,7 @@ describe DiscourseJira::IssuesController do
           },
           {
             "field_type" => "option",
+            "hidden" => false,
             "key" => "platform",
             "name" => "Platform",
             "options" => [{ "id" => 5, "value" => "Windows" }, { "id" => 6, "value" => "Mac" }],
