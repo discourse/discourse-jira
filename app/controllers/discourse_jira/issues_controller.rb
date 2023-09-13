@@ -106,8 +106,7 @@ module DiscourseJira
             },
           )
 
-        post.custom_fields["jira_issue_key"] = result[:issue_key]
-        post.save_custom_fields
+        post.jira_issue_key = result[:issue_key]
 
         if topic = Topic.find_by(id: params[:topic_id])
           if current_user.guardian.can_create_post_on_topic?(topic)
@@ -156,8 +155,7 @@ module DiscourseJira
             },
           )
 
-        post.custom_fields["jira_issue_key"] = result[:issue_key]
-        post.save_custom_fields
+        post.jira_issue_key = result[:issue_key]
 
         if topic = Topic.find_by(id: params[:topic_id])
           if current_user.guardian.can_create_post_on_topic?(topic)
@@ -186,6 +184,7 @@ module DiscourseJira
       log(params.inspect)
 
       if SiteSetting.discourse_jira_webhook_token.present?
+        params.require(:t)
         if !ActiveSupport::SecurityUtils.secure_compare(
              params[:t],
              SiteSetting.discourse_jira_webhook_token,
@@ -198,23 +197,44 @@ module DiscourseJira
         )
       end
 
-      issue = params[:issue]
-      post =
-        Post.joins(:_custom_fields).find_by(
-          _custom_fields: {
-            name: "jira_issue_key",
-            value: issue[:key],
-          },
-        )
-      raise Discourse::NotFound if post.blank?
+      event = params[:webhookEvent]
+      issue_event = params[:issue_event_type_name]
 
-      post.custom_fields["jira_issue"] = issue.to_json
-      post.save_custom_fields
+      if event == "jira:issue_updated"
+        issue = params[:issue]
+        post =
+          Post.joins(:_custom_fields).find_by(
+            _custom_fields: {
+              name: "jira_issue_key",
+              value: issue[:key],
+            },
+          )
+        raise Discourse::NotFound if post.blank?
 
-      if SiteSetting.discourse_jira_close_topic_on_resolve && issue[:fields][:resolution].present?
-        topic = post.topic
-        if post.post_number == 1 && topic&.open?
-          topic.update_status("closed", true, Discourse.system_user)
+        post.custom_fields["jira_issue"] = issue.to_json
+        post.save_custom_fields
+
+        if SiteSetting.discourse_jira_close_topic_on_resolve && issue[:fields][:resolution].present?
+          topic = post.topic
+          if post.post_number == 1 && topic&.open?
+            topic.update_status("closed", true, Discourse.system_user)
+          end
+        end
+
+        if SiteSetting.discourse_jira_sync_issue_comments && issue_event == "issue_commented" &&
+             post.is_first_post?
+          topic = post.topic
+          comment = params[:comment]
+
+          PostCreator.create!(
+            Discourse.system_user,
+            topic_id: topic.id,
+            raw: comment[:body],
+            skip_validations: true,
+            custom_fields: {
+              "jira_comment_id" => comment[:id],
+            },
+          )
         end
       end
 
