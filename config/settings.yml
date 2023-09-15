@@ -21,3 +21,5 @@ plugins:
     default: false
   discourse_jira_add_fields_to_default_screen:
     default: false
+  discourse_jira_sync_issue_comments:
+    default: false

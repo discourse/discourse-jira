@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "json"
+require_relative "../spec_helper"
 
 describe DiscourseJira::IssuesController do
   let(:admin) { Fabricate(:admin) }
@@ -251,13 +253,12 @@ describe DiscourseJira::IssuesController do
     fab!(:post2) { Fabricate(:post, topic: topic, post_number: 1) }
 
     before do
-      post2.custom_fields["jira_issue_key"] = "DIS-42"
-      post2.save_custom_fields
+      post2.jira_issue_key = "DIS-42"
       SiteSetting.discourse_jira_webhook_token = "secret"
-      SiteSetting.discourse_jira_close_topic_on_resolve = true
     end
 
     it "closes the topic when the issue has resolution" do
+      SiteSetting.discourse_jira_close_topic_on_resolve = true
       post "/jira/issues/webhook.json",
            params: {
              t: "secret",
@@ -276,6 +277,30 @@ describe DiscourseJira::IssuesController do
            }
 
       expect(topic.reload.closed).to eq(true)
+    end
+
+    it "creates reply to topic when the issue is commented" do
+      SiteSetting.discourse_jira_sync_issue_comments = true
+
+      expect {
+        post "/jira/issues/webhook.json",
+             params: {
+               t: "secret",
+               issue_event_type_name: "issue_commented",
+               timestamp: "1536083559131",
+               webhookEvent: "jira:issue_updated",
+               issue: {
+                 id: "10041",
+                 key: "DIS-42",
+               },
+               comment: {
+                 id: "10041",
+                 body: "This is a comment",
+               },
+             }
+      }.to change { topic.reload.posts.count }.by(1)
+
+      expect(topic.posts.last.raw).to eq("This is a comment")
     end
   end
 end
