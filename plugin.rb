@@ -22,6 +22,10 @@ after_initialize do
     user&.staff? ? %w[jira_issue_key jira_issue] : []
   end
 
+  on(:site_setting_changed) do |name|
+    Jobs.enqueue(:sync_jira) if [:discourse_jira_enabled, :discourse_jira_url].include?(name)
+  end
+
   add_to_class(:guardian, :can_create_jira_issue?) do
     SiteSetting.discourse_jira_enabled && is_staff?
   end
