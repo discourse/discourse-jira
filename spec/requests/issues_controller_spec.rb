@@ -218,6 +218,21 @@ describe DiscourseJira::IssuesController do
       expect(response.status).to eq(404)
     end
 
+    it "requires issue key in correct format" do
+      sign_in(admin)
+      post = Fabricate(:post)
+
+      post "/jira/issues/attach.json",
+            params: {
+              issue_key: "../DIS/42",
+              topic_id: post.topic_id,
+              post_number: post.post_number,
+            }
+
+      expect(response.status).to eq(400)
+      expect(response.parsed_body["errors"][0]).to eq(I18n.t("invalid_params", message: "issue_key"))
+    end
+
     it "attach an existing Jira issue to post" do
       sign_in(admin)
       post = Fabricate(:post)
