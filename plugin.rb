@@ -23,7 +23,7 @@ after_initialize do
   end
 
   on(:site_setting_changed) do |name|
-    Jobs.enqueue(:sync_jira) if [:discourse_jira_enabled, :discourse_jira_url].include?(name)
+    Jobs.enqueue(:sync_jira) if %i[discourse_jira_enabled discourse_jira_url].include?(name)
   end
 
   add_to_class(:guardian, :can_create_jira_issue?) do
