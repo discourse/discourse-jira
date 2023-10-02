@@ -22,6 +22,7 @@ RSpec.describe ::DiscourseJira::Api do
         },
       )
       expect { described_class.get_version! }.to raise_error(DiscourseJira::InvalidURI)
+    ensure
       WebMock.enable!
     end
 
