@@ -34,7 +34,7 @@ export default createWidget("post-jira-menu", {
 
     buildManageButtons(this.attrs, this.currentUser).forEach((b) => {
       b.secondaryAction = "closeJiraMenu";
-      contents.push(this.attach("post-admin-menu-button", b));
+      contents.push(this.attach("post-jira-menu-button", b));
     });
 
     return h("ul", contents);
@@ -42,5 +42,20 @@ export default createWidget("post-jira-menu", {
 
   clickOutside() {
     this.sendWidgetAction("closeJiraMenu");
+  },
+});
+
+createWidget("post-jira-menu-button", {
+  tagName: "li",
+
+  html(attrs) {
+    return this.attach("button", {
+      className: attrs.className,
+      action: attrs.action,
+      url: attrs.url,
+      icon: attrs.icon,
+      label: attrs.label,
+      secondaryAction: attrs.secondaryAction,
+    });
   },
 });
