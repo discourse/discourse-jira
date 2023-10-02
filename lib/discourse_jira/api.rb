@@ -31,8 +31,6 @@ module DiscourseJira
         uri = URI.join(SiteSetting.discourse_jira_url, endpoint)
       end
 
-      FinalDestination::SSRFDetector.lookup_and_filter_ips(uri.hostname)
-
       FinalDestination::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
         headers = {
           "Content-Type" => "application/json",

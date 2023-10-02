@@ -8,16 +8,12 @@ RSpec.describe ::DiscourseJira::Api do
     SiteSetting.discourse_jira_url = "https://jira.example.com"
     SiteSetting.discourse_jira_username = "jira"
     SiteSetting.discourse_jira_password = "password"
-    FinalDestination::SSRFDetector.allow_ip_lookups_in_test!
-  end
-
-  after do
-    FinalDestination::SSRFDetector.disallow_ip_lookups_in_test!
   end
 
   describe ".get_version!" do
     it "raises error for internal hosts" do
-      FinalDestination::Resolver.stubs(:lookup).returns(["192.168.1.1"])
+      WebMock.enable!(except: [:final_destination])
+      FinalDestination::SSRFDetector.stubs(:lookup_ips).returns(["192.168.1.1"])
       Discourse.expects(:warn_exception).with(
         instance_of(FinalDestination::SSRFDetector::DisallowedIpError),
         message: "SSRF detected",
@@ -26,10 +22,11 @@ RSpec.describe ::DiscourseJira::Api do
       expect {
         described_class.get_version!
       }.to raise_error(DiscourseJira::InvalidURI)
+      WebMock.enable!
     end
 
     it "returns the API version" do
-      FinalDestination::Resolver.stubs(:lookup).returns(["1.2.3.4"])
+      FinalDestination::SSRFDetector.stubs(:lookup_ips).returns(["1.2.3.4"])
       stub_request(:get, "https://jira.example.com/rest/api/2/serverInfo").to_return(
         status: 200,
         body: {
