@@ -103,11 +103,16 @@ export default Controller.extend(ModalFunctionality, {
   },
 
   @discourseComputed("fields")
+  visibleFields(fields) {
+    return fields.filter((field) => !field.hidden);
+  },
+
+  @discourseComputed("visibleFields")
   requiredFields(fields) {
     return fields.filter((field) => field.required);
   },
 
-  @discourseComputed("fields")
+  @discourseComputed("visibleFields")
   optionalFields(fields) {
     return fields.filter((field) => !field.required);
   },
