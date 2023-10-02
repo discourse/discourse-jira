@@ -17,11 +17,11 @@ RSpec.describe ::DiscourseJira::Api do
       Discourse.expects(:warn_exception).with(
         instance_of(FinalDestination::SSRFDetector::DisallowedIpError),
         message: "SSRF detected",
-        env: { url: "https://jira.example.com/rest/api/2/serverInfo" },
+        env: {
+          url: "https://jira.example.com/rest/api/2/serverInfo",
+        },
       )
-      expect {
-        described_class.get_version!
-      }.to raise_error(DiscourseJira::InvalidURI)
+      expect { described_class.get_version! }.to raise_error(DiscourseJira::InvalidURI)
       WebMock.enable!
     end
 
