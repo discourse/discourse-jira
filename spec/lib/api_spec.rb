@@ -17,6 +17,12 @@ RSpec.describe ::DiscourseJira::Api do
 
   describe ".get_version!" do
     it "raises error for internal hosts" do
+      FinalDestination::Resolver.stubs(:lookup).returns(["192.168.1.1"])
+      Discourse.expects(:warn_exception).with(
+        instance_of(FinalDestination::SSRFDetector::DisallowedIpError),
+        message: "SSRF detected",
+        env: { url: "https://jira.example.com/rest/api/2/serverInfo" },
+      )
       expect {
         described_class.get_version!
       }.to raise_error(DiscourseJira::InvalidURI)

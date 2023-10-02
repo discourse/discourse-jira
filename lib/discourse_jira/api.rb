@@ -47,7 +47,10 @@ module DiscourseJira
         request = yield(uri, headers)
         http.request(request)
       end
-    rescue FinalDestination::SSRFDetector::DisallowedIpError, SocketError, Timeout::Error
+    rescue FinalDestination::SSRFDetector::DisallowedIpError => e
+      Discourse.warn_exception(e, message: "SSRF detected", env: { url: uri.to_s })
+      raise InvalidURI
+    rescue SocketError, Timeout::Error
       raise InvalidURI
     end
 
