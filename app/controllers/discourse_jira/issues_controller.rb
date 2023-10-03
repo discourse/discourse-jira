@@ -55,17 +55,20 @@ module DiscourseJira
         },
       }
 
-      (params[:fields] || []).each do |_, data|
-        next if data.blank?
-        next if data[:value].blank? && !data[:required]
+      Field.fetch(project.uid, issue_type.uid).each do |field|
+        key = field[:key]
+        data = params[:fields]&.each_value&.find { |d| d[:key]&.to_sym == key && d[:value].present? }
 
-        case data[:field_type]
+        raise Discourse::InvalidParameters.new(field[:name]) if field[:required] && data.blank?
+        next if data.blank?
+
+        case field[:field_type]
         when "array"
-          fields[data[:key]] = data[:value].map { |v| { id: v } }
+          fields[key] = data[:value].map { |v| { id: v } }
         when "option"
-          fields[data[:key]] = { id: data[:value] }
+          fields[key] = { id: data[:value] }
         else
-          fields[data[:key]] = data[:value]
+          fields[key] = data[:value]
         end
       end
       log(fields.inspect)

@@ -61,7 +61,7 @@ describe DiscourseJira::IssuesController do
       expect(response.status).to eq(404)
     end
 
-    it "create a Jira issue and " do
+    it "create a Jira issue and and associate it with post" do
       sign_in(admin)
       post = Fabricate(:post)
 
