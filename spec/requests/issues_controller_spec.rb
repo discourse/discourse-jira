@@ -98,6 +98,11 @@ describe DiscourseJira::IssuesController do
                    value: "windows",
                    field_type: "option",
                  },
+                 "2": {
+                    key: "customfield_10010",
+                    field_type: "array",
+                    required: "false",
+                 },
                },
              }
       end.to change { Post.count }.by(1)
