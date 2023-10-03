@@ -99,9 +99,9 @@ describe DiscourseJira::IssuesController do
                    field_type: "option",
                  },
                  "2": {
-                    key: "customfield_10010",
-                    field_type: "array",
-                    required: "false",
+                   key: "customfield_10010",
+                   field_type: "array",
+                   required: "false",
                  },
                },
              }
