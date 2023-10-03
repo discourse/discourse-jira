@@ -57,7 +57,7 @@ module DiscourseJira
 
       (params[:fields] || []).each do |_, data|
         next if data.blank?
-        next if data[:value].blank? && !data[:required]
+        next if data[:value].blank? && data[:required] != "true"
 
         case data[:field_type]
         when "array"
