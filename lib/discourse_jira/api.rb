@@ -3,6 +3,8 @@
 module DiscourseJira
   class InvalidApiResponse < ::StandardError
   end
+  class InvalidURI < StandardError
+  end
 
   class Api
     INVALID_RESPONSE = "Invalid response from Jira API server"
@@ -29,7 +31,7 @@ module DiscourseJira
         uri = URI.join(SiteSetting.discourse_jira_url, endpoint)
       end
 
-      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
+      FinalDestination::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
         headers = {
           "Content-Type" => "application/json",
           "Accept" => "application/json",
@@ -43,10 +45,15 @@ module DiscourseJira
         request = yield(uri, headers)
         http.request(request)
       end
+    rescue FinalDestination::SSRFDetector::DisallowedIpError => e
+      Discourse.warn_exception(e, message: "SSRF detected", env: { url: uri.to_s })
+      raise InvalidURI
+    rescue SocketError, Timeout::Error
+      raise InvalidURI
     end
 
     def self.get(endpoint)
-      make_request(endpoint) { |uri, headers| Net::HTTP::Get.new(uri, headers) }
+      make_request(endpoint) { |uri, headers| FinalDestination::HTTP::Get.new(uri, headers) }
     end
 
     def self.getJSON(endpoint)
@@ -64,7 +71,7 @@ module DiscourseJira
 
     def self.post(endpoint, body)
       make_request(endpoint) do |uri, headers|
-        request = Net::HTTP::Post.new(uri, headers)
+        request = FinalDestination::HTTP::Post.new(uri, headers)
         request.body = body.to_json
 
         request

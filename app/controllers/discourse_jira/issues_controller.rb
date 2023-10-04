@@ -130,11 +130,15 @@ module DiscourseJira
     def attach
       raise Discourse::InvalidAccess if !SiteSetting.discourse_jira_enabled
 
+      params.require(:issue_key)
+      issue_key = params[:issue_key]
+      raise Discourse::InvalidParameters.new(:issue_key) if issue_key.include?("/")
+
       hijack(
         info:
           "attaching Jira issue for topic #{params[:topic_id]} and post_number #{params[:post_number]}",
       ) do
-        response = Api.get("issue/#{params[:issue_key]}")
+        response = Api.get("issue/#{issue_key}")
 
         if response.code != "200"
           log("Bad Jira response: #{response.body}")
@@ -150,12 +154,12 @@ module DiscourseJira
         result =
           success_json.merge(
             {
-              issue_key: json[:key],
-              issue_url: URI.join(SiteSetting.discourse_jira_url, "browse/#{json[:key]}").to_s,
+              issue_key: issue_key,
+              issue_url: URI.join(SiteSetting.discourse_jira_url, "browse/#{issue_key}").to_s,
             },
           )
 
-        post.jira_issue_key = result[:issue_key]
+        post.jira_issue_key = issue_key
 
         if topic = Topic.find_by(id: params[:topic_id])
           if current_user.guardian.can_create_post_on_topic?(topic)
