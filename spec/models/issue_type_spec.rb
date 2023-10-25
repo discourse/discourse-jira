@@ -23,5 +23,11 @@ RSpec.describe DiscourseJira::IssueType do
 
       expect(described_class.pluck(:uid, :name)).to eq(issue_types.pluck(:id, :name))
     end
+
+    it "does not error out if error received from API" do
+      stub_request(:get, "#{api_url}/issuetype").to_return(status: 400)
+
+      expect { described_class.sync! }.not_to raise_error
+    end
   end
 end
