@@ -11,15 +11,16 @@ module DiscourseJira
     has_many :projects, through: :project_issue_types
 
     def self.sync!
-      Api
-        .getJSON("issuetype")
-        .each do |data|
-          next if data[:subtask]
-          find_or_initialize_by(uid: data[:id]).tap do |i|
-            i.name = data[:name]
-            i.save!
-          end
+      json_response = Api.getJSON("issuetype")
+      return if (json_response.is_a?(Hash) && json_response.has_key?(:error))
+
+      json_response.each do |data|
+        next if data[:subtask]
+        find_or_initialize_by(uid: data[:id]).tap do |i|
+          i.name = data[:name]
+          i.save!
         end
+      end
     end
   end
 end

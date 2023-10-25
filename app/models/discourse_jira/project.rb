@@ -28,9 +28,10 @@ module DiscourseJira
     end
 
     def self.sync!
-      Api
-        .getJSON("project?expand=issueTypes")
-        .each { |data| find_or_initialize_by(uid: data[:id]).sync!(data) }
+      json_response = Api.getJSON("project?expand=issueTypes")
+      return if (json_response.is_a?(Hash) && json_response.has_key?(:error))
+
+      json_response.each { |data| find_or_initialize_by(uid: data[:id]).sync!(data) }
     end
   end
 end
