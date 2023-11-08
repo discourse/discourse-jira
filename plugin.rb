@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 # name: discourse-jira
-# about: Allow creation of JIRA issues from Discourse
+# about: Allow synchronization of JIRA projects, issue types, fields, and issue statuses from Discourse.
+# meta_topic_id: 274045
 # version: 0.0.2
 # authors: Discourse
 # url: https://github.com/discourse/discourse-jira
