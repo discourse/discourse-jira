@@ -99,25 +99,6 @@ export default class Create extends Component {
   }
 
   @action
-  async getFields() {
-    this.loading = true;
-    try {
-      const result = await ajax("/jira/issue/createmeta", {
-        type: "GET",
-        data: { project_id: this.projectId, issue_type_id: this.issueTypeId },
-      });
-
-      if (result.fields) {
-        this.fields = result.fields;
-      }
-    } catch (error) {
-      popupAjaxError(error);
-    } finally {
-      this.loading = false;
-    }
-  }
-
-  @action
   async createIssue() {
     this.loading = true;
     try {
