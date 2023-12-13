@@ -1,5 +1,6 @@
+import CreateModal from "../discourse/components/modal/create";
+import AttachModal from "../discourse/components/modal/attach";
 import { withPluginApi } from "discourse/lib/plugin-api";
-import showModal from "discourse/lib/show-modal";
 import PostCooked from "discourse/widgets/post-cooked";
 import { iconHTML } from "discourse-common/lib/icon-library";
 
@@ -7,20 +8,19 @@ export default {
   name: "discourse-jira",
 
   initialize(container) {
-    const siteSettings = container.lookup("site-settings:main");
+    const siteSettings = container.lookup("service:site-settings");
+    const modal = container.lookup("service:modal");
 
     if (siteSettings.discourse_jira_enabled) {
       withPluginApi("0.8.8", (api) => {
-        const currentUser = container.lookup("current-user:main");
+        const currentUser = container.lookup("service:current-user");
 
         api.attachWidgetAction("post", "createIssue", function () {
-          const controller = showModal("discourse-jira-create");
-          controller.fillDescription(this.model);
+          modal.show(CreateModal, { model: this.model });
         });
 
         api.attachWidgetAction("post", "attachIssue", function () {
-          const controller = showModal("discourse-jira-attach");
-          controller.fillDescription(this.model);
+          modal.show(AttachModal, { model: this.model });
         });
 
         api.attachWidgetAction("post-menu", "toggleJiraMenu", function () {
