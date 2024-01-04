@@ -26,7 +26,7 @@ module DiscourseJira
           Api.getJSON(
             "issue/createmeta?projectIds=#{project_id}&issuetypeIds=#{issue_type_id}&expand=projects.issuetypes.fields",
           )
-        data[:projects].first[:issuetypes].first[:fields].each do |key, json|
+        data.dig(:projects, 0, :issuetypes, 0, :fields)&.each do |key, json|
           json[:fieldId] = key
           fields << json
         end

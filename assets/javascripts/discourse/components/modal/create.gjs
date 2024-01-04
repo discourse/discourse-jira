@@ -10,6 +10,7 @@ import { popupAjaxError } from "discourse/lib/ajax-error";
 import DTextarea from "discourse/components/d-textarea";
 import ComboBox from "select-kit/components/combo-box";
 import JiraField from "../jira-field";
+import { TrackedArray, TrackedObject } from '@ember-compat/tracked-built-ins';
 
 export default class Create extends Component {
   @tracked loading = false;
@@ -19,7 +20,7 @@ export default class Create extends Component {
   @tracked postNumber = null;
   @tracked projectId = null;
   @tracked issueTypeId = null;
-  @tracked fields = [];
+  @tracked fields = new TrackedArray([]);
   @tracked title = "";
   @tracked description = "";
 
@@ -132,6 +133,22 @@ export default class Create extends Component {
   @action
   onChangeIssueType(issueTypeId) {
     this.issueTypeId = issueTypeId;
+    this.fetchFields();
+  }
+
+  fetchFields() {
+    this.loading = true;
+    ajax("/jira/issue/createmeta", {
+      type: "GET",
+      data: { project_id: this.projectId, issue_type_id: this.issueTypeId },
+    })
+      .then((result) => {
+        if (result.fields) {
+          this.fields = result.fields.map((field) => new TrackedObject(field));
+        }
+      })
+      .catch(popupAjaxError)
+      .finally(() => this.loading = false);
   }
 
   <template>
