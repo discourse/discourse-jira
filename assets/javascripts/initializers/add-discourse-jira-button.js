@@ -1,8 +1,8 @@
-import CreateModal from "../discourse/components/modal/create";
-import AttachModal from "../discourse/components/modal/attach";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import PostCooked from "discourse/widgets/post-cooked";
 import { iconHTML } from "discourse-common/lib/icon-library";
+import AttachModal from "../discourse/components/modal/attach";
+import CreateModal from "../discourse/components/modal/create";
 
 export default {
   name: "discourse-jira",

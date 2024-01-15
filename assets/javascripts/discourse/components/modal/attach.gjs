@@ -1,12 +1,12 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
+import { Input } from "@ember/component";
 import { action } from "@ember/object";
-import { ajax } from "discourse/lib/ajax";
 import DButton from "discourse/components/d-button";
 import DModal from "discourse/components/d-modal";
-import i18n from "discourse-common/helpers/i18n";
-import { Input } from "@ember/component";
+import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import i18n from "discourse-common/helpers/i18n";
 
 export default class Attach extends Component {
   @tracked loading = false;

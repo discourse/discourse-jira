@@ -1,5 +1,5 @@
-import BaseField from "./dj-base-field";
 import { action, computed } from "@ember/object";
+import BaseField from "./dj-base-field";
 
 export default class DateField extends BaseField {
   @action
