@@ -3,8 +3,9 @@
 require "rails_helper"
 
 RSpec.describe Jobs::SyncJira do
-  let(:job) { described_class.new }
   subject(:execute) { job.execute({}) }
+
+  let(:job) { described_class.new }
 
   before do
     SiteSetting.discourse_jira_enabled = true

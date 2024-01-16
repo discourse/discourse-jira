@@ -1,16 +1,16 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
+import { Input } from "@ember/component";
 import { action } from "@ember/object";
-import { ajax } from "discourse/lib/ajax";
+import { TrackedArray, TrackedObject } from "@ember-compat/tracked-built-ins";
 import DButton from "discourse/components/d-button";
 import DModal from "discourse/components/d-modal";
-import i18n from "discourse-common/helpers/i18n";
-import { Input } from "@ember/component";
-import { popupAjaxError } from "discourse/lib/ajax-error";
 import DTextarea from "discourse/components/d-textarea";
+import { ajax } from "discourse/lib/ajax";
+import { popupAjaxError } from "discourse/lib/ajax-error";
+import i18n from "discourse-common/helpers/i18n";
 import ComboBox from "select-kit/components/combo-box";
 import JiraField from "../jira-field";
-import { TrackedArray, TrackedObject } from '@ember-compat/tracked-built-ins';
 
 export default class Create extends Component {
   @tracked loading = false;
@@ -148,7 +148,7 @@ export default class Create extends Component {
         }
       })
       .catch(popupAjaxError)
-      .finally(() => this.loading = false);
+      .finally(() => (this.loading = false));
   }
 
   <template>
