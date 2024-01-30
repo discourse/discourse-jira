@@ -7,7 +7,22 @@
 it:
   js:
     discourse_jira:
+      issue: "Problema"
+      create_issue: "Crea problema"
+      attach_issue: "Allega problema"
+      actions:
+        create_issue: "Crea un nuovo problema"
+        attach_issue: "Allega problema esistente"
       create_form:
+        project: "Progetto"
+        issue_type: "Tipo di problema"
+        title: "Titolo del problema"
+        description: "Fornisci una descrizione del problema"
         continue: "Continua"
       attach_form:
+        issue_key: "Chiave del problema"
         continue: "Continua"
+      issue_creation_success: "Il tuo problema %{issueKey} è stato creato! Fare clic sul collegamento al numero del problema riportato di seguito per visualizzarlo in Jira."
+      issue_creation_error: "Si è verificato un problema durante la creazione del problema. Invia un problema tramite la procedura standard del tuo territorio locale."
+    action_codes:
+      jira_issue: "Problema Jira creato"

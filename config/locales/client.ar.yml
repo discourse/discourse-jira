@@ -7,7 +7,22 @@
 ar:
   js:
     discourse_jira:
+      issue: "مشكلة"
+      create_issue: "إنشاء مشكلة"
+      attach_issue: "إرفاق مشكلة"
+      actions:
+        create_issue: "إنشاء مشكلة جديدة"
+        attach_issue: "إرفاق مشكلة موجودة"
       create_form:
-        continue: "متابعة"
+        project: "مشروع"
+        issue_type: "نوع المشكلة"
+        title: "عنوان المشكلة"
+        description: "يُرجى إدخال وصف لهذه المشكلة"
+        continue: "المتابعة"
       attach_form:
-        continue: "متابعة"
+        issue_key: "مفتاح المشكلة"
+        continue: "المتابعة"
+      issue_creation_success: "تم إنشاء مشكلتك %{issueKey}! انقر على رابط رقم الإصدار أدناه لعرضه في Jira."
+      issue_creation_error: "حدثت مشكلة في أثناء إنشاء مشكلتك. يُرجى إرسال مشكلة عبر العملية القياسية في منطقتك المحلية."
+    action_codes:
+      jira_issue: "تم إنشاء مشكلة في Jira"

@@ -5,3 +5,15 @@
 # https://translate.discourse.org/
 
 fr:
+  discourse_jira:
+    issue_title: "[Discourse] %{title}"
+    small_action: "Un ticket a été créé : [%{title}](%{url})"
+    bad_api_response: "Mauvais code de réponse de l'API Jira %{status_code}"
+    error_message: "Veuillez résoudre les problèmes suivants. %{errors}"
+  site_settings:
+    discourse_jira_enabled: "Activer l'intégration Discourse-Jira"
+    discourse_jira_url: "URL vers l'instance Jira (doit se terminer par un /)"
+    discourse_jira_username: "Nom d'utilisateur de l'utilisateur créant les problèmes"
+    discourse_jira_password: "Clé API attribuée à l'utilisateur créant les problèmes. Un mot de passe peut fonctionner, mais il n'est pas sécurisé et l'API a été supprimée par Atlassian"
+    discourse_jira_webhook_token: "Ce jeton doit être passé dans le paramètre de requête 't' du webhook. Par exemple : https://example.com/jira/issues/webhook?t=supersecret"
+    discourse_jira_verbose_log: "Activer la journalisation détaillée pour l'extension Jira"

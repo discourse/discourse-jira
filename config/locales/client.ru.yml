@@ -7,7 +7,22 @@
 ru:
   js:
     discourse_jira:
+      issue: "Проблема"
+      create_issue: "Создать проблему"
+      attach_issue: "Прикрепить проблему"
+      actions:
+        create_issue: "Создать новую проблему"
+        attach_issue: "Прикрепить существующую проблему"
       create_form:
+        project: "Проект"
+        issue_type: "Тип проблемы"
+        title: "Название проблемы"
+        description: "Добавьте описание проблемы"
         continue: "Продолжить"
       attach_form:
+        issue_key: "Ключ проблемы"
         continue: "Продолжить"
+      issue_creation_success: "Проблема %{issueKey} создана! Нажмите на ссылку с номером проблемы ниже, чтобы просмотреть ее в Jira."
+      issue_creation_error: "Не удалось создать проблему. Сообщите о проблеме, используя стандартную процедуру местного подразделения."
+    action_codes:
+      jira_issue: "Созданная проблема в Jira"

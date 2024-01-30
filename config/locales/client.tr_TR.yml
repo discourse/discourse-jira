@@ -7,7 +7,22 @@
 tr_TR:
   js:
     discourse_jira:
+      issue: "Sorun"
+      create_issue: "Sorun oluştur"
+      attach_issue: "Sorun ekle"
+      actions:
+        create_issue: "Yeni sorun oluştur"
+        attach_issue: "Mevcut sorun ekle"
       create_form:
+        project: "Proje"
+        issue_type: "Sorun türü"
+        title: "Sorun başlığı"
+        description: "Lütfen sorunun bir açıklamasını sağlayın"
         continue: "Devam et"
       attach_form:
+        issue_key: "Sorun anahtarı"
         continue: "Devam et"
+      issue_creation_success: "Sorununuz %{issueKey} oluşturuldu! Jira'da görüntülemek için aşağıdaki sorun numarası bağlantısına tıklayın."
+      issue_creation_error: "Sorununuzu oluştururken bir sorun oluştu. Lütfen yerel bölgenizin standart süreci aracılığıyla bir sorun gönderin."
+    action_codes:
+      jira_issue: "Jira sorunu oluşturuldu"

@@ -7,7 +7,22 @@
 nl:
   js:
     discourse_jira:
+      issue: "Probleem"
+      create_issue: "Probleem maken"
+      attach_issue: "Probleem bijvoegen"
+      actions:
+        create_issue: "Nieuw probleem maken"
+        attach_issue: "Bestaand probleem bijvoegen"
       create_form:
+        project: "Project"
+        issue_type: "Probleemtype"
+        title: "Probleemtitel"
+        description: "Geef een beschrijving van het probleem"
         continue: "Doorgaan"
       attach_form:
+        issue_key: "Probleemcode"
         continue: "Doorgaan"
+      issue_creation_success: "Je probleem %{issueKey} is gemaakt! Klik op de link met het probleemnummer hieronder om deze in Jira te bekijken."
+      issue_creation_error: "Er was een probleem bij het maken van je probleem. Dien een probleem in via de standaardprocedure in je lokale regio."
+    action_codes:
+      jira_issue: "Jira-probleem gemaakt"

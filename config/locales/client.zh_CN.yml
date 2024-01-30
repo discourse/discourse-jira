@@ -7,7 +7,22 @@
 zh_CN:
   js:
     discourse_jira:
+      issue: "问题"
+      create_issue: "创建问题"
+      attach_issue: "附加问题"
+      actions:
+        create_issue: "创建新问题"
+        attach_issue: "附加现有问题"
       create_form:
+        project: "项目"
+        issue_type: "问题类型"
+        title: "问题标题"
+        description: "请提供问题的描述"
         continue: "继续"
       attach_form:
+        issue_key: "问题键"
         continue: "继续"
+      issue_creation_success: "您的问题 %{issueKey} 已创建！点击下方问题编号链接在 Jira 中查看。"
+      issue_creation_error: "创建您的问题时出现问题。请通过当地的标准流程提交问题。"
+    action_codes:
+      jira_issue: "Jira 问题已创建"
