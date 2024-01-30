@@ -7,7 +7,22 @@
 es:
   js:
     discourse_jira:
+      issue: "Incidencia"
+      create_issue: "Crear incidencia"
+      attach_issue: "Adjuntar incidencia"
+      actions:
+        create_issue: "Crear nueva incidencia"
+        attach_issue: "Adjuntar incidencia existente"
       create_form:
+        project: "Proyecto"
+        issue_type: "Tipo de incidencia"
+        title: "Título de la incidencia"
+        description: "Proporciona una descripción de la incidencia"
         continue: "Continuar"
       attach_form:
+        issue_key: "Clave de la incidencia"
         continue: "Continuar"
+      issue_creation_success: "¡Se ha creado tu incidencia %{issueKey}! Haz clic en el enlace del número de incidencia para verlo en Jira."
+      issue_creation_error: "Se ha producido un problema al crear tu incidencia. Envía una incidencia a través del proceso estándar de tu territorio local."
+    action_codes:
+      jira_issue: "Se ha creado una incidencia en Jira"

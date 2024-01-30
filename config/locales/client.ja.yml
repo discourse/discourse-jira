@@ -7,7 +7,22 @@
 ja:
   js:
     discourse_jira:
+      issue: "課題"
+      create_issue: "課題を作成"
+      attach_issue: "課題を添付"
+      actions:
+        create_issue: "新しい課題を作成"
+        attach_issue: "既存の課題を添付"
       create_form:
+        project: "プロジェクト"
+        issue_type: "課題の種類"
+        title: "課題のタイトル"
+        description: "課題の説明を入力してください"
         continue: "続行"
       attach_form:
+        issue_key: "課題キー"
         continue: "続行"
+      issue_creation_success: "課題 %{issueKey} が作成されました！Jira で表示するには、以下の課題番号リンクをクリックしてください。"
+      issue_creation_error: "課題の作成中に問題が発生しました。現地の標準プロセスに従って課題を提出してください。"
+    action_codes:
+      jira_issue: "Jira 課題が作成されました"

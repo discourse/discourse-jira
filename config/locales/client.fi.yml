@@ -7,7 +7,22 @@
 fi:
   js:
     discourse_jira:
+      issue: "Ongelma"
+      create_issue: "Luo ongelma"
+      attach_issue: "Liitä ongelma"
+      actions:
+        create_issue: "Luo uusi ongelma"
+        attach_issue: "Liitä olemassa oleva ongelma"
       create_form:
+        project: "Projekti"
+        issue_type: "Ongelman tyyppi"
+        title: "Ongelman otsikko"
+        description: "Anna kuvaus ongelmasta"
         continue: "Jatka"
       attach_form:
+        issue_key: "Ongelman avain"
         continue: "Jatka"
+      issue_creation_success: "Ongelmasi %{issueKey} on luotu! Tarkastele sitä Jirassa napsauttamalla alla olevaa ongelman numerolinkkiä."
+      issue_creation_error: "Ongelmasi luomisessa tapahtui ongelma. Lähetä ongelma paikallisen alueesi vakioprosessin kautta."
+    action_codes:
+      jira_issue: "Jira-ongelma luotu"

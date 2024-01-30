@@ -5,3 +5,15 @@
 # https://translate.discourse.org/
 
 zh_CN:
+  discourse_jira:
+    issue_title: "[Discourse] %{title}"
+    small_action: "工单已创建：[%{title}](%{url})"
+    bad_api_response: "错误的 Jira API 响应代码 %{status_code}"
+    error_message: "请解决以下问题。%{errors}"
+  site_settings:
+    discourse_jira_enabled: "启用 Discourse-Jira 集成"
+    discourse_jira_url: "Jira 实例的 URL（应以 / 结尾）"
+    discourse_jira_username: "创建问题的用户的用户名"
+    discourse_jira_password: "分配给创建问题的用户的 API 密钥。密码可能有效，但不安全，并且 Atlassian 已弃用该 API"
+    discourse_jira_webhook_token: "此令牌必须在网络钩子的“t”查询参数中传递。例如：https://example.com/jira/issues/webhook?t=supersecret"
+    discourse_jira_verbose_log: "为 Jira 插件启用详细日志记录"
