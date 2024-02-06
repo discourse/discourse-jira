@@ -10,7 +10,7 @@ de:
       issue: "Issue"
       create_issue: "Issue erstellen"
       attach_issue: "Issue anhängen"
-      actions:
+      menu:
         create_issue: "Neues Issue erstellen"
         attach_issue: "Bestehendes Issue anhängen"
       create_form:

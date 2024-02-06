@@ -10,7 +10,7 @@ fr:
       issue: "Problème"
       create_issue: "Créer un problème"
       attach_issue: "Joindre un problème"
-      actions:
+      menu:
         create_issue: "Créer un nouveau problème"
         attach_issue: "Joindre un problème existant"
       create_form:

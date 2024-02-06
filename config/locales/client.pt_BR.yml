@@ -10,7 +10,7 @@ pt_BR:
       issue: "Problema"
       create_issue: "Criar problema"
       attach_issue: "Anexar problema"
-      actions:
+      menu:
         create_issue: "Criar novo problema"
         attach_issue: "Anexar problema existente"
       create_form:

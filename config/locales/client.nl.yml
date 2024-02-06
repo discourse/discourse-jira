@@ -10,7 +10,7 @@ nl:
       issue: "Probleem"
       create_issue: "Probleem maken"
       attach_issue: "Probleem bijvoegen"
-      actions:
+      menu:
         create_issue: "Nieuw probleem maken"
         attach_issue: "Bestaand probleem bijvoegen"
       create_form:

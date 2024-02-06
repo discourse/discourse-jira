@@ -14,6 +14,5 @@ fr:
     discourse_jira_enabled: "Activer l'intégration Discourse-Jira"
     discourse_jira_url: "URL vers l'instance Jira (doit se terminer par un /)"
     discourse_jira_username: "Nom d'utilisateur de l'utilisateur créant les problèmes"
-    discourse_jira_password: "Clé API attribuée à l'utilisateur créant les problèmes. Un mot de passe peut fonctionner, mais il n'est pas sécurisé et l'API a été supprimée par Atlassian"
     discourse_jira_webhook_token: "Ce jeton doit être passé dans le paramètre de requête 't' du webhook. Par exemple : https://example.com/jira/issues/webhook?t=supersecret"
     discourse_jira_verbose_log: "Activer la journalisation détaillée pour l'extension Jira"

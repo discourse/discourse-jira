@@ -14,6 +14,5 @@ tr_TR:
     discourse_jira_enabled: "Discourse-Jira entegrasyonunu etkinleştir"
     discourse_jira_url: "Jira örneğine giden URL (/ ile bitmelidir)"
     discourse_jira_username: "Sorun yaratan kullanıcının kullanıcı adı"
-    discourse_jira_password: "Sorun oluşturan kullanıcıya atanan API anahtarı. Şifre işe yarayabilir, ancak güvenli değildir ve API Atlassian tarafından kullanımdan kaldırılmıştır"
     discourse_jira_webhook_token: "Bu belirteç, web kancasının 't' sorgu parametresinde geçirilmelidir. Örneğin: https://example.com/jira/issues/webhook?t=supersecret"
     discourse_jira_verbose_log: "Jira eklentisi için ayrıntılı günlük kaydını etkinleştir"

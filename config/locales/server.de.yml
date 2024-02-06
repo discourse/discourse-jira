@@ -14,6 +14,5 @@ de:
     discourse_jira_enabled: "Aktiviere die Discourse-Jira-Integration"
     discourse_jira_url: "URL zur Jira-Instanz (sollte mit / enden)"
     discourse_jira_username: "Benutzername des Benutzers, der Issues erstellt"
-    discourse_jira_password: "API-Schlüssel, der dem Benutzer zugewiesen wurde, der Issues erstellt. Ein Passwort funktioniert zwar, ist aber unsicher, und die API wurde von Atlassian als veraltet eingestuft"
     discourse_jira_webhook_token: "Dieses Token muss im Abfrageparameter „t“ des Webhooks übergeben werden. Zum Beispiel: https://example.com/jira/issues/webhook?t=supersecret"
     discourse_jira_verbose_log: "Aktiviere die ausführliche Protokollierung für das Jira-Plug-in"

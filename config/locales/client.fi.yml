@@ -10,7 +10,7 @@ fi:
       issue: "Ongelma"
       create_issue: "Luo ongelma"
       attach_issue: "Liitä ongelma"
-      actions:
+      menu:
         create_issue: "Luo uusi ongelma"
         attach_issue: "Liitä olemassa oleva ongelma"
       create_form:

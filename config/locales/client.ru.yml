@@ -10,7 +10,7 @@ ru:
       issue: "Проблема"
       create_issue: "Создать проблему"
       attach_issue: "Прикрепить проблему"
-      actions:
+      menu:
         create_issue: "Создать новую проблему"
         attach_issue: "Прикрепить существующую проблему"
       create_form:

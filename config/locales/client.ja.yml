@@ -10,7 +10,7 @@ ja:
       issue: "課題"
       create_issue: "課題を作成"
       attach_issue: "課題を添付"
-      actions:
+      menu:
         create_issue: "新しい課題を作成"
         attach_issue: "既存の課題を添付"
       create_form:

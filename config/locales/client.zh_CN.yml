@@ -10,7 +10,7 @@ zh_CN:
       issue: "问题"
       create_issue: "创建问题"
       attach_issue: "附加问题"
-      actions:
+      menu:
         create_issue: "创建新问题"
         attach_issue: "附加现有问题"
       create_form:
