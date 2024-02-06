@@ -10,7 +10,7 @@ he:
       issue: "סוגיה"
       create_issue: "יצירת סוגיה"
       attach_issue: "צירוף סוגיה"
-      actions:
+      menu:
         create_issue: "יצירת סוגיה חדשה"
         attach_issue: "צירוף סוגיה קיימת"
       create_form:

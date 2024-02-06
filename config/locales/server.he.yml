@@ -14,6 +14,5 @@ he:
     discourse_jira_enabled: "הפעלת שילוב בין Discourse ל־Jira"
     discourse_jira_url: "כתובת לעותק של Jira (אמורה להסתיים ב־/)"
     discourse_jira_username: "שם המשתמש של המשתמש ליצירת סוגיות"
-    discourse_jira_password: "מפתח API שמוקצה למשתמש שיוצר סוגיות. סיסמה אמורה להיות בסדר אבל היא לא בטוח והשימוש ב־API הופסק על ידי Atlassian"
     discourse_jira_webhook_token: "יש להעביר את האסימון הזה במשתנה השאילתה ‚t’ כחלק מההתליה. למשל: https://example.com/jira/issues"
     discourse_jira_verbose_log: "הפעלת תיעוד מפורט לתוסף ה־Jira"

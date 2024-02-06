@@ -14,6 +14,5 @@ ar:
     discourse_jira_enabled: "تفعيل تكامل Discourse-Jira"
     discourse_jira_url: "عنوان URL لمثيل Jira (يجب أن ينتهي بالرمز /)"
     discourse_jira_username: "اسم المستخدم للمستخدم الذي ينشئ المشكلات"
-    discourse_jira_password: "مفتاح API المعيَّن إلى المستخدم الذي ينشئ المشكلات. قد تعمل كلمة المرور، لكن هذا غير آمن؛ وقد ألغت Atlassian واجهة API"
     discourse_jira_webhook_token: "يجب تمرير هذا الرمز المميَّز في معلمة الاستعلام \"t\" لخطاف الويب. على سبيل المثال: https://example.com/jira/issues/webhook?t=supersecret"
     discourse_jira_verbose_log: "تفعيل التسجيل المطوَّل للمكوِّن الإضافي لأداة Jira"

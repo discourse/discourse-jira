@@ -14,6 +14,5 @@ ja:
     discourse_jira_enabled: "Discourse と Jira の統合を有効化"
     discourse_jira_url: "Jira インスタンスへの URL (/ で終わる必要があります)"
     discourse_jira_username: "課題を作成しているユーザーのユーザー名"
-    discourse_jira_password: "課題を作成しているユーザーに割り当てられる API キー。パスワードが機能する可能性はありますが、安全ではなく、API は Altassian によって廃止されています。"
     discourse_jira_webhook_token: "このトークンは webhook の 't' クエリパラメーターで渡す必要があります。例: https://example.com/jira/issues/webhook?t=supersecret"
     discourse_jira_verbose_log: "Jira プラグインの詳細ログを有効化"

@@ -14,6 +14,5 @@ nl:
     discourse_jira_enabled: "Discourse-Jira-integratie inschakelen"
     discourse_jira_url: "URL naar Jira-instantie (moet eindigen met een /)"
     discourse_jira_username: "Gebruikersnaam van de gebruiker die problemen maakt"
-    discourse_jira_password: "API-sleutel toegewezen aan de gebruiker die problemen maakt. Een wachtwoord zou kunnen werken, maar is onveilig en de API is verouderd door Atlassian."
     discourse_jira_webhook_token: "Dit token moet worden doorgegeven in de queryparameter 't' van de webhook. Bijvoorbeeld: https://example.com/jira/issues/webhook?t=supersecret"
     discourse_jira_verbose_log: "Uitgebreide logging inschakelen voor Jira-plug-in"

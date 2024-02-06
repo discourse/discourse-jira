@@ -10,7 +10,7 @@ ar:
       issue: "مشكلة"
       create_issue: "إنشاء مشكلة"
       attach_issue: "إرفاق مشكلة"
-      actions:
+      menu:
         create_issue: "إنشاء مشكلة جديدة"
         attach_issue: "إرفاق مشكلة موجودة"
       create_form:

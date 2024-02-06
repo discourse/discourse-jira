@@ -10,7 +10,7 @@ tr_TR:
       issue: "Sorun"
       create_issue: "Sorun oluştur"
       attach_issue: "Sorun ekle"
-      actions:
+      menu:
         create_issue: "Yeni sorun oluştur"
         attach_issue: "Mevcut sorun ekle"
       create_form:

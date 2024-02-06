@@ -10,7 +10,7 @@ es:
       issue: "Incidencia"
       create_issue: "Crear incidencia"
       attach_issue: "Adjuntar incidencia"
-      actions:
+      menu:
         create_issue: "Crear nueva incidencia"
         attach_issue: "Adjuntar incidencia existente"
       create_form:
