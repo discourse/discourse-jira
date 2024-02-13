@@ -11,6 +11,7 @@ he:
       create_issue: "יצירת סוגיה"
       attach_issue: "צירוף סוגיה"
       menu:
+        title: "תפריט Jira"
         create_issue: "יצירת סוגיה חדשה"
         attach_issue: "צירוף סוגיה קיימת"
       create_form:
