@@ -166,7 +166,7 @@ export default class Create extends Component {
         {{else}}
           <div class="create-issue form">
             <section class="field">
-              <section class="field-item">
+              <section class="field-item project">
                 <label>{{i18n "discourse_jira.create_form.project"}}</label>
                 <ComboBox
                   @name="project_id"
@@ -177,7 +177,7 @@ export default class Create extends Component {
                 />
               </section>
 
-              <section class="field-item">
+              <section class="field-item issue-type">
                 <label>{{i18n "discourse_jira.create_form.issue_type"}}</label>
                 <ComboBox
                   @name="issue_type"
@@ -207,12 +207,14 @@ export default class Create extends Component {
               />
             </section>
 
-            {{#each this.requiredFields as |field|}}
-              <JiraField @field={{field}} />
-            {{/each}}
+            <div class="required-fields">
+              {{#each this.requiredFields as |field|}}
+                <JiraField @field={{field}} />
+              {{/each}}
+            </div>
 
             {{#if this.optionalFields}}
-              <details>
+              <details class="optional-fields">
                 <summary>Optional Fields</summary>
                 {{#each this.optionalFields as |field|}}
                   <JiraField @field={{field}} />
