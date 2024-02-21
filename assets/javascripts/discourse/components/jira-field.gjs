@@ -20,19 +20,17 @@ export default class JiraField extends Component {
       case "option":
         return JiraFieldDropdown;
       case "date":
-          return JiraFieldDate;
+        return JiraFieldDate;
       default:
         return JiraFieldText;
     }
   }
 
   <template>
-    {{#let this.component as |djComponent|}}
-      <this.component
-        @field={{@field}}
-        @saveIssue={{@saveIssue}}
-        @label={{@field.name}}
-      />
-    {{/let}}
+    <this.component
+      @field={{@field}}
+      @saveIssue={{@saveIssue}}
+      @label={{@field.name}}
+    />
   </template>
 }
