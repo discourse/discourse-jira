@@ -203,27 +203,33 @@ acceptance("Jira - post menu", function (needs) {
 
     server.get("/jira/issues/preflight", () =>
       response({
-        projects: [{
-          id: "p1",
-          key: "TEST",
-          name: "A project",
-          issue_types: [{
-            id: "it1",
-            name: "Task",
-          }],
-        }],
+        projects: [
+          {
+            id: "p1",
+            key: "TEST",
+            name: "A project",
+            issue_types: [
+              {
+                id: "it1",
+                name: "Task",
+              },
+            ],
+          },
+        ],
       })
     );
 
     server.get("/jira/issue/createmeta", () =>
       response({
-        fields: [{
-          id: "f1",
-          key: "customfield_10000",
-          name: "Custom field 1",
-          field_type: "string",
-          required: true,
-        }],
+        fields: [
+          {
+            id: "f1",
+            key: "customfield_10000",
+            name: "Custom field 1",
+            field_type: "string",
+            required: true,
+          },
+        ],
       })
     );
 
@@ -250,9 +256,16 @@ acceptance("Jira - post menu", function (needs) {
     await issueTypeSelector.expand();
     await issueTypeSelector.selectRowByValue("it1");
 
-    await fillIn(".required-fields .field input.ember-text-field", "sample value");
+    await fillIn(
+      ".required-fields .field input.ember-text-field",
+      "sample value"
+    );
     await click(".d-modal__footer .btn-primary");
 
-    assert.ok(find(".d-modal").innerHTML.includes(`<p><a href="https://jira.example.com/browse/TEST-123">TEST-123</a></p>`));
+    assert.ok(
+      find(".d-modal").innerHTML.includes(
+        `<p><a href="https://jira.example.com/browse/TEST-123">TEST-123</a></p>`
+      )
+    );
   });
 });
