@@ -11,6 +11,7 @@ de:
       create_issue: "Issue erstellen"
       attach_issue: "Issue anhängen"
       menu:
+        title: "Jira-Menü"
         create_issue: "Neues Issue erstellen"
         attach_issue: "Bestehendes Issue anhängen"
       create_form:
