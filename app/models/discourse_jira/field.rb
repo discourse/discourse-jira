@@ -38,8 +38,8 @@ module DiscourseJira
         .select do |field|
           type = field[:schema][:type]
 
-          next unless SUPPORTED_TYPES.include?(type)
-          next unless field[:operations].include?("set")
+          next if SUPPORTED_TYPES.exclude?(type)
+          next if field[:operations].exclude?("set")
           next if DEFAULT_FIELDS.include?(field[:fieldId].to_s)
           next if type == "array" && field[:schema][:items] != "option"
           next if %w[array option].include?(type) && field[:allowedValues].blank?
