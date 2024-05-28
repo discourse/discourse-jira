@@ -3,8 +3,8 @@
 require "rails_helper"
 
 describe DiscourseJira::PostsController do
-  fab!(:admin) { Fabricate(:admin) }
-  fab!(:topic) { Fabricate(:topic) }
+  fab!(:admin)
+  fab!(:topic)
   fab!(:first_post) { Fabricate(:post, topic: topic, raw: "first post") }
   fab!(:second_post) { Fabricate(:post, topic: topic, post_number: 2, raw: "second post") }
   fab!(:third_post) { Fabricate(:post, topic: topic, post_number: 3, raw: "third post") }

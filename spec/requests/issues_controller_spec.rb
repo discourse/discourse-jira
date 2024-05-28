@@ -269,7 +269,7 @@ describe DiscourseJira::IssuesController do
   end
 
   describe "#webhook" do
-    fab!(:topic) { Fabricate(:topic) }
+    fab!(:topic)
     fab!(:post2) { Fabricate(:post, topic: topic, post_number: 1) }
 
     before do
