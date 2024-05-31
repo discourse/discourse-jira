@@ -4,10 +4,4 @@
 # To work with us on translations, join this project:
 # https://translate.discourse.org/
 
-te:
-  js:
-    discourse_jira:
-      create_form:
-        continue: "కొనసాగించండి"
-      attach_form:
-        continue: "కొనసాగించండి"
+ug:
