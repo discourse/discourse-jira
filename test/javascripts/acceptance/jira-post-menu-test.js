@@ -8,6 +8,7 @@ acceptance("Jira - post menu", function (needs) {
 
   needs.settings({
     discourse_jira_enabled: true,
+    discourse_jira_allowed_groups: 1,
   });
 
   needs.pretender((server, { response }) => {
