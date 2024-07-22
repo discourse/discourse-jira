@@ -15,6 +15,7 @@ Set the values for site settings below before enabling the plugin.
 - discourse_jira_username: The username of the user whose behalf of going to create issues.
 - discourse_jira_password: The API key that assigned to the user who creates issues. A password might work but is unsafe and the API was deprecated by Atlassian.
 - discourse_jira_enabled: Enable the Jira plugin for Discourse.
+- discourse_jira_allowed_groups: Select the groups you want to allow to use this plugin (defaults to Admins).
 
 ### Webhook
 

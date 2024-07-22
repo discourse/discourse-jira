@@ -114,7 +114,9 @@ after_initialize do
     Mustache.render(template, args).strip
   end
 
-  add_to_serializer(:current_user, :can_create_jira_issue, false) { true }
+  add_to_serializer(:current_user, :can_create_jira_issue, false) do
+    user&.in_any_groups?(SiteSetting.discourse_jira_allowed_groups_map)
+  end
 
   add_to_serializer(:current_user, :include_can_create_jira_issue?) { scope.can_create_jira_issue? }
 

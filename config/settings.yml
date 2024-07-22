@@ -23,3 +23,11 @@ plugins:
     default: false
   discourse_jira_issue_tags_enabled:
     default: false
+  discourse_jira_allowed_groups:
+    default: "1" # @admins
+    mandatory_values: "1"
+    type: group_list
+    client: true
+    allow_any: false
+    refresh: true
+    validator: "AtLeastOneGroupValidator"
