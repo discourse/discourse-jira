@@ -10,7 +10,11 @@ acceptance("Jira - post menu", function (needs) {
 
   needs.settings({
     discourse_jira_enabled: true,
+<<<<<<< HEAD
     discourse_jira_allowed_groups: admin_group_id,
+=======
+    discourse_jira_allowed_groups: 1,
+>>>>>>> 2cd75f0 (Adjusts permissions via group selector)
   });
 
   needs.pretender((server, { response }) => {
