@@ -16,14 +16,34 @@ register_asset "stylesheets/common/discourse-jira.scss"
 
 require_relative "lib/discourse_jira/api"
 require_relative "lib/discourse_jira/engine"
+require_relative "lib/discourse_jira/log"
 
 after_initialize do
+  reloadable_patch do |plugin|
+    Category.register_custom_field_type("jira_project_id", :integer)
+    Category.register_custom_field_type("jira_num_likes_auto_create_issue", :integer)
+    Category.register_custom_field_type("jira_issue_type_id", :integer)
+  end
+
   topic_view_post_custom_fields_allowlister do |user|
     user&.staff? ? %w[jira_issue_key jira_issue] : []
   end
 
   on(:site_setting_changed) do |name|
     Jobs.enqueue(:sync_jira) if %i[discourse_jira_enabled discourse_jira_url].include?(name)
+  end
+
+  on(:like_created) do |post_action, post_action_creator|
+    post = post_action.post
+    category = post&.topic&.category
+
+    if category
+      required_num_likes = category.custom_fields["jira_num_likes_auto_create_issue"].to_i
+
+      if required_num_likes.positive? && post.like_count >= required_num_likes
+        Jobs.enqueue(:create_jira_issue, post_id: post.id)
+      end
+    end
   end
 
   add_to_class(:guardian, :can_create_jira_issue?) do
@@ -40,6 +60,10 @@ after_initialize do
 
   add_to_class(:post, :has_jira_issue?) { custom_fields["jira_issue"].present? }
 
+  add_to_class(:post, :jira_issue_key) do
+    custom_fields["jira_issue_key"].presence
+  end
+
   add_to_class(:post, :jira_issue_key=) do |key|
     custom_fields["jira_issue_key"] = key
     save_custom_fields
@@ -48,6 +72,31 @@ after_initialize do
       topic.custom_fields["jira_issue_key"] = key
       topic.save_custom_fields
     end
+  end
+
+  add_to_class(:topic, :formatted_post_history) do |post_number|
+    last_post_number = post_number.clamp(1, highest_post_number)
+    posts = ordered_posts.where("post_number <= ?", last_post_number)
+
+    args = {}
+    args[:topic] = self
+    args[:posts] = posts.collect do |post|
+      summary = {}
+      summary[:username] = post.username
+      summary[:created_at] = post.created_at
+      summary[:body] = post.excerpt(
+        1000,
+        strip_links: true,
+        text_entities: true,
+        markdown_images: true,
+      )
+      summary
+    end
+
+    template =
+      File.read(Rails.root.join("plugins/discourse-jira/lib/templates/topic_summary.mustache"))
+    
+    Mustache.render(template, args).strip
   end
 
   add_to_serializer(:current_user, :can_create_jira_issue, false) { true }

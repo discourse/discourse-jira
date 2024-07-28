@@ -60,9 +60,7 @@ module DiscourseJira
       response = get(endpoint)
 
       if response.code != "200"
-        e = InvalidApiResponse.new(response.body.presence || "")
-        e.set_backtrace(caller)
-        Discourse.warn_exception(e, message: INVALID_RESPONSE, env: { endpoint: endpoint })
+        invalid_response_exception(response, message: INVALID_RESPONSE, env: { endpoint: endpoint })
         return { error: INVALID_RESPONSE }
       end
 
@@ -76,6 +74,13 @@ module DiscourseJira
 
         request
       end
+    end
+
+    def self.invalid_response_exception(response, message:, env: {})
+      e = InvalidApiResponse.new(response.body.presence || "")
+      e.set_backtrace(caller)
+      Discourse.warn_exception(e, message: message, env: env)
+      e
     end
   end
 end
