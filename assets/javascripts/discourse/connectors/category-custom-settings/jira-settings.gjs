@@ -3,21 +3,21 @@ import { tracked } from "@glimmer/tracking";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
+import withEventValue from "discourse/helpers/with-event-value";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { t } from "I18n";
 import ComboBox from "select-kit/components/combo-box";
-import withEventValue from "discourse/helpers/with-event-value";
 
 export default class JiraSettings extends Component {
+  static shouldRender(args, container) {
+    return container.siteSettings.discourse_jira_enabled;
+  }
+
   @tracked loading = false;
   @tracked projects = [];
   @tracked projectId = null;
   @tracked issueTypeId = null;
-
-  static shouldRender(args, container) {
-    return container.siteSettings.discourse_jira_enabled;
-  }
 
   constructor() {
     super(...arguments);
@@ -89,17 +89,30 @@ export default class JiraSettings extends Component {
         </div>
       </section>
       <section class="field jira-project">
-        <label>{{t "discourse_jira.category_setting.num_likes_auto_create_issue"}}</label>
+        <label>{{t
+            "discourse_jira.category_setting.num_likes_auto_create_issue"
+          }}</label>
         <div class="controls">
           <input
             type="number"
             min="1"
             value={{this.category.custom_fields.jira_num_likes_auto_create_issue}}
-            // {{on "input" (action (mut this.category.custom_fields.jira_num_likes_auto_create_issue))}}
+            {{on
+              "input"
+              (action
+                (mut
+                  this.category.custom_fields.jira_num_likes_auto_create_issue
+                )
+              )
+            }}
             {{on
               "input"
               (withEventValue
-                (fn (mut this.category.custom_fields.jira_num_likes_auto_create_issue))
+                (fn
+                  (mut
+                    this.category.custom_fields.jira_num_likes_auto_create_issue
+                  )
+                )
               )
             }}
           />

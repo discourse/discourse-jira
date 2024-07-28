@@ -2,7 +2,6 @@
 
 module ::Jobs
   class JiraPostLiked < ::Jobs::Base
-
     def execute(args)
       return unless SiteSetting.discourse_jira_enabled
       return if SiteSetting.discourse_jira_url.blank?

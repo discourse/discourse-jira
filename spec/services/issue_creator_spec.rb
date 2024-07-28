@@ -18,39 +18,44 @@ RSpec.describe ::DiscourseJira::IssueCreator do
     SiteSetting.discourse_jira_password = "test"
     SiteSetting.discourse_jira_url = "https://test.atlassian.net"
 
-    stub_request(:post, "https://test.atlassian.net/rest/api/2/issue")
-        .with(body: {
-          fields: {
-            project: { key: "DIS" },
-            summary: I18n.t("discourse_jira.issue_title", title: topic.title),
-            description: topic.formatted_post_history(post.post_number),
-            issuetype: { id: 2001 },
+    stub_request(:post, "https://test.atlassian.net/rest/api/2/issue").with(
+      body: {
+        fields: {
+          project: {
+            key: "DIS",
           },
-        }.to_json)
-        .to_return(status: 201, body: {
-          key: issue_key,
-          self: issue_api_url ,
-        }.to_json)
-
-      stub_request(:get, issue_api_url)
-        .to_return(status: 200, body: {
-          key: issue_key,
-          fields: {
-            summary: "Test issue",
-            description: "Test description",
-            issuetype: { id: "1" },
+          summary: I18n.t("discourse_jira.issue_title", title: topic.title),
+          description: topic.formatted_post_history(post.post_number),
+          issuetype: {
+            id: 2001,
           },
-          self: issue_api_url,
-        }.to_json)
+        },
+      }.to_json,
+    ).to_return(status: 201, body: { key: issue_key, self: issue_api_url }.to_json)
 
-      stub_request(:post, "#{issue_api_url}/remotelink")
-        .with(body: {
-          object: { url: post.full_url, title: I18n.t("discourse_jira.issue_source") },
-        }.to_json)
-        .to_return(status: 201, body: {
-          id: "1",
-          self: "#{issue_api_url}/remotelink/1",
-        }.to_json)
+    stub_request(:get, issue_api_url).to_return(
+      status: 200,
+      body: {
+        key: issue_key,
+        fields: {
+          summary: "Test issue",
+          description: "Test description",
+          issuetype: {
+            id: "1",
+          },
+        },
+        self: issue_api_url,
+      }.to_json,
+    )
+
+    stub_request(:post, "#{issue_api_url}/remotelink").with(
+      body: {
+        object: {
+          url: post.full_url,
+          title: I18n.t("discourse_jira.issue_source"),
+        },
+      }.to_json,
+    ).to_return(status: 201, body: { id: "1", self: "#{issue_api_url}/remotelink/1" }.to_json)
   end
 
   describe "#create" do
@@ -72,12 +77,21 @@ RSpec.describe ::DiscourseJira::IssueCreator do
     it "creates a new issue with fields param" do
       described_class.any_instance.expects(:generated_fields).never
 
-      result = described_class.create(post, admin, {
-        project: { key: "DIS" },
-        summary: I18n.t("discourse_jira.issue_title", title: topic.title),
-        description: topic.formatted_post_history(post.post_number),
-        issuetype: { id: 2001 },
-      })
+      result =
+        described_class.create(
+          post,
+          admin,
+          {
+            project: {
+              key: "DIS",
+            },
+            summary: I18n.t("discourse_jira.issue_title", title: topic.title),
+            description: topic.formatted_post_history(post.post_number),
+            issuetype: {
+              id: 2001,
+            },
+          },
+        )
 
       expect(result[:issue_key]).to eq(issue_key)
       expect(result[:issue_url]).to eq(issue_url)

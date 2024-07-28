@@ -66,7 +66,10 @@ module DiscourseJira
       post.custom_fields["jira_issue"] = response.body
       post.save_custom_fields
 
-      Api.post("issue/#{key}/remotelink", { object: { url: post.full_url, title: I18n.t("discourse_jira.issue_source") } })
+      Api.post(
+        "issue/#{key}/remotelink",
+        { object: { url: post.full_url, title: I18n.t("discourse_jira.issue_source") } },
+      )
 
       result
     end
@@ -102,10 +105,7 @@ module DiscourseJira
     end
 
     def issue_data(key)
-      {
-        issue_key: key,
-        issue_url: URI.join(SiteSetting.discourse_jira_url, "browse/#{key}").to_s,
-      }
+      { issue_key: key, issue_url: URI.join(SiteSetting.discourse_jira_url, "browse/#{key}").to_s }
     end
   end
 end

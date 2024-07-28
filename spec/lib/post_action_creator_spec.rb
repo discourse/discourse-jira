@@ -11,11 +11,9 @@ RSpec.describe PostActionCreator do
 
   describe "#like" do
     it "enqueues the jira_post_liked job" do
-      expect {
-        PostActionCreator.like(user, post)
-      }.to change {
-        Jobs::JiraPostLiked.jobs.size
-      }.by(1)
+      expect { PostActionCreator.like(user, post) }.to change { Jobs::JiraPostLiked.jobs.size }.by(
+        1,
+      )
     end
   end
 end

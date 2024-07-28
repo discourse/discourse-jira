@@ -51,9 +51,7 @@ after_initialize do
 
   add_to_class(:post, :has_jira_issue?) { custom_fields["jira_issue"].present? }
 
-  add_to_class(:post, :jira_issue_key) do
-    custom_fields["jira_issue_key"].presence
-  end
+  add_to_class(:post, :jira_issue_key) { custom_fields["jira_issue_key"].presence }
 
   add_to_class(:post, :jira_issue_key=) do |key|
     custom_fields["jira_issue_key"] = key
@@ -86,7 +84,7 @@ after_initialize do
 
     template =
       File.read(Rails.root.join("plugins/discourse-jira/lib/templates/topic_summary.mustache"))
-    
+
     Mustache.render(template, args).strip
   end
 
