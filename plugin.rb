@@ -34,16 +34,7 @@ after_initialize do
   end
 
   on(:like_created) do |post_action, post_action_creator|
-    post = post_action.post
-    category = post&.topic&.category
-
-    if category
-      required_num_likes = category.custom_fields["jira_num_likes_auto_create_issue"].to_i
-
-      if required_num_likes.positive? && post.like_count >= required_num_likes
-        Jobs.enqueue(:create_jira_issue, post_id: post.id)
-      end
-    end
+    Jobs.enqueue(:jira_post_liked, post_id: post_action.post_id)
   end
 
   add_to_class(:guardian, :can_create_jira_issue?) do

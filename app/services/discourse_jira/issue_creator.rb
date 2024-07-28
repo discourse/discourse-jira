@@ -16,13 +16,13 @@ module DiscourseJira
       @post = post
       @topic = @post&.topic
       @user = user
-      @fields = fields
+      @fields = fields.presence || generated_fields
     end
 
     def create
       return issue_data(post.jira_issue_key) if post.has_jira_issue?
+      return if fields.blank?
 
-      generate_fields if fields.blank?
       log(fields.inspect)
 
       response = Api.post("issue", { fields: fields })
@@ -46,7 +46,7 @@ module DiscourseJira
             end
           )
 
-        throw Api.invalid_response_exception(response, message: error_message)
+        raise Api.invalid_response_exception(response, message: error_message)
       end
 
       key = json[:key]
@@ -71,7 +71,7 @@ module DiscourseJira
       result
     end
 
-    def generate_fields
+    def generated_fields
       category = topic&.category
       return if category.blank?
 
@@ -89,7 +89,7 @@ module DiscourseJira
 
       summary = I18n.t("discourse_jira.issue_title", title: topic.title)
 
-      @fields = {
+      {
         project: {
           key: project.key,
         },
