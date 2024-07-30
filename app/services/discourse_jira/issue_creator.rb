@@ -14,7 +14,7 @@ module DiscourseJira
 
     def initialize(post, user, fields = {})
       @post = post
-      @topic = @post&.topic
+      @topic = @post.topic
       @user = user
       @fields = fields.presence || generated_fields
     end

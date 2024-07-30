@@ -99,14 +99,6 @@ export default class JiraSettings extends Component {
             value={{this.category.custom_fields.jira_num_likes_auto_create_issue}}
             {{on
               "input"
-              (action
-                (mut
-                  this.category.custom_fields.jira_num_likes_auto_create_issue
-                )
-              )
-            }}
-            {{on
-              "input"
               (withEventValue
                 (fn
                   (mut
