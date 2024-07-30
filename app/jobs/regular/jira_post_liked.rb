@@ -8,7 +8,7 @@ module ::Jobs
 
       post_id = args[:post_id]
       post = Post.find_by(id: post_id)
-      return if post.blank? || post.post_number != 1
+      return if post.blank? || !post.is_first_post?
 
       category = post.topic&.category
       return if category.blank?
