@@ -6,8 +6,7 @@ module ::Jobs
       return unless SiteSetting.discourse_jira_enabled
       return if SiteSetting.discourse_jira_url.blank?
 
-      post_id = args[:post_id]
-      post = Post.find_by(id: post_id)
+      post = Post.find_by(id: args[:post_id])
       return if post.blank? || !post.is_first_post?
 
       category = post.topic&.category
