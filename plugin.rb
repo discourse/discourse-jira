@@ -18,6 +18,10 @@ require_relative "lib/discourse_jira/api"
 require_relative "lib/discourse_jira/engine"
 
 after_initialize do
+  reloadable_patch do
+    Post.register_custom_field_type("jira_issue", :json)
+  end
+
   topic_view_post_custom_fields_allowlister do |user|
     user&.staff? ? %w[jira_issue_key jira_issue] : []
   end
@@ -47,6 +51,24 @@ after_initialize do
     if is_first_post?
       topic.custom_fields["jira_issue_key"] = key
       topic.save_custom_fields
+    end
+  end
+
+  add_to_class(:post, :jira_issue) do
+    custom_fields["jira_issue"]
+  end
+
+  add_to_class(:post, :jira_issue=) do |issue|
+    custom_fields["jira_issue"] = issue
+    save_custom_fields
+
+    if is_first_post?
+      status = issue.dig("fields", "status", "name")
+      DiscourseTagging.add_or_create_tags_by_name(topic, ["jira-issue", "status-#{status}"])
+
+      tag_names = []
+      tag_ids = Tag.where(name: tag_names).pluck(:id)
+      topic.topic_tags.where(tag_id: tag_ids).delete_all
     end
   end
 

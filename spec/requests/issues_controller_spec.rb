@@ -108,7 +108,10 @@ describe DiscourseJira::IssuesController do
       end.to change { Post.count }.by(1)
       expect(response.parsed_body["issue_key"]).to eq("DIS-42")
       expect(response.parsed_body["issue_url"]).to eq("https://example.com/browse/DIS-42")
-      expect(post.reload.custom_fields["jira_issue_key"]).to eq("DIS-42")
+
+      post.reload
+      expect(post.custom_fields["jira_issue_key"]).to eq("DIS-42")
+      expect(post.custom_fields["jira_issue"]).to eq(JSON.parse(issue_response))
       expect(Post.last.post_type).to eq(Post.types[:whisper])
     end
 
@@ -269,6 +272,18 @@ describe DiscourseJira::IssuesController do
   end
 
   describe "#webhook" do
+    let!(:issue_param) do
+      {
+        id: "10041",
+        key: "DIS-42",
+        fields: {
+          resolution: {
+            name: "Fixed",
+          },
+        }
+      }
+    end
+
     fab!(:topic)
     fab!(:post2) { Fabricate(:post, topic: topic, post_number: 1) }
 
@@ -285,18 +300,11 @@ describe DiscourseJira::IssuesController do
              issue_event_type_name: "issue_generic",
              timestamp: "1536083559131",
              webhookEvent: "jira:issue_updated",
-             issue: {
-               id: "10041",
-               key: "DIS-42",
-               fields: {
-                 resolution: {
-                   name: "Fixed",
-                 },
-               },
-             },
+             issue: issue_param,
            }
 
       expect(topic.reload.closed).to eq(true)
+      expect(post2.reload.custom_fields["jira_issue"]).to eq(JSON.parse(issue_param.to_json))
     end
 
     it "creates reply to topic when the issue is commented" do
