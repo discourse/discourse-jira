@@ -22,7 +22,7 @@ RSpec.describe Jobs::JiraPostLiked do
   it "does nothing if the post is not the first post" do
     post.update!(post_number: 2)
     DiscourseJira::IssueCreator.expects(:create).never
-    execute()
+    execute
   end
 
   it "does nothing if the post does not have the required likes" do
