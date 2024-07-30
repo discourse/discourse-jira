@@ -80,6 +80,11 @@ describe DiscourseJira::IssuesController do
         body: issue_response,
       )
 
+      stub_request(:post, "https://example.com/rest/api/2/issue/DIS-42/remotelink").to_return(
+        status: 201,
+        body: { id: "1", self: "https://example.com/rest/api/2/issue/DIS-42/remotelink/1" }.to_json,
+      )
+
       expect do
         post "/jira/issues.json",
              params: {
