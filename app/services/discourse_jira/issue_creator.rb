@@ -78,8 +78,8 @@ module DiscourseJira
       category = topic&.category
       return if category.blank?
 
-      projectId = category.custom_fields["jira_project_id"]
-      return if projectId.blank?
+      project_id = category.custom_fields["jira_project_id"]
+      return if project_id.blank?
 
       project = Project.find_by(id: projectId)
       return if project.blank?
