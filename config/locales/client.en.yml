@@ -19,6 +19,11 @@ en:
         continue: "Continue"
       issue_creation_success: "Your issue %{issueKey} has been created! Click the issue number link below to view in Jira."
       issue_creation_error: "There was a problem creating your issue. Please submit a issue via your local territory’s standard process."
+      category_setting:
+        title: "Jira"
+        project: "Project"
+        issue_type: "Issue type"
+        num_likes_auto_create_issue: "Number of likes to automatically create a Jira issue:"
 
     action_codes:
       jira_issue: "Jira issue created"
