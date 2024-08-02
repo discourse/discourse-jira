@@ -12,27 +12,7 @@ module DiscourseJira
       raise Discourse::NotFound if !topic
       guardian.ensure_can_see!(topic)
 
-      last_post_number = params[:post_number].to_i.clamp(1, topic.highest_post_number)
-      posts = topic.ordered_posts.where("post_number <= ?", last_post_number)
-
-      args = {}
-      args[:topic] = topic
-      args[:posts] = posts.collect do |post|
-        summary = {}
-        summary[:username] = post.username
-        summary[:created_at] = post.created_at
-        summary[:body] = post.excerpt(
-          1000,
-          strip_links: true,
-          text_entities: true,
-          markdown_images: true,
-        )
-        summary
-      end
-
-      template =
-        File.read(Rails.root.join("plugins/discourse-jira/lib/templates/topic_summary.mustache"))
-      result = Mustache.render(template, args).strip
+      result = topic.formatted_post_history(params[:post_number].to_i)
 
       render json: { formatted_post_history: result }
     end

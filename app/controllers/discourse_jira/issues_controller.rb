@@ -68,60 +68,21 @@ module DiscourseJira
           fields[data[:key]] = data[:value]
         end
       end
-      log(fields.inspect)
 
       hijack(
         info:
           "creating Jira issue for topic #{params[:topic_id]} and post_number #{params[:post_number]}",
       ) do
-        response = Api.post("issue", { fields: fields })
-        json =
-          begin
-            JSON.parse(response.body, symbolize_names: true)
-          rescue StandardError
-            {}
-          end
-        log(json.inspect)
+        post = Post.find_by(topic_id: params[:topic_id], post_number: params[:post_number])
+        raise Discourse::NotFound if post.blank?
 
-        if response.code != "201"
-          log("Bad Jira response: #{response.body}")
-          errors = (json[:errors] || {}).values.join(" ")
-          error_message =
-            (
-              if errors.present?
-                I18n.t("discourse_jira.error_message", errors: errors)
-              else
-                I18n.t("discourse_jira.bad_api_response", status_code: response.code)
-              end
-            )
-          render_json_error(error_message, status: 422)
+        begin
+          result = IssueCreator.create(post, current_user, fields)
+        rescue InvalidApiResponse => e
+          render_json_error(e.message, status: 422)
           break
         end
-
-        result =
-          success_json.merge(
-            {
-              issue_key: json[:key],
-              issue_url: URI.join(SiteSetting.discourse_jira_url, "browse/#{json[:key]}").to_s,
-            },
-          )
-
-        post.jira_issue_key = result[:issue_key]
-
-        if topic = Topic.find_by(id: params[:topic_id])
-          if current_user.guardian.can_create_post_on_topic?(topic)
-            topic.add_moderator_post(
-              current_user,
-              I18n.t("discourse_jira.small_action", title: summary, url: result[:issue_url]),
-              post_type: Post.types[:whisper],
-              action_code: "jira_issue",
-            )
-          end
-        end
-
-        response = Api.get(json[:self])
-        post.custom_fields["jira_issue"] = response.body
-        post.save_custom_fields
+        result.merge!(success_json) if result[:issue_key].present?
 
         render json: result
       end
