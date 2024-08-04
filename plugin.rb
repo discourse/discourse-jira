@@ -19,6 +19,8 @@ require_relative "lib/discourse_jira/engine"
 require_relative "lib/discourse_jira/log"
 
 after_initialize do
+  SeedFu.fixture_paths << Rails.root.join("plugins", "discourse-jira", "db", "fixtures").to_s
+
   reloadable_patch do |plugin|
     Post.register_custom_field_type("jira_issue", :json)
     Category.register_custom_field_type("jira_project_id", :integer)
@@ -71,14 +73,25 @@ after_initialize do
   add_to_class(:post, :jira_issue=) do |issue|
     custom_fields["jira_issue"] = issue
     save_custom_fields
+    topic.jira_issue_status = issue.dig("fields", "status", "name") if is_first_post?
+  end
 
-    if is_first_post?
-      status = issue.dig("fields", "status", "name")
-      DiscourseTagging.add_or_create_tags_by_name(topic, ["jira-issue", "status-#{status}"])
+  add_to_class(:topic, :jira_issue_status=) do |status|
+    if SiteSetting.tagging_enabled && SiteSetting.discourse_jira_issue_tags_enabled
+      tag_name = "status-#{status.downcase.gsub(/\s+/, "-")}"
+      tag = Tag.find_or_create_by(name: tag_name)
 
-      tag_names = []
-      tag_ids = Tag.where(name: tag_names).pluck(:id)
-      topic.topic_tags.where(tag_id: tag_ids).delete_all
+      tag_group = TagGroup.find_by(name: "Jira Issue Status")
+      TagGroupMembership.find_or_create_by(tag_group_id: tag_group.id, tag_id: tag.id)
+
+      if self.topic_tags.where(tag_id: tag.id).empty?
+        TopicTag
+          .joins(:tag)
+          .where(topic_id: self.id)
+          .where("tags.name LIKE 'status-%'")
+          .delete_all
+        DiscourseTagging.add_or_create_tags_by_name(self, ["jira-issue", tag.name])
+      end
     end
   end
 
