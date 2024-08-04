@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-Tag.seed(:name) do |tag|
-  tag.name = "jira-issue"
-end
+Tag.seed(:name) { |tag| tag.name = "jira-issue" }
 
 TagGroup.seed(:name) do |tag_group|
   tag_group.name = "Jira Issue Status"

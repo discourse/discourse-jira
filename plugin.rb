@@ -66,9 +66,7 @@ after_initialize do
     end
   end
 
-  add_to_class(:post, :jira_issue) do
-    custom_fields["jira_issue"]
-  end
+  add_to_class(:post, :jira_issue) { custom_fields["jira_issue"] }
 
   add_to_class(:post, :jira_issue=) do |issue|
     custom_fields["jira_issue"] = issue
@@ -85,11 +83,7 @@ after_initialize do
       TagGroupMembership.find_or_create_by(tag_group_id: tag_group.id, tag_id: tag.id)
 
       if self.topic_tags.where(tag_id: tag.id).empty?
-        TopicTag
-          .joins(:tag)
-          .where(topic_id: self.id)
-          .where("tags.name LIKE 'status-%'")
-          .delete_all
+        TopicTag.joins(:tag).where(topic_id: self.id).where("tags.name LIKE 'status-%'").delete_all
         DiscourseTagging.add_or_create_tags_by_name(self, ["jira-issue", tag.name])
       end
     end

@@ -287,8 +287,8 @@ describe DiscourseJira::IssuesController do
           },
           status: {
             name: "Done",
-          }
-        }
+          },
+        },
       }
     end
 
@@ -313,7 +313,7 @@ describe DiscourseJira::IssuesController do
 
       expect(topic.reload.closed).to eq(true)
       expect(post2.reload.custom_fields["jira_issue"]).to eq(JSON.parse(issue_param.to_json))
-      expect(topic.tags.pluck(:name)).not_to eq(["jira-issue", "status-done"])
+      expect(topic.tags.pluck(:name)).not_to eq(%w[jira-issue status-done])
     end
 
     it "adds status tags to the topic when the issue has status" do
@@ -328,7 +328,7 @@ describe DiscourseJira::IssuesController do
              issue: issue_param,
            }
 
-      expect(topic.tags.pluck(:name)).to eq(["jira-issue", "status-done"])
+      expect(topic.tags.pluck(:name)).to eq(%w[jira-issue status-done])
     end
 
     it "creates reply to topic when the issue is commented" do

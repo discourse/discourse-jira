@@ -12,13 +12,11 @@ RSpec.describe DiscourseJira::Project do
   end
 
   describe ".jira_issue_status=" do
-    before do
-      SiteSetting.tagging_enabled = true
-    end
+    before { SiteSetting.tagging_enabled = true }
 
     it "sets the issue status for the project" do
       topic.jira_issue_status = "To Do"
-      expect(topic.tags.pluck(:name)).to eq(["jira-issue", "status-to-do"])
+      expect(topic.tags.pluck(:name)).to eq(%w[jira-issue status-to-do])
     end
   end
 end
