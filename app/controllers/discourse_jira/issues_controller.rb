@@ -82,6 +82,7 @@ module DiscourseJira
           render_json_error(e.message, status: 422)
           break
         end
+
         result.merge!(success_json) if result[:issue_key].present?
 
         render json: result
@@ -138,8 +139,7 @@ module DiscourseJira
         end
 
         response = Api.get(json[:self])
-        post.custom_fields["jira_issue"] = response.body
-        post.save_custom_fields
+        post.jira_issue = JSON.parse(response.body)
 
         render json: result
       end
@@ -176,8 +176,7 @@ module DiscourseJira
           )
         raise Discourse::NotFound if post.blank?
 
-        post.custom_fields["jira_issue"] = issue.to_json
-        post.save_custom_fields
+        post.jira_issue = issue
 
         if SiteSetting.discourse_jira_close_topic_on_resolve && issue[:fields][:resolution].present?
           topic = post.topic

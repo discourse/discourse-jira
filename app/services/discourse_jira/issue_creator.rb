@@ -63,8 +63,7 @@ module DiscourseJira
       end
 
       response = Api.get(json[:self])
-      post.custom_fields["jira_issue"] = response.body
-      post.save_custom_fields
+      post.jira_issue = JSON.parse(response.body)
 
       Api.post(
         "issue/#{key}/remotelink",
