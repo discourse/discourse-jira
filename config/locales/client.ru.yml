@@ -11,6 +11,7 @@ ru:
       create_issue: "Создать проблему"
       attach_issue: "Прикрепить проблему"
       menu:
+        title: "Меню Jira"
         create_issue: "Создать новую проблему"
         attach_issue: "Прикрепить существующую проблему"
       create_form:
@@ -24,5 +25,10 @@ ru:
         continue: "Продолжить"
       issue_creation_success: "Проблема %{issueKey} создана! Нажмите на ссылку с номером проблемы ниже, чтобы просмотреть ее в Jira."
       issue_creation_error: "Не удалось создать проблему. Сообщите о проблеме, используя стандартную процедуру местного подразделения."
+      category_setting:
+        title: "Jira"
+        project: "Проект"
+        issue_type: "Тип проблемы"
+        num_likes_auto_create_issue: "Количество лайков для автоматического создания проблемы в Jira:"
     action_codes:
       jira_issue: "Созданная проблема в Jira"

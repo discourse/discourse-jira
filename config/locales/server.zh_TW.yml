@@ -5,3 +5,5 @@
 # https://translate.discourse.org/
 
 zh_TW:
+  discourse_jira:
+    issue_source: "論壇"

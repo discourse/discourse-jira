@@ -6,6 +6,7 @@
 
 fi:
   discourse_jira:
+    issue_source: "Discourse"
     issue_title: "[Discourse] %{title}"
     small_action: "Tukipalvelupyyntö on luotu: [%{title}](%{url})"
     bad_api_response: "Virheellinen Jira APIn vastauskoodi %{status_code}"
@@ -14,5 +15,9 @@ fi:
     discourse_jira_enabled: "Ota Discourse-Jira-integraatio käyttöön"
     discourse_jira_url: "Jira-esiintymän URL-osoite (päättyy merkkiin /)"
     discourse_jira_username: "Ongelmia luovan käyttäjän käyttäjätunnus"
+    discourse_jira_password: "API-avain, joka on määritetty ongelmia luovalle käyttäjälle. Salasana saattaa toimia, mutta se ei ole turvallinen, ja Atlassian on poistanut APIn käytöstä"
     discourse_jira_webhook_token: "Tämä tunnus täytyy välittää webhookin \"t\"-kyselyparametrissa. Esimerkki: https://example.com/jira/issues/webhook?t=supersalainen"
     discourse_jira_verbose_log: "Ota käyttöön monisanainen lokikirjaus Jira-lisäosalle"
+    discourse_jira_close_topic_on_resolve: "Sulje ketju, kun ongelmalla on ratkaisu"
+    discourse_jira_sync_issue_comments: "Synkronoi ongelman kommentit Discoursen ketjuun webhookin kautta"
+    discourse_jira_issue_tags_enabled: "Lisää tunnisteen kaikkiin ongelmaketjuihin ja tilatunnisteisiin ongelman tilan perusteella."

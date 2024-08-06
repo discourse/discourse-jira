@@ -6,6 +6,7 @@
 
 he:
   discourse_jira:
+    issue_source: "Discourse"
     issue_title: "[Discourse] %{title}"
     small_action: "נוצר כרטיס: [%{title}](%{url})"
     bad_api_response: "קוד התגובה של ה־API של JIRA פגום %{status_code}"
