@@ -11,6 +11,7 @@ pt_BR:
       create_issue: "Criar problema"
       attach_issue: "Anexar problema"
       menu:
+        title: "Menu do Jira"
         create_issue: "Criar novo problema"
         attach_issue: "Anexar problema existente"
       create_form:
@@ -24,5 +25,10 @@ pt_BR:
         continue: "Continuar"
       issue_creation_success: "Seu problema %{issueKey} foi criado! Clique no link do número do problema abaixo para ver no Jira."
       issue_creation_error: "Ocorreu um erro ao criar seu problema. Envie o erro pelo processo padrão do seu território local."
+      category_setting:
+        title: "Jira"
+        project: "Projeto"
+        issue_type: "Tipo de problema"
+        num_likes_auto_create_issue: "Quantidade de curtidas para criar automaticamente um problema no Jira:"
     action_codes:
       jira_issue: "Problema do Jira criado"

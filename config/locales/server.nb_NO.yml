@@ -5,3 +5,5 @@
 # https://translate.discourse.org/
 
 nb_NO:
+  discourse_jira:
+    issue_source: "Discourse"

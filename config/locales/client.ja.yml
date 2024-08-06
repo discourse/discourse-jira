@@ -11,6 +11,7 @@ ja:
       create_issue: "課題を作成"
       attach_issue: "課題を添付"
       menu:
+        title: "Jira メニュー"
         create_issue: "新しい課題を作成"
         attach_issue: "既存の課題を添付"
       create_form:
@@ -24,5 +25,10 @@ ja:
         continue: "続行"
       issue_creation_success: "課題 %{issueKey} が作成されました！Jira で表示するには、以下の課題番号リンクをクリックしてください。"
       issue_creation_error: "課題の作成中に問題が発生しました。現地の標準プロセスに従って課題を提出してください。"
+      category_setting:
+        title: "Jira"
+        project: "プロジェクト"
+        issue_type: "課題の種類"
+        num_likes_auto_create_issue: "Jira 課題を自動的に作成する「いいね！」の数:"
     action_codes:
       jira_issue: "Jira 課題が作成されました"

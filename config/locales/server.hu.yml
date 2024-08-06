@@ -5,3 +5,5 @@
 # https://translate.discourse.org/
 
 hu:
+  discourse_jira:
+    issue_source: "Discourse"

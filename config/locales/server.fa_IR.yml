@@ -6,4 +6,5 @@
 
 fa_IR:
   discourse_jira:
+    issue_source: "Discourse"
     issue_title: "[Discourse] %{title}"
