@@ -15,8 +15,5 @@ en:
     discourse_jira_verbose_log: "Enable verbose logging for Jira plugin"
     discourse_jira_close_topic_on_resolve: "Close the topic when the issue has a resolution"
     discourse_jira_sync_issue_comments: "Sync issue comments to Discourse topic via webhook"
-<<<<<<< HEAD
     discourse_jira_issue_tags_enabled: "Adds tag to the all issue topics and status tags based on the issue status."
-=======
     discourse_jira_allowed_groups: "Allow the following Groups to use this plugin (defaults to admin)"
->>>>>>> e0f1772 (Adjusts permissions via group selector)
