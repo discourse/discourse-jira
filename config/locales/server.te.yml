@@ -5,3 +5,5 @@
 # https://translate.discourse.org/
 
 te:
+  discourse_jira:
+    issue_source: "డిస్కోర్స్"

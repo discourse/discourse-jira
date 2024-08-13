@@ -6,6 +6,7 @@
 
 ar:
   discourse_jira:
+    issue_source: "Discourse"
     issue_title: "[Discourse] %{title}"
     small_action: "تم إنشاء تذكرة: [%{title}](%{url})"
     bad_api_response: "رمز استجابة Jira API %{status_code} غير صحيح"
@@ -14,5 +15,9 @@ ar:
     discourse_jira_enabled: "تفعيل تكامل Discourse-Jira"
     discourse_jira_url: "عنوان URL لمثيل Jira (يجب أن ينتهي بالرمز /)"
     discourse_jira_username: "اسم المستخدم للمستخدم الذي ينشئ المشكلات"
+    discourse_jira_password: "مفتاح API المعيَّن إلى المستخدم الذي ينشئ المشكلات. قد تعمل كلمة المرور، لكن هذا غير آمن؛ وقد ألغت Atlassian واجهة API"
     discourse_jira_webhook_token: "يجب تمرير هذا الرمز المميَّز في معلمة الاستعلام \"t\" لخطاف الويب. على سبيل المثال: https://example.com/jira/issues/webhook?t=supersecret"
     discourse_jira_verbose_log: "تفعيل التسجيل المطوَّل للمكوِّن الإضافي لأداة Jira"
+    discourse_jira_close_topic_on_resolve: "إغلاق الموضوع عندما يكون للمشكلة حل"
+    discourse_jira_sync_issue_comments: "مزامنة التعليقات على المشكلة مع موضوع Discourse عبر خطاف الويب"
+    discourse_jira_issue_tags_enabled: "إضافة وسم إلى جميع موضوعات المشكلة ووسوم الحالة بناءً على حالة المشكلة."

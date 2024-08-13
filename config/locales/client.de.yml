@@ -25,5 +25,10 @@ de:
         continue: "Weiter"
       issue_creation_success: "Dein Issue %{issueKey} wurde erstellt! Klicke auf die Issue-Nummer unten, um es in Jira zu sehen."
       issue_creation_error: "Beim Erstellen deines Issue ist ein Problem aufgetreten. Bitte reiche dein Issue über den Standardprozess deines Gebiets ein."
+      category_setting:
+        title: "Jira"
+        project: "Projekt"
+        issue_type: "Issue-Typ"
+        num_likes_auto_create_issue: "Anzahl der „Gefällt mir“-Angaben, um automatisch ein Jira-Issue zu erstellen:"
     action_codes:
       jira_issue: "Jira-Issue erstellt"

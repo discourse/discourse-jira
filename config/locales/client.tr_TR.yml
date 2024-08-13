@@ -11,6 +11,7 @@ tr_TR:
       create_issue: "Sorun oluştur"
       attach_issue: "Sorun ekle"
       menu:
+        title: "Jira menüsü"
         create_issue: "Yeni sorun oluştur"
         attach_issue: "Mevcut sorun ekle"
       create_form:
@@ -24,5 +25,10 @@ tr_TR:
         continue: "Devam et"
       issue_creation_success: "Sorununuz %{issueKey} oluşturuldu! Jira'da görüntülemek için aşağıdaki sorun numarası bağlantısına tıklayın."
       issue_creation_error: "Sorununuzu oluştururken bir sorun oluştu. Lütfen yerel bölgenizin standart süreci aracılığıyla bir sorun gönderin."
+      category_setting:
+        title: "Jira"
+        project: "Proje"
+        issue_type: "Sorun türü"
+        num_likes_auto_create_issue: "Otomatik olarak bir Jira sorunu oluşturacak beğeni sayısı:"
     action_codes:
       jira_issue: "Jira sorunu oluşturuldu"

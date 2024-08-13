@@ -12,3 +12,5 @@ fa_IR:
         continue: "ادامه"
       attach_form:
         continue: "ادامه"
+      category_setting:
+        project: "پروژه"

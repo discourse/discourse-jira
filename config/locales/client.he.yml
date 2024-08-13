@@ -25,5 +25,10 @@ he:
         continue: "המשך"
       issue_creation_success: "הסוגיה שלך %{issueKey} נוצרה! נא ללחוץ על קישור מספר הסוגיה שלהלן כדי לצפות ב־Jira."
       issue_creation_error: "אירעה תקלה ביצירת הסוגיה שלך. נא להגיש סוגיה דרך התהליך הרגיל של הנגישות המקומית שלך."
+      category_setting:
+        title: "Jira"
+        project: "מיזם"
+        issue_type: "סוג בעיה"
+        num_likes_auto_create_issue: "מספר הלייקים ליצירת בעיה אוטומטית ב־Jira:"
     action_codes:
       jira_issue: "נוצרה סוגיה ב־Jira"

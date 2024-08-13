@@ -11,6 +11,7 @@ es:
       create_issue: "Crear incidencia"
       attach_issue: "Adjuntar incidencia"
       menu:
+        title: "Menú de Jira"
         create_issue: "Crear nueva incidencia"
         attach_issue: "Adjuntar incidencia existente"
       create_form:
@@ -24,5 +25,10 @@ es:
         continue: "Continuar"
       issue_creation_success: "¡Se ha creado tu incidencia %{issueKey}! Haz clic en el enlace del número de incidencia para verlo en Jira."
       issue_creation_error: "Se ha producido un problema al crear tu incidencia. Envía una incidencia a través del proceso estándar de tu territorio local."
+      category_setting:
+        title: "Jira"
+        project: "Proyecto"
+        issue_type: "Tipo de incidencia"
+        num_likes_auto_create_issue: "Número de «me gusta» para crear automáticamente una edición de Jira:"
     action_codes:
       jira_issue: "Se ha creado una incidencia en Jira"
