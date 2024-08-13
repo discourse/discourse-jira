@@ -6,6 +6,7 @@
 
 it:
   discourse_jira:
+    issue_source: "Discourse"
     issue_title: "[Discourse] %{title}"
     small_action: "È stato creato un ticket: [%{title}](%{url})"
     bad_api_response: "Codice di risposta API Jira errato %{status_code}"
@@ -14,5 +15,9 @@ it:
     discourse_jira_enabled: "Abilita l'integrazione Discourse-Jira"
     discourse_jira_url: "URL dell'istanza Jira (dovrebbe terminare con /)"
     discourse_jira_username: "Nome utente dell'utente che crea problemi"
+    discourse_jira_password: "Chiave API assegnata all'utente che crea problemi. Una password potrebbe funzionare, ma non è sicura e l'API è stata deprecata da Atlassian"
     discourse_jira_webhook_token: "Questo token deve essere passato nel parametro di query \"t\" del webhook. Ad esempio: https://example.com/jira/issues/webhook?t=supersecret"
     discourse_jira_verbose_log: "Abilita il logging dettagliato per il plug-in Jira"
+    discourse_jira_close_topic_on_resolve: "Chiudi l'argomento quando il problema ha una risoluzione"
+    discourse_jira_sync_issue_comments: "Sincronizza i commenti sui problemi con l'argomento del discorso tramite webhook"
+    discourse_jira_issue_tags_enabled: "Aggiunge un'etichetta a tutti gli argomenti del problema ed etichette di stato in base allo stato del problema."

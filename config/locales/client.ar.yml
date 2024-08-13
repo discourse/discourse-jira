@@ -11,6 +11,7 @@ ar:
       create_issue: "إنشاء مشكلة"
       attach_issue: "إرفاق مشكلة"
       menu:
+        title: "قائمة Jira"
         create_issue: "إنشاء مشكلة جديدة"
         attach_issue: "إرفاق مشكلة موجودة"
       create_form:
@@ -24,5 +25,10 @@ ar:
         continue: "المتابعة"
       issue_creation_success: "تم إنشاء مشكلتك %{issueKey}! انقر على رابط رقم الإصدار أدناه لعرضه في Jira."
       issue_creation_error: "حدثت مشكلة في أثناء إنشاء مشكلتك. يُرجى إرسال مشكلة عبر العملية القياسية في منطقتك المحلية."
+      category_setting:
+        title: "Jira"
+        project: "مشروع"
+        issue_type: "نوع المشكلة"
+        num_likes_auto_create_issue: "عدد الإعجابات لإنشاء مشكلة في Jira تلقائيًا:"
     action_codes:
       jira_issue: "تم إنشاء مشكلة في Jira"

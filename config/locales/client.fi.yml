@@ -11,6 +11,7 @@ fi:
       create_issue: "Luo ongelma"
       attach_issue: "Liitä ongelma"
       menu:
+        title: "Jira-valikko"
         create_issue: "Luo uusi ongelma"
         attach_issue: "Liitä olemassa oleva ongelma"
       create_form:
@@ -24,5 +25,10 @@ fi:
         continue: "Jatka"
       issue_creation_success: "Ongelmasi %{issueKey} on luotu! Tarkastele sitä Jirassa napsauttamalla alla olevaa ongelman numerolinkkiä."
       issue_creation_error: "Ongelmasi luomisessa tapahtui ongelma. Lähetä ongelma paikallisen alueesi vakioprosessin kautta."
+      category_setting:
+        title: "Jira"
+        project: "Projekti"
+        issue_type: "Ongelman tyyppi"
+        num_likes_auto_create_issue: "Tykkäysten määrä, joka luo Jira-ongelman automaattisesti:"
     action_codes:
       jira_issue: "Jira-ongelma luotu"

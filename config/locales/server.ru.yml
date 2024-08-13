@@ -6,6 +6,7 @@
 
 ru:
   discourse_jira:
+    issue_source: "Discourse"
     issue_title: "[Discourse] %{title}"
     small_action: "Запрос создан: [%{title}](%{url})"
     bad_api_response: "Некорректный код ответа API Jira %{status_code}"
@@ -14,5 +15,9 @@ ru:
     discourse_jira_enabled: "Включить интеграцию Discourse-Jira"
     discourse_jira_url: "URL-адрес экземпляра Jira (должен заканчиваться на /)"
     discourse_jira_username: "Имя пользователя, создающего проблемы"
+    discourse_jira_password: "Ключ API, назначенный пользователю, создающему проблемы. Пароль может работать, но он небезопасен, а API признан Atlassian устаревшим."
     discourse_jira_webhook_token: "Этот токен нужно передавать в параметре запроса 't' вебхука. Например: https://example.com/jira/issues/webhook?t=supersecret"
     discourse_jira_verbose_log: "Включить подробное ведение журнала для плагина Jira"
+    discourse_jira_close_topic_on_resolve: "Закрывает тему, когда проблема будет решена"
+    discourse_jira_sync_issue_comments: "Синхронизирует комментарии к проблеме с темой Discourse через вебхук"
+    discourse_jira_issue_tags_enabled: "Добавляет тег ко всем темам проблемы и теги статуса в зависимости от статуса проблемы."

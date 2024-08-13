@@ -6,6 +6,7 @@
 
 he:
   discourse_jira:
+    issue_source: "Discourse"
     issue_title: "[Discourse] %{title}"
     small_action: "נוצר כרטיס: [%{title}](%{url})"
     bad_api_response: "קוד התגובה של ה־API של JIRA פגום %{status_code}"
@@ -19,3 +20,4 @@ he:
     discourse_jira_verbose_log: "הפעלת תיעוד מפורט לתוסף ה־Jira"
     discourse_jira_close_topic_on_resolve: "לסגור את הנושא כשלסוגיה יש פתרון"
     discourse_jira_sync_issue_comments: "סנכרון הערות של סוגיות לנושא Discourse דרך התליה"
+    discourse_jira_issue_tags_enabled: "הוספת תגית לכל נושאי הבעיה ותגיות המצב לפי מצב הבעיה."
