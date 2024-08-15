@@ -4,8 +4,6 @@ require "rails_helper"
 
 describe DiscourseJira::PostsController do
   fab!(:admin)
-  fab!(:non_admin_user_with_access) { Fabricate(:user) } # stuff
-  fab!(:joe_schmoe) { Fabricate(:user) } # stuff
   fab!(:topic)
   fab!(:first_post) { Fabricate(:post, topic: topic, raw: "first post") }
   fab!(:second_post) { Fabricate(:post, topic: topic, post_number: 2, raw: "second post") }

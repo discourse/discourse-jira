@@ -174,15 +174,15 @@ describe DiscourseJira::IssuesController do
           mods = Group.find(Group::AUTO_GROUPS[:moderators])
           mods.add(user)
 
-          expect do
-            post "/jira/issues.json",
-                 params: {
-                   project_id: project.id,
-                   issue_type_id: issue_type.id,
-                   topic_id: post.topic_id,
-                   post_number: post.post_number,
-                 }
-          end.not_to raise_error
+          response = post "/jira/issues.json",
+                      params: {
+                        project_id: project.id,
+                        issue_type_id: issue_type.id,
+                        topic_id: post.topic_id,
+                        post_number: post.post_number,
+                      }
+
+          expect(response).to eq(200)
         end
       end
     end
