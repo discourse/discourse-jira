@@ -6,8 +6,11 @@ import selectKit from "discourse/tests/helpers/select-kit-helper";
 acceptance("Jira - post menu", function (needs) {
   needs.user({ admin: true, can_create_jira_issue: true });
 
+  const admin_group_id = 1;
+
   needs.settings({
     discourse_jira_enabled: true,
+    discourse_jira_allowed_groups: admin_group_id,
   });
 
   needs.pretender((server, { response }) => {

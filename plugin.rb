@@ -41,7 +41,8 @@ after_initialize do
   end
 
   add_to_class(:guardian, :can_create_jira_issue?) do
-    SiteSetting.discourse_jira_enabled && is_staff?
+    SiteSetting.discourse_jira_enabled &&
+      user&.in_any_groups?(SiteSetting.discourse_jira_allowed_groups_map)
   end
 
   add_to_class(:post, :jira_issue) do
@@ -114,7 +115,10 @@ after_initialize do
     Mustache.render(template, args).strip
   end
 
-  add_to_serializer(:current_user, :can_create_jira_issue, false) { true }
+  add_to_serializer(:current_user, :can_create_jira_issue, false) do
+    SiteSetting.discourse_jira_enabled &&
+      user&.in_any_groups?(SiteSetting.discourse_jira_allowed_groups_map)
+  end
 
   add_to_serializer(:current_user, :include_can_create_jira_issue?) { scope.can_create_jira_issue? }
 

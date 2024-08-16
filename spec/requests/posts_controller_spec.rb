@@ -13,6 +13,7 @@ describe DiscourseJira::PostsController do
   before do
     SiteSetting.discourse_jira_enabled = true
     Topic.next_post_number(topic.id)
+    Group.refresh_automatic_groups!
   end
 
   describe "#formatted_post_history" do
