@@ -149,41 +149,77 @@ describe DiscourseJira::IssuesController do
       )
     end
 
-    describe "group access" do
+    describe "user with insufficient permissions" do
+      it "does not allow access" do
+        sign_in(user)
+
+        post "/jira/issues.json"
+        expect(response.status).to eq(403)
+      end
+    end
+
+    describe "user in group with permission" do
       before do
         SiteSetting.discourse_jira_allowed_groups = Group::AUTO_GROUPS[:moderators]
         Group.refresh_automatic_groups!
       end
 
-      describe "regular user with insufficient permissions" do
-        it "does not allow access" do
-          sign_in(user)
+      it "allows access" do
+        post = Fabricate(:post)
 
-          post "/jira/issues.json"
-          expect(response.status).to eq(403)
-        end
-      end
+        sign_in(user)
+        mods = Group.find(Group::AUTO_GROUPS[:moderators])
+        mods.add(user)
 
-      describe "user in group with permission" do
-        it "allows access" do
-          post = Fabricate(:post)
-          project = Fabricate(:jira_project, uid: 2)
+        stub_request(:post, "https://example.com/rest/api/2/issue").with(
+          body:
+            "{\"fields\":{\"project\":{\"key\":\"#{project.key}\"},\"summary\":\"[Discourse] \",\"description\":\"This is a bug\",\"issuetype\":{\"id\":#{issue_type.uid}},\"software\":\"value\",\"platform\":{\"id\":\"windows\"}}}",
+        ).to_return(
+          status: 201,
+          body: '{"id":"10041","key":"DIS-42","self":"https://example.com/rest/api/2/issue/10041"}',
+          headers: {
+          },
+        )
 
-          sign_in(user)
+        stub_request(:get, "https://example.com/rest/api/2/issue/10041").to_return(
+          status: 200,
+          body: issue_response,
+        )
 
-          mods = Group.find(Group::AUTO_GROUPS[:moderators])
-          mods.add(user)
+        stub_request(:post, "https://example.com/rest/api/2/issue/DIS-42/remotelink").to_return(
+          status: 201,
+          body: {
+            id: "1",
+            self: "https://example.com/rest/api/2/issue/DIS-42/remotelink/1",
+          }.to_json,
+        )
 
-          response = post "/jira/issues.json",
-                      params: {
-                        project_id: project.id,
-                        issue_type_id: issue_type.id,
-                        topic_id: post.topic_id,
-                        post_number: post.post_number,
-                      }
+        post "/jira/issues.json",
+             params: {
+               project_id: project.id,
+               description: "This is a bug",
+               issue_type_id: issue_type.id,
+               topic_id: post.topic_id,
+               post_number: post.post_number,
+               fields: {
+                 "0": {
+                   key: "software",
+                   value: "value",
+                 },
+                 "1": {
+                   key: "platform",
+                   value: "windows",
+                   field_type: "option",
+                 },
+                 "2": {
+                   key: "customfield_10010",
+                   field_type: "array",
+                   required: "false",
+                 },
+               },
+             }
 
-          expect(response).to eq(200)
-        end
+        expect(response.status).to eq(200)
       end
     end
   end
