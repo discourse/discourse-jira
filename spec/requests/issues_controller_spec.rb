@@ -149,77 +149,81 @@ describe DiscourseJira::IssuesController do
       )
     end
 
-    describe "user with insufficient permissions" do
-      it "does not allow access" do
-        sign_in(user)
+    describe "group access" do
+      let(:group) { Fabricate(:group) }
 
-        post "/jira/issues.json"
-        expect(response.status).to eq(403)
-      end
-    end
-
-    describe "user in group with permission" do
       before do
-        SiteSetting.discourse_jira_allowed_groups = Group::AUTO_GROUPS[:moderators]
+        SiteSetting.discourse_jira_allowed_groups = "#{Group::AUTO_GROUPS[:moderators]}|#{group.id}"
         Group.refresh_automatic_groups!
       end
 
-      it "allows access" do
-        post = Fabricate(:post)
+      describe "user with insufficient permissions" do
+        it "does not allow access" do
+          sign_in(user)
 
-        sign_in(user)
-        mods = Group.find(Group::AUTO_GROUPS[:moderators])
-        mods.add(user)
+          post "/jira/issues.json"
+          expect(response.status).to eq(403)
+        end
+      end
 
-        stub_request(:post, "https://example.com/rest/api/2/issue").with(
-          body:
-            "{\"fields\":{\"project\":{\"key\":\"#{project.key}\"},\"summary\":\"[Discourse] \",\"description\":\"This is a bug\",\"issuetype\":{\"id\":#{issue_type.uid}},\"software\":\"value\",\"platform\":{\"id\":\"windows\"}}}",
-        ).to_return(
-          status: 201,
-          body: '{"id":"10041","key":"DIS-42","self":"https://example.com/rest/api/2/issue/10041"}',
-          headers: {
-          },
-        )
+      describe "user in group with permission" do
+        it "allows access" do
+          post = Fabricate(:post)
 
-        stub_request(:get, "https://example.com/rest/api/2/issue/10041").to_return(
-          status: 200,
-          body: issue_response,
-        )
+          sign_in(user)
+          group.add(user)
 
-        stub_request(:post, "https://example.com/rest/api/2/issue/DIS-42/remotelink").to_return(
-          status: 201,
-          body: {
-            id: "1",
-            self: "https://example.com/rest/api/2/issue/DIS-42/remotelink/1",
-          }.to_json,
-        )
+          stub_request(:post, "https://example.com/rest/api/2/issue").with(
+            body:
+              "{\"fields\":{\"project\":{\"key\":\"#{project.key}\"},\"summary\":\"[Discourse] \",\"description\":\"This is a bug\",\"issuetype\":{\"id\":#{issue_type.uid}},\"software\":\"value\",\"platform\":{\"id\":\"windows\"}}}",
+          ).to_return(
+            status: 201,
+            body:
+              '{"id":"10041","key":"DIS-42","self":"https://example.com/rest/api/2/issue/10041"}',
+            headers: {
+            },
+          )
 
-        post "/jira/issues.json",
-             params: {
-               project_id: project.id,
-               description: "This is a bug",
-               issue_type_id: issue_type.id,
-               topic_id: post.topic_id,
-               post_number: post.post_number,
-               fields: {
-                 "0": {
-                   key: "software",
-                   value: "value",
+          stub_request(:get, "https://example.com/rest/api/2/issue/10041").to_return(
+            status: 200,
+            body: issue_response,
+          )
+
+          stub_request(:post, "https://example.com/rest/api/2/issue/DIS-42/remotelink").to_return(
+            status: 201,
+            body: {
+              id: "1",
+              self: "https://example.com/rest/api/2/issue/DIS-42/remotelink/1",
+            }.to_json,
+          )
+
+          post "/jira/issues.json",
+               params: {
+                 project_id: project.id,
+                 description: "This is a bug",
+                 issue_type_id: issue_type.id,
+                 topic_id: post.topic_id,
+                 post_number: post.post_number,
+                 fields: {
+                   "0": {
+                     key: "software",
+                     value: "value",
+                   },
+                   "1": {
+                     key: "platform",
+                     value: "windows",
+                     field_type: "option",
+                   },
+                   "2": {
+                     key: "customfield_10010",
+                     field_type: "array",
+                     required: "false",
+                   },
                  },
-                 "1": {
-                   key: "platform",
-                   value: "windows",
-                   field_type: "option",
-                 },
-                 "2": {
-                   key: "customfield_10010",
-                   field_type: "array",
-                   required: "false",
-                 },
-               },
-             }
+               }
 
-        expect(response.status).to eq(200)
+          expect(response.status).to eq(200)
+        end
       end
     end
   end
