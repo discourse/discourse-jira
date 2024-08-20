@@ -4,7 +4,7 @@ import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 
 acceptance("Jira - post menu", function (needs) {
-  needs.user({ admin: true, can_create_jira_issue: true });
+  needs.user({ can_create_jira_issue: true });
 
   const admin_group_id = 1;
 

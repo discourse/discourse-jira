@@ -7,7 +7,7 @@ export function buildManageButtons(attrs, currentUser) {
   }
 
   let contents = [];
-  if (currentUser.staff) {
+  if (currentUser.can_create_jira_issue) {
     contents.push({
       icon: "plus",
       className: "popup-menu-button create-issue",
