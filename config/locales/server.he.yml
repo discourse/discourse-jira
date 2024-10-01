@@ -21,3 +21,4 @@ he:
     discourse_jira_close_topic_on_resolve: "לסגור את הנושא כשלסוגיה יש פתרון"
     discourse_jira_sync_issue_comments: "סנכרון הערות של סוגיות לנושא Discourse דרך התליה"
     discourse_jira_issue_tags_enabled: "הוספת תגית לכל נושאי הבעיה ותגיות המצב לפי מצב הבעיה."
+    discourse_jira_allowed_groups: "לאפשר לקבוצות הבאות להשתמש בתוסף הזה (ברירת המחדל היא הניהול)"
