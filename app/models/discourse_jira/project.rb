@@ -35,3 +35,20 @@ module DiscourseJira
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: jira_projects
+#
+#  id         :bigint           not null, primary key
+#  uid        :integer          not null
+#  key        :string           not null
+#  name       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  synced_at  :datetime
+#
+# Indexes
+#
+#  index_jira_projects_on_uid  (uid)
+#

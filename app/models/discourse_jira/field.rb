@@ -70,3 +70,15 @@ module DiscourseJira
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: jira_fields
+#
+#  id         :bigint           not null, primary key
+#  key        :string           not null
+#  name       :string           not null
+#  field_type :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
