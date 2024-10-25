@@ -24,3 +24,19 @@ module DiscourseJira
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: jira_issue_types
+#
+#  id         :bigint           not null, primary key
+#  uid        :integer          not null
+#  name       :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  synced_at  :datetime
+#
+# Indexes
+#
+#  index_jira_issue_types_on_uid  (uid)
+#
