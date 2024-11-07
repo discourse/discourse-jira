@@ -1,6 +1,7 @@
 import { h } from "virtual-dom";
 import { createWidget } from "discourse/widgets/widget";
 
+// TODO (glimmer-post-menu): Remove this widget after the post menu widget code is removed
 export function buildManageButtons(attrs, currentUser) {
   if (!currentUser) {
     return [];
