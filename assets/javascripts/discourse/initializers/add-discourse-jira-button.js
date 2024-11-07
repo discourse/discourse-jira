@@ -4,7 +4,7 @@ import { withSilencedDeprecations } from "discourse-common/lib/deprecated";
 import { iconHTML } from "discourse-common/lib/icon-library";
 import AttachModal from "../components/modal/attach";
 import CreateModal from "../components/modal/create";
-import ToggleJiraMenuButton from "../components/post-menu/toggle-jira-menu-button";
+import JiraMenuButton from "../components/post-menu/jira-menu-button";
 
 export default {
   name: "discourse-jira",
@@ -66,7 +66,7 @@ function customizePostMenu(api, container) {
         return;
       }
 
-      dag.add("jira", ToggleJiraMenuButton, { before: firstButtonKey });
+      dag.add("jira", JiraMenuButton, { before: firstButtonKey });
     }
   );
 

@@ -8,7 +8,7 @@ import DMenu from "float-kit/components/d-menu";
 import AttachModal from "../modal/attach";
 import CreateModal from "../modal/create";
 
-export default class ToggleJiraMenuButton extends Component {
+export default class JiraMenuButton extends Component {
   static shouldRender(args) {
     return !args.post.jira_issue;
   }
@@ -25,6 +25,7 @@ export default class ToggleJiraMenuButton extends Component {
     this.modal.show(CreateModal, { model: this.args.post });
   }
 
+  // TODO (glimmer-post-menu): When updating the template below do not forget to update the menu widget
   <template>
     <DMenu
       class="post-action-menu__jira-menu jira-menu"

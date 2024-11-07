@@ -8,6 +8,8 @@ export function buildManageButtons(attrs, currentUser) {
   }
 
   let contents = [];
+
+  // when updating the code for the buttons below do not forget to update the glimmer component
   if (currentUser.can_create_jira_issue) {
     contents.push({
       icon: "plus",
