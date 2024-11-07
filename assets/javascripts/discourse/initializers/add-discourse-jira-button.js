@@ -17,7 +17,7 @@ export default {
     }
 
     withPluginApi("1.34.0", (api) => {
-      customizePostMenu(api, container);
+      customizePostMenu(api);
 
       api.includePostAttributes("jira_issue");
 
@@ -56,8 +56,8 @@ export default {
   },
 };
 
-function customizePostMenu(api, container) {
-  const currentUser = container.lookup("service:current-user");
+function customizePostMenu(api) {
+  const currentUser = api.getCurrentUser();
 
   const transformerRegistered = api.registerValueTransformer(
     "post-menu-buttons",
@@ -73,14 +73,12 @@ function customizePostMenu(api, container) {
   const silencedKey =
     transformerRegistered && "discourse.post-menu-widget-overrides";
 
-  withSilencedDeprecations(silencedKey, () =>
-    customizeWidgetPostMenu(api, container)
-  );
+  withSilencedDeprecations(silencedKey, () => customizeWidgetPostMenu(api));
 }
 
-function customizeWidgetPostMenu(api, container) {
-  const currentUser = container.lookup("service:current-user");
-  const modal = container.lookup("service:modal");
+function customizeWidgetPostMenu(api) {
+  const currentUser = api.container.lookup("service:current-user");
+  const modal = api.container.lookup("service:modal");
 
   api.attachWidgetAction("post", "createIssue", function () {
     modal.show(CreateModal, { model: this.model });
