@@ -3,13 +3,14 @@ import { test } from "qunit";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 
-acceptance("Jira - post menu", function (needs) {
+// TODO (glimmer-post-menu): Remove this file when the post menu widget code is removed from core
+acceptance("Jira - Widget post menu", function (needs) {
   needs.user({ can_create_jira_issue: true });
 
   const admin_group_id = 1;
 
   needs.settings({
-    glimmer_post_menu_mode: "enabled",
+    glimmer_post_menu_mode: "disabled",
 
     discourse_jira_enabled: true,
     discourse_jira_allowed_groups: admin_group_id,
@@ -253,7 +254,7 @@ acceptance("Jira - post menu", function (needs) {
     await visit("/t/integration-test-topic/1");
 
     await click("#post_1 .post-menu-area button.jira-menu");
-    await click(".post-jira-menu-content .create-issue");
+    await click(".post-jira-menu .create-issue");
 
     await projectSelector.expand();
     await projectSelector.selectRowByValue("p1");
