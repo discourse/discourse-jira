@@ -40,7 +40,6 @@ export default class JiraMenuButton extends Component {
         <dropdown.item>
           <DButton
             class="post-action-menu__jira-create-issue create-issue btn-transparent"
-            ...attributes
             @action={{this.createIssue}}
             @icon="plus"
             @label="discourse_jira.menu.create_issue"
@@ -49,7 +48,6 @@ export default class JiraMenuButton extends Component {
         <dropdown.item>
           <DButton
             class="post-action-menu__jira-attach-issue attach-issue btn-transparent"
-            ...attributes
             @action={{this.attachIssue}}
             @icon="paperclip"
             @label="discourse_jira.menu.attach_issue"
