@@ -1,12 +1,15 @@
 import { h } from "virtual-dom";
 import { createWidget } from "discourse/widgets/widget";
 
+// TODO (glimmer-post-menu): Remove this widget after the post menu widget code is removed
 export function buildManageButtons(attrs, currentUser) {
   if (!currentUser) {
     return [];
   }
 
   let contents = [];
+
+  // when updating the code for the buttons below do not forget to update the glimmer component
   if (currentUser.can_create_jira_issue) {
     contents.push({
       icon: "plus",
