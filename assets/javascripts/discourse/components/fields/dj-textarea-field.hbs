@@ -1,12 +1,12 @@
 <section class="field text-field">
   <div class="control-group">
-    {{fields/dj-field-label label=label field=field}}
+    {{fields/dj-field-label label=this.label field=this.field}}
 
     <div class="controls">
       <div class="field-wrapper">
         {{d-textarea
-          value=field.metadata.value
-          input=(action (mut field.metadata.value) value="target.value")
+          value=this.field.metadata.value
+          input=(action (mut this.field.metadata.value) value="target.value")
         }}
       </div>
     </div>

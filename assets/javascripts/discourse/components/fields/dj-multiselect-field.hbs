@@ -1,11 +1,11 @@
 <div class="field control-group">
-  {{fields/dj-field-label label=label field=field}}
+  {{fields/dj-field-label label=this.label field=this.field}}
 
   <div class="controls">
     <MultiSelect
-      @content={{replacedContent}}
-      @value={{field.value}}
-      @onChange={{action (mut field.value)}}
+      @content={{this.replacedContent}}
+      @value={{this.field.value}}
+      @onChange={{action (mut this.field.value)}}
     />
   </div>
 </div>
