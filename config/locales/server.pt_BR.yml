@@ -21,3 +21,4 @@ pt_BR:
     discourse_jira_close_topic_on_resolve: "Fechar o tópico quando o problema tiver solução"
     discourse_jira_sync_issue_comments: "Sincronizar comentários do problema com o tópico do Discourse via webhook"
     discourse_jira_issue_tags_enabled: "Adiciona etiqueta a todos os tópicos de problemas e etiquetas de status com base no status do problema."
+    discourse_jira_allowed_groups: "Permitir que os grupos a seguir usem este plugin (padrão para a administração)"

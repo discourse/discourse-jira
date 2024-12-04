@@ -21,3 +21,4 @@ nl:
     discourse_jira_close_topic_on_resolve: "Topic sluiten wanneer het probleem is opgelost"
     discourse_jira_sync_issue_comments: "Probleemopmerkingen synchroniseren met Discourse-topic via webhook"
     discourse_jira_issue_tags_enabled: "Voegt een tag toe aan alle probleemtopics en statustags op basis van de probleemstatus."
+    discourse_jira_allowed_groups: "Sta de volgende groepen toe om deze plugi-n te gebruiken (standaard beheerder)"

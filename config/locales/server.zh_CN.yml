@@ -21,3 +21,4 @@ zh_CN:
     discourse_jira_close_topic_on_resolve: "在问题得到解决后关闭话题"
     discourse_jira_sync_issue_comments: "通过网络钩子将问题评论同步到 Discourse 话题"
     discourse_jira_issue_tags_enabled: "为所有问题话题添加标签并根据问题状态添加状态标签。"
+    discourse_jira_allowed_groups: "允许以下群组使用此插件（默认为管理员）"

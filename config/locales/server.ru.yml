@@ -21,3 +21,4 @@ ru:
     discourse_jira_close_topic_on_resolve: "Закрывает тему, когда проблема будет решена"
     discourse_jira_sync_issue_comments: "Синхронизирует комментарии к проблеме с темой Discourse через вебхук"
     discourse_jira_issue_tags_enabled: "Добавляет тег ко всем темам проблемы и теги статуса в зависимости от статуса проблемы."
+    discourse_jira_allowed_groups: "Разрешить следующим группам использовать этот плагин (по умолчанию разрешено администратору)"

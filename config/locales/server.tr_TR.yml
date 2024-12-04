@@ -21,3 +21,4 @@ tr_TR:
     discourse_jira_close_topic_on_resolve: "Sorunun çözümü bulununca konuyu kapatın"
     discourse_jira_sync_issue_comments: "Sorun yorumlarını web kancası aracılığıyla Discourse konusuna senkronize edin"
     discourse_jira_issue_tags_enabled: "Sorun durumuna göre tüm sorun konularına ve durum etiketlerine etiket ekler."
+    discourse_jira_allowed_groups: "Aşağıdaki Grupların bu eklentiyi kullanmasına izin verin (varsayılan olarak yönetici)"

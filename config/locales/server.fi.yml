@@ -21,3 +21,4 @@ fi:
     discourse_jira_close_topic_on_resolve: "Sulje ketju, kun ongelmalla on ratkaisu"
     discourse_jira_sync_issue_comments: "Synkronoi ongelman kommentit Discoursen ketjuun webhookin kautta"
     discourse_jira_issue_tags_enabled: "Lisää tunnisteen kaikkiin ongelmaketjuihin ja tilatunnisteisiin ongelman tilan perusteella."
+    discourse_jira_allowed_groups: "Salli seuraavien ryhmien käyttää tätä lisäosaa (oletuksena ylläpitäjät)"
