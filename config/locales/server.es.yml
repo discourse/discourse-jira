@@ -21,3 +21,4 @@ es:
     discourse_jira_close_topic_on_resolve: "Cerrar el tema cuando el problema tenga una solución"
     discourse_jira_sync_issue_comments: "Sincronizar comentarios en el tema Discourse a través de webhook"
     discourse_jira_issue_tags_enabled: "Añade etiquetas a los temas de todas las incidencias y etiquetas de estado según el estado de la incidencia."
+    discourse_jira_allowed_groups: "Permitir que los siguientes grupos utilicen este complemento (por defecto, administrador)"

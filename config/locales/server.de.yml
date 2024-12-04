@@ -21,3 +21,4 @@ de:
     discourse_jira_close_topic_on_resolve: "Schließe das Thema, wenn das Issue gelöst ist"
     discourse_jira_sync_issue_comments: "Issue-Kommentare über Webhook mit Discourse-Thema synchronisieren"
     discourse_jira_issue_tags_enabled: "Fügt ein Schlagwort sowie Status-Schlagwörter basierend auf dem Issue-Status zu allen Issue-Themen hinzu."
+    discourse_jira_allowed_groups: "Den folgenden Gruppen erlauben, dieses Plug-in zu verwenden (Standardeinstellung: Administrator)"
