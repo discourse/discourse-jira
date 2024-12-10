@@ -21,3 +21,4 @@ ar:
     discourse_jira_close_topic_on_resolve: "إغلاق الموضوع عندما يكون للمشكلة حل"
     discourse_jira_sync_issue_comments: "مزامنة التعليقات على المشكلة مع موضوع Discourse عبر خطاف الويب"
     discourse_jira_issue_tags_enabled: "إضافة وسم إلى جميع موضوعات المشكلة ووسوم الحالة بناءً على حالة المشكلة."
+    discourse_jira_allowed_groups: "السماح للمجموعات التالية باستخدام هذا المكوِّن الإضافي (الإعداد الافتراضي هو \"المسؤول\")"
