@@ -6,7 +6,7 @@ import { action } from "@ember/object";
 import withEventValue from "discourse/helpers/with-event-value";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import { t } from "I18n";
+import { t } from "discourse-i18n";
 import ComboBox from "select-kit/components/combo-box";
 
 export default class JiraSettings extends Component {
