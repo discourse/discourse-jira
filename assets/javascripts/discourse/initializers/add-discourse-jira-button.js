@@ -1,7 +1,7 @@
+import { withSilencedDeprecations } from "discourse/lib/deprecated";
+import { iconHTML } from "discourse/lib/icon-library";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import PostCooked from "discourse/widgets/post-cooked";
-import { withSilencedDeprecations } from "discourse-common/lib/deprecated";
-import { iconHTML } from "discourse-common/lib/icon-library";
 import AttachModal from "../components/modal/attach";
 import CreateModal from "../components/modal/create";
 import JiraMenuButton from "../components/post-menu/jira-menu-button";
