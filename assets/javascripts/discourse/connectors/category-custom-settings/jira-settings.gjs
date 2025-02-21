@@ -6,7 +6,7 @@ import { action } from "@ember/object";
 import withEventValue from "discourse/helpers/with-event-value";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import { t } from "discourse-i18n";
+import { i18n } from "discourse-i18n";
 import ComboBox from "select-kit/components/combo-box";
 
 export default class JiraSettings extends Component {
@@ -64,9 +64,9 @@ export default class JiraSettings extends Component {
 
   <template>
     <div class="jira-settings">
-      <h3>{{t "discourse_jira.category_setting.title"}}</h3>
+      <h3>{{i18n "discourse_jira.category_setting.title"}}</h3>
       <section class="field jira-project">
-        <label>{{t "discourse_jira.category_setting.project"}}</label>
+        <label>{{i18n "discourse_jira.category_setting.project"}}</label>
         <div class="controls">
           <ComboBox
             @name="project_id"
@@ -78,7 +78,7 @@ export default class JiraSettings extends Component {
         </div>
       </section>
       <section class="field jira-project">
-        <label>{{t "discourse_jira.category_setting.issue_type"}}</label>
+        <label>{{i18n "discourse_jira.category_setting.issue_type"}}</label>
         <div class="controls">
           <ComboBox
             @name="issue_type"
@@ -89,7 +89,7 @@ export default class JiraSettings extends Component {
         </div>
       </section>
       <section class="field jira-project">
-        <label>{{t
+        <label>{{i18n
             "discourse_jira.category_setting.num_likes_auto_create_issue"
           }}</label>
         <div class="controls">
