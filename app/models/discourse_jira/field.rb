@@ -4,8 +4,8 @@ module DiscourseJira
   class Field < ::ActiveRecord::Base
     self.table_name = "jira_fields"
 
-    SUPPORTED_TYPES ||= %w[string date array option].freeze
-    DEFAULT_FIELDS ||= %w[summary description].freeze
+    SUPPORTED_TYPES = %w[string date array option].freeze
+    DEFAULT_FIELDS = %w[summary description].freeze
 
     def self.fetch(project_id, issue_type_id)
       Discourse
