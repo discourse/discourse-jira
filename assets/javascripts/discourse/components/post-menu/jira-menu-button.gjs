@@ -25,7 +25,6 @@ export default class JiraMenuButton extends Component {
     this.modal.show(CreateModal, { model: this.args.post });
   }
 
-  // TODO (glimmer-post-menu): When updating the template below do not forget to update the menu widget
   <template>
     <DMenu
       class="post-action-menu__jira-menu jira-menu"

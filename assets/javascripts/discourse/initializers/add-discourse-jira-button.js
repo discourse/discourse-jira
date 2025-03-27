@@ -59,7 +59,7 @@ export default {
 function customizePostMenu(api) {
   const currentUser = api.getCurrentUser();
 
-  const transformerRegistered = api.registerValueTransformer(
+  api.registerValueTransformer(
     "post-menu-buttons",
     ({ value: dag, context: { firstButtonKey } }) => {
       if (!currentUser?.can_create_jira_issue) {
@@ -69,50 +69,4 @@ function customizePostMenu(api) {
       dag.add("jira", JiraMenuButton, { before: firstButtonKey });
     }
   );
-
-  const silencedKey =
-    transformerRegistered && "discourse.post-menu-widget-overrides";
-
-  withSilencedDeprecations(silencedKey, () => customizeWidgetPostMenu(api));
-}
-
-function customizeWidgetPostMenu(api) {
-  const currentUser = api.container.lookup("service:current-user");
-  const modal = api.container.lookup("service:modal");
-
-  api.attachWidgetAction("post", "createIssue", function () {
-    modal.show(CreateModal, { model: this.model });
-  });
-
-  api.attachWidgetAction("post", "attachIssue", function () {
-    modal.show(AttachModal, { model: this.model });
-  });
-
-  api.attachWidgetAction("post-menu", "toggleJiraMenu", function () {
-    this.state.jiraVisible = !this.state.jiraVisible;
-  });
-
-  api.attachWidgetAction("post-menu", "closeJiraMenu", function () {
-    this.state.jiraVisible = false;
-  });
-
-  api.addPostMenuButton("jira", (attrs) => {
-    if (currentUser?.can_create_jira_issue && !attrs.jira_issue) {
-      return {
-        action: "toggleJiraMenu",
-        icon: "fab-jira",
-        className: "jira-menu",
-        title: "discourse_jira.menu.title",
-        position: "first",
-      };
-    }
-  });
-
-  api.decorateWidget("post-menu:before-extra-controls", (helper) => {
-    if (!helper.state.jiraVisible) {
-      return;
-    }
-
-    return helper.attach("post-jira-menu");
-  });
 }
