@@ -9,8 +9,6 @@ acceptance("Jira - post menu", function (needs) {
   const admin_group_id = 1;
 
   needs.settings({
-    glimmer_post_menu_mode: "enabled",
-
     discourse_jira_enabled: true,
     discourse_jira_allowed_groups: admin_group_id,
   });
