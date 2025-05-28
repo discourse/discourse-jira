@@ -1,7 +1,7 @@
 import { computed } from "@ember/object";
 import MultiSelect from "select-kit/components/multi-select";
 import BaseField from "./dj-base-field";
-import fieldsDjFieldLabel from "./dj-field-label";
+import FieldsDjFieldLabel from "./dj-field-label";
 
 export default class MultiselectField extends BaseField {
   @computed("field.options.[]")
@@ -16,7 +16,7 @@ export default class MultiselectField extends BaseField {
 
   <template>
     <div class="field control-group">
-      {{fieldsDjFieldLabel label=this.label field=this.field}}
+      <FieldsDjFieldLabel @label={{this.label}} @field={{this.field}} />
 
       <div class="controls">
         <MultiSelect

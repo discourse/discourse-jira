@@ -1,8 +1,8 @@
 import { Input } from "@ember/component";
 import { action, computed } from "@ember/object";
-import dButton from "discourse/components/d-button";
+import DButton from "discourse/components/d-button";
 import BaseField from "./dj-base-field";
-import fieldsDjFieldLabel from "./dj-field-label";
+import FieldsDjFieldLabel from "./dj-field-label";
 
 export default class DateField extends BaseField {
   @action
@@ -21,7 +21,7 @@ export default class DateField extends BaseField {
   <template>
     <section class="field date-field">
       <div class="control-group">
-        {{fieldsDjFieldLabel label=this.label field=this.field}}
+        <FieldsDjFieldLabel @label={{this.label}} @field={{this.field}} />
 
         <div class="controls">
           <div class="controls-row">
@@ -32,10 +32,7 @@ export default class DateField extends BaseField {
             }}
 
             {{#if this.field.value}}
-              {{dButton
-                icon="trash-alt"
-                action=(action (mut this.field.value) value=null)
-              }}
+              <DButton @icon="trash-alt" @action={{action (mut this.field.value) value=null}} />
             {{/if}}
           </div>
         </div>
