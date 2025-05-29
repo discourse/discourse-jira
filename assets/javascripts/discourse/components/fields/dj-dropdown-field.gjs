@@ -20,7 +20,12 @@ export default class DropdownField extends BaseField {
       <FieldsDjFieldLabel @label={{this.label}} @field={{this.field}} />
 
       <div class="controls">
-        <ComboBox @value={{this.field.value}} @content={{this.replacedContent}} @onChange={{action (mut this.field.value)}} @options={{hash allowAny=false disabled=this.field.isDisabled}} />
+        <ComboBox
+          @value={{this.field.value}}
+          @content={{this.replacedContent}}
+          @onChange={{action (mut this.field.value)}}
+          @options={{hash allowAny=false disabled=this.field.isDisabled}}
+        />
       </div>
     </div>
   </template>

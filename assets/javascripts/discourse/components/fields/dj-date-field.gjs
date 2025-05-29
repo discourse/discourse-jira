@@ -32,7 +32,10 @@ export default class DateField extends BaseField {
             }}
 
             {{#if this.field.value}}
-              <DButton @icon="trash-alt" @action={{action (mut this.field.value) value=null}} />
+              <DButton
+                @icon="trash-alt"
+                @action={{action (mut this.field.value) value=null}}
+              />
             {{/if}}
           </div>
         </div>

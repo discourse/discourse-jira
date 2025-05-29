@@ -8,7 +8,13 @@ const DjTextareaField = <template>
 
       <div class="controls">
         <div class="field-wrapper">
-          <DTextarea @value={{this.field.metadata.value}} @input={{action (mut this.field.metadata.value) value="target.value"}} />
+          <DTextarea
+            @value={{this.field.metadata.value}}
+            @input={{action
+              (mut this.field.metadata.value)
+              value="target.value"
+            }}
+          />
         </div>
       </div>
     </div>
