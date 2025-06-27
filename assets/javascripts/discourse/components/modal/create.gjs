@@ -103,6 +103,15 @@ export default class Create extends Component {
   async createIssue() {
     this.loading = true;
     try {
+      const sanitizedFields = this.fields.map(field => {
+        return {
+          required: field.required,
+          value: field.value,
+          key: field.key,
+          field_type: field.field_type,
+        };
+      });
+
       const result = await ajax("/jira/issues", {
         type: "POST",
         data: {
@@ -112,7 +121,7 @@ export default class Create extends Component {
           description: this.description,
           topic_id: this.topicId,
           post_number: this.postNumber,
-          fields: this.fields,
+          fields: sanitizedFields,
         },
       });
 
