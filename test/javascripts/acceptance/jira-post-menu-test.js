@@ -253,14 +253,10 @@ acceptance("Jira - post menu", function (needs) {
           }
           return arr;
         }, []);
-      return [
-        200,
-        { "Content-Type": "application/json" },
-        JSON.stringify({
-          issue_key: "TEST-123",
-          issue_url: "https://jira.example.com/browse/TEST-123",
-        }),
-      ];
+      return response({
+        issue_key: "TEST-123",
+        issue_url: "https://jira.example.com/browse/TEST-123",
+      });
     });
   });
 
@@ -291,7 +287,11 @@ acceptance("Jira - post menu", function (needs) {
       )
     );
 
-    assert.ok(capturedFields, "The fields payload was captured");
+    assert.strictEqual(
+      typeof capturedFields,
+      "object",
+      "The fields payload was captured"
+    );
 
     capturedFields.forEach((field) => {
       assert.deepEqual(
