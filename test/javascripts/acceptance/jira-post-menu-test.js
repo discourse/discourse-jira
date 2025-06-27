@@ -4,6 +4,8 @@ import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 
 acceptance("Jira - post menu", function (needs) {
+  let capturedFields = null;
+
   needs.user({ can_create_jira_issue: true });
 
   const admin_group_id = 1;
@@ -236,15 +238,29 @@ acceptance("Jira - post menu", function (needs) {
       })
     );
 
-    server.post("/jira/issues", () =>
-      response({
+    server.post("/jira/issues", (request) => {
+      const payload = Object.fromEntries(
+        new URLSearchParams(request.requestBody)
+      );
+      capturedFields = Object.keys(payload)
+        .filter((k) => k.startsWith("fields"))
+        .reduce((arr, k) => {
+          const match = k.match(/^fields\[(\d+)\]\[(\w+)\]$/);
+          if (match) {
+            const idx = parseInt(match[1], 10);
+            arr[idx] = arr[idx] || {};
+            arr[idx][match[2]] = payload[k];
+          }
+          return arr;
+        }, []);
+      return response({
         issue_key: "TEST-123",
         issue_url: "https://jira.example.com/browse/TEST-123",
-      })
-    );
+      });
+    });
   });
 
-  test("displays custom fields in create issue form", async function (assert) {
+  test("displays custom fields in create issue form and sends only allowed field keys", async function (assert) {
     const projectSelector = selectKit(".field-item.project .select-kit");
     const issueTypeSelector = selectKit(".field-item.issue-type .select-kit");
 
@@ -270,5 +286,19 @@ acceptance("Jira - post menu", function (needs) {
         `<p><a href="https://jira.example.com/browse/TEST-123">TEST-123</a></p>`
       )
     );
+
+    assert.strictEqual(
+      typeof capturedFields,
+      "object",
+      "The fields payload was captured"
+    );
+
+    capturedFields.forEach((field) => {
+      assert.deepEqual(
+        Object.keys(field).sort(),
+        ["field_type", "key", "required", "value"].sort(),
+        "Only the allowed keys are sent for each field"
+      );
+    });
   });
 });
