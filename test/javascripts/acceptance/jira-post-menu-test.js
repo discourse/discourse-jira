@@ -238,10 +238,12 @@ acceptance("Jira - post menu", function (needs) {
       })
     );
 
-    server.post("/jira/issues", request => {
-      const payload = Object.fromEntries(new URLSearchParams(request.requestBody));
+    server.post("/jira/issues", (request) => {
+      const payload = Object.fromEntries(
+        new URLSearchParams(request.requestBody)
+      );
       capturedFields = Object.keys(payload)
-        .filter(k => k.startsWith("fields"))
+        .filter((k) => k.startsWith("fields"))
         .reduce((arr, k) => {
           const match = k.match(/^fields\[(\d+)\]\[(\w+)\]$/);
           if (match) {
@@ -289,12 +291,9 @@ acceptance("Jira - post menu", function (needs) {
       )
     );
 
-    assert.ok(
-      capturedFields,
-      "The fields payload was captured"
-    );
+    assert.ok(capturedFields, "The fields payload was captured");
 
-    capturedFields.forEach(field => {
+    capturedFields.forEach((field) => {
       assert.deepEqual(
         Object.keys(field).sort(),
         ["field_type", "key", "required", "value"].sort(),

@@ -103,7 +103,7 @@ export default class Create extends Component {
   async createIssue() {
     this.loading = true;
     try {
-      const sanitizedFields = this.fields.map(field => {
+      const sanitizedFields = this.fields.map((field) => {
         return {
           required: field.required,
           value: field.value,
