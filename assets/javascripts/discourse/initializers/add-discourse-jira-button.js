@@ -1,6 +1,8 @@
+import { withSilencedDeprecations } from "discourse/lib/deprecated";
 import { iconHTML } from "discourse/lib/icon-library";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import PostCooked from "discourse/widgets/post-cooked";
+import JiraIssue from "../components/jira-issue";
 import JiraMenuButton from "../components/post-menu/jira-menu-button";
 
 export default {
@@ -13,25 +15,38 @@ export default {
       return;
     }
 
-    withPluginApi("1.34.0", (api) => {
+    withPluginApi((api) => {
+      customizePost(api);
       customizePostMenu(api);
+    });
+  },
+};
 
-      api.includePostAttributes("jira_issue");
+function customizePost(api) {
+  api.addTrackedPostProperties("jira_issue");
 
-      api.decorateWidget("post-contents:after-cooked", (helper) => {
-        const postModel = helper.getModel();
-        if (!postModel || !postModel.jira_issue) {
-          return;
-        }
+  api.renderAfterWrapperOutlet("post-content-cooked-html", JiraIssue);
 
-        const jira = postModel.jira_issue;
+  withSilencedDeprecations("discourse.post-stream-widget-overrides", () =>
+    customizeWidgetPost(api)
+  );
+}
 
-        const jiraUrl = jira.self.replace(
-          /\/rest\/api\/.*$/,
-          "/browse/" + jira.key
-        );
+function customizeWidgetPost(api) {
+  api.decorateWidget("post-contents:after-cooked", (helper) => {
+    const postModel = helper.getModel();
+    if (!postModel || !postModel.jira_issue) {
+      return;
+    }
 
-        const cooked = `
+    const jira = postModel.jira_issue;
+
+    const jiraUrl = jira.self.replace(
+      /\/rest\/api\/.*$/,
+      "/browse/" + jira.key
+    );
+
+    const cooked = `
             <aside class='quote jira-issue' data-jira-key='${jira.key}'>
               <div class='title'>
                 ${iconHTML("tag")}
@@ -46,12 +61,10 @@ export default {
             </aside>
           `;
 
-        const postCooked = new PostCooked({ cooked }, helper);
-        return helper.rawHtml(postCooked.init());
-      });
-    });
-  },
-};
+    const postCooked = new PostCooked({ cooked }, helper);
+    return helper.rawHtml(postCooked.init());
+  });
+}
 
 function customizePostMenu(api) {
   const currentUser = api.getCurrentUser();
