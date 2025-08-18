@@ -1,4 +1,4 @@
-import { hash } from "@ember/helper";
+import { fn, hash } from "@ember/helper";
 import { computed } from "@ember/object";
 import ComboBox from "select-kit/components/combo-box";
 import BaseField from "./dj-base-field";
@@ -23,7 +23,7 @@ export default class DropdownField extends BaseField {
         <ComboBox
           @value={{this.field.value}}
           @content={{this.replacedContent}}
-          @onChange={{action (mut this.field.value)}}
+          @onChange={{fn (mut this.field.value)}}
           @options={{hash allowAny=false disabled=this.field.isDisabled}}
         />
       </div>

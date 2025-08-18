@@ -1,6 +1,9 @@
 import { Input } from "@ember/component";
+import { fn } from "@ember/helper";
+import { on } from "@ember/modifier";
 import { action, computed } from "@ember/object";
 import DButton from "discourse/components/d-button";
+import withEventValue from "discourse/helpers/with-event-value";
 import BaseField from "./dj-base-field";
 import FieldsDjFieldLabel from "./dj-field-label";
 
@@ -25,16 +28,16 @@ export default class DateField extends BaseField {
 
         <div class="controls">
           <div class="controls-row">
-            {{Input
-              type="date"
-              value=(readonly this.localTime)
-              input=(action "convertToUniversalTime" value="target.value")
-            }}
+            <Input
+              {{on "input" (withEventValue this.convertToUniversalTime)}}
+              @value={{readonly this.localTime}}
+              @type="date"
+            />
 
             {{#if this.field.value}}
               <DButton
                 @icon="trash-alt"
-                @action={{action (mut this.field.value) value=null}}
+                @action={{fn (mut this.field.value) null}}
               />
             {{/if}}
           </div>

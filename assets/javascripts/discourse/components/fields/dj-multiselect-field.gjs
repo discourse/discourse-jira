@@ -1,3 +1,4 @@
+import { fn } from "@ember/helper";
 import { computed } from "@ember/object";
 import MultiSelect from "select-kit/components/multi-select";
 import BaseField from "./dj-base-field";
@@ -22,7 +23,7 @@ export default class MultiselectField extends BaseField {
         <MultiSelect
           @content={{this.replacedContent}}
           @value={{this.field.value}}
-          @onChange={{action (mut this.field.value)}}
+          @onChange={{fn (mut this.field.value)}}
         />
       </div>
     </div>
