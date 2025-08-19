@@ -1,4 +1,6 @@
+import { fn } from "@ember/helper";
 import DTextarea from "discourse/components/d-textarea";
+import withEventValue from "discourse/helpers/with-event-value";
 import FieldsDjFieldLabel from "./dj-field-label";
 
 const DjTextareaField = <template>
@@ -10,10 +12,7 @@ const DjTextareaField = <template>
         <div class="field-wrapper">
           <DTextarea
             @value={{this.field.metadata.value}}
-            @input={{action
-              (mut this.field.metadata.value)
-              value="target.value"
-            }}
+            @input={{withEventValue (fn (mut this.field.metadata.value))}}
           />
         </div>
       </div>
