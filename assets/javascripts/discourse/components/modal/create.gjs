@@ -34,7 +34,7 @@ export default class Create extends Component {
   }
 
   get issueTypes() {
-    const project = this.projects.findBy("id", this.projectId);
+    const project = this.projects.find((item) => item.id === this.projectId);
     return project ? project.issue_types : [];
   }
 
