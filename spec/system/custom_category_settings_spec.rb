@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe "Jira custom category settings'", type: :system do
-  fab!(:current_user) { Fabricate(:admin) }
+  fab!(:current_user, :admin)
 
   before do
     SiteSetting.discourse_jira_enabled = true
