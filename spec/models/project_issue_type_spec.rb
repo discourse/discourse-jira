@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.describe DiscourseJira::ProjectIssueType do
-  fab!(:project) { Fabricate(:jira_project) }
-  fab!(:issue_type) { Fabricate(:jira_issue_type) }
+  fab!(:project, :jira_project)
+  fab!(:issue_type, :jira_issue_type)
 
   before do
     SiteSetting.discourse_jira_enabled = true
