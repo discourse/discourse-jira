@@ -2,7 +2,8 @@
 
 module ::Jobs
   class SyncJira < ::Jobs::Scheduled
-    every 4.hours
+    INTERVAL = 4.hours
+    every INTERVAL
 
     def execute(args)
       return unless SiteSetting.discourse_jira_enabled

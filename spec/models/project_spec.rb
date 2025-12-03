@@ -38,26 +38,37 @@ RSpec.describe DiscourseJira::Project do
 
         expect(described_class.pluck(:uid, :key, :name)).to eq(projects.pluck(:id, :key, :name))
       end
-
-      it "syncs issue types and projects relationship" do
-        project = Fabricate(:jira_project, uid: 10_000)
-        Fabricate(:jira_issue_type, uid: 1)
-        Fabricate(:jira_issue_type, uid: 3)
-
-        stub_request(:get, "#{api_url}/project/#{project.uid}?expand=issueTypes").to_return(
-          status: 200,
-          body: get_jira_response("project.json"),
-        )
-
-        expect { project.sync! }.to change { project.issue_types.count }.from(0).to(2)
-        expect(project.issue_types.pluck(:uid)).to eq([1, 3])
-      end
     end
 
     it "does not error out if error received from API" do
       stub_request(:get, "#{api_url}/project?expand=issueTypes").to_return(status: 400)
 
       expect { described_class.sync! }.not_to raise_error
+    end
+
+    it "enqueues the right sidekiq job to sync project when API response doesn't include issue types" do
+      stub_request(:get, "#{api_url}/project?expand=issueTypes").to_return(
+        status: 200,
+        body: [{ id: 100, key: "TEST", name: "Test Project" }].to_json,
+      )
+
+      expect_enqueued_with(job: Jobs::SyncJiraProject, args: { project_uid: 100 }) do
+        described_class.sync!
+      end
+    end
+  end
+
+  describe "#sync_issue_types!" do
+    it "syncs issue types and projects relationship" do
+      project = Fabricate(:jira_project, uid: 10_000)
+      Fabricate(:jira_issue_type, uid: 1)
+      Fabricate(:jira_issue_type, uid: 3)
+
+      expect {
+        project.sync_issue_types!(JSON.parse(get_jira_response("project.json")).deep_symbolize_keys)
+      }.to change { project.issue_types.count }.from(0).to(2)
+
+      expect(project.issue_types.pluck(:uid)).to eq([1, 3])
     end
   end
 end
