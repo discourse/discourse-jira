@@ -76,10 +76,10 @@ module DiscourseJira
       end
     end
 
-    def self.invalid_response_exception(response, message:, env: {})
+    def self.invalid_response_exception(response, message: INVALID_RESPONSE, env: {})
       e = InvalidApiResponse.new(response.body.presence || "")
       e.set_backtrace(caller)
-      Discourse.warn_exception(e, message: INVALID_RESPONSE, env: env)
+      Discourse.warn_exception(e, message:, env: env)
       InvalidApiResponse.new(message)
     end
   end
