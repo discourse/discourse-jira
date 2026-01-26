@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 RSpec.describe ::DiscourseJira::Api do
   before do
     SiteSetting.discourse_jira_enabled = true
