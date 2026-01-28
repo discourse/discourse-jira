@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 RSpec.describe DiscourseJira::IssueType do
   let(:api_url) { "https://jira.example.com/rest/api/2" }
 

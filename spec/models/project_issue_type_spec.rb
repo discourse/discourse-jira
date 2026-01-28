@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 RSpec.describe DiscourseJira::ProjectIssueType do
   fab!(:project, :jira_project)
   fab!(:issue_type, :jira_issue_type)

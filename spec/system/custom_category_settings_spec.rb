@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe "Jira custom category settings'", type: :system do
+RSpec.describe "Jira custom category settings'" do
   fab!(:current_user, :admin)
 
   before do
