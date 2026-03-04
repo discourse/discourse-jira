@@ -1,20 +1,4 @@
-.post-controls {
-  .actions {
-    position: relative;
-
-    .post-jira-menu {
-      position: absolute;
-      bottom: auto;
-
-      .btn {
-        color: var(--primary);
-        margin-left: 0;
-      }
-    }
-  }
-}
-
-.modal-inner-container .create-issue {
+.d-modal__body .create-issue {
   input[type="text"],
   .select-kit {
     width: 100%;
@@ -24,9 +8,4 @@
   summary {
     margin-bottom: 10px;
   }
-}
-
-.post-jira-menu {
-  left: 15px;
-  right: auto;
 }
