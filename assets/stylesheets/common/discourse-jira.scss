@@ -1,16 +1,7 @@
-.post-controls {
-  .actions {
-    position: relative;
-
-    .post-jira-menu {
-      position: absolute;
-      bottom: auto;
-
-      .btn {
-        color: var(--primary);
-        margin-left: 0;
-      }
-    }
+.post-jira-menu {
+  .btn {
+    color: var(--primary);
+    margin-left: 0;
   }
 }
 
@@ -24,9 +15,4 @@
   summary {
     margin-bottom: 10px;
   }
-}
-
-.post-jira-menu {
-  left: 15px;
-  right: auto;
 }
