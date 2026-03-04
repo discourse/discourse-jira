@@ -1,11 +1,4 @@
-.post-jira-menu {
-  .btn {
-    color: var(--primary);
-    margin-left: 0;
-  }
-}
-
-.modal-inner-container .create-issue {
+.d-modal__body .create-issue {
   input[type="text"],
   .select-kit {
     width: 100%;
