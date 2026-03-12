@@ -1,6 +1,6 @@
 import { fn } from "@ember/helper";
 import { computed } from "@ember/object";
-import MultiSelect from "select-kit/components/multi-select";
+import MultiSelect from "discourse/select-kit/components/multi-select";
 import BaseField from "./dj-base-field";
 import FieldsDjFieldLabel from "./dj-field-label";
 
