@@ -1,4 +1,4 @@
-import { click, fillIn, find, visit } from "@ember/test-helpers";
+import { click, fillIn, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
@@ -281,11 +281,11 @@ acceptance("Jira - post menu", function (needs) {
     );
     await click(".d-modal__footer .btn-primary");
 
-    assert.ok(
-      find(".d-modal").innerHTML.includes(
-        `<p><a href="https://jira.example.com/browse/TEST-123">TEST-123</a></p>`
-      )
-    );
+    assert
+      .dom(".d-modal")
+      .includesHtml(
+        '<p><a href="https://jira.example.com/browse/TEST-123">TEST-123</a></p>'
+      );
 
     assert.strictEqual(
       typeof capturedFields,

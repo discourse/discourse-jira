@@ -1,6 +1,6 @@
 import { fn, hash } from "@ember/helper";
 import { computed } from "@ember/object";
-import ComboBox from "select-kit/components/combo-box";
+import ComboBox from "discourse/select-kit/components/combo-box";
 import BaseField from "./dj-base-field";
 import FieldsDjFieldLabel from "./dj-field-label";
 
