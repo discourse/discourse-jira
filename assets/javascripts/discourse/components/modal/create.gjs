@@ -2,7 +2,7 @@ import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { Input } from "@ember/component";
 import { action } from "@ember/object";
-import { TrackedArray, TrackedObject } from "@ember-compat/tracked-built-ins";
+import { trackedArray, trackedObject } from "@ember/reactive/collections";
 import DButton from "discourse/components/d-button";
 import DModal from "discourse/components/d-modal";
 import DTextarea from "discourse/components/d-textarea";
@@ -20,7 +20,7 @@ export default class Create extends Component {
   @tracked postNumber = null;
   @tracked projectId = null;
   @tracked issueTypeId = null;
-  @tracked fields = new TrackedArray([]);
+  @tracked fields = trackedArray([]);
   @tracked title = "";
   @tracked description = "";
 
@@ -153,7 +153,7 @@ export default class Create extends Component {
     })
       .then((result) => {
         if (result.fields) {
-          this.fields = result.fields.map((field) => new TrackedObject(field));
+          this.fields = result.fields.map((field) => trackedObject(field));
         }
       })
       .catch(popupAjaxError)
