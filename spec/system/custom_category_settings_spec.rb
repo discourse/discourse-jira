@@ -3,13 +3,18 @@
 RSpec.describe "Jira custom category settings'" do
   fab!(:current_user, :admin)
 
+  let(:category_page) { PageObjects::Pages::Category.new }
+
   before do
     SiteSetting.discourse_jira_enabled = true
+    SiteSetting.enable_simplified_category_creation = true
     sign_in(current_user)
   end
 
   it "renders successfully on the category settings section" do
     visit("/new-category")
+
+    category_page.toggle_advanced_settings
     find(".edit-category-settings").click
 
     expect(page).to have_css(
