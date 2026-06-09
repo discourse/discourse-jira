@@ -376,6 +376,24 @@ describe DiscourseJira::IssuesController do
       SiteSetting.discourse_jira_webhook_token = "secret"
     end
 
+    it "rejects the webhook when the token setting is blank" do
+      SiteSetting.discourse_jira_webhook_token = ""
+      SiteSetting.discourse_jira_close_topic_on_resolve = true
+
+      post "/jira/issues/webhook.json",
+           params: {
+             issue_event_type_name: "issue_generic",
+             timestamp: "1536083559131",
+             webhookEvent: "jira:issue_updated",
+             issue: issue_param,
+           }
+
+      expect(response.status).to eq(403)
+      expect(response.parsed_body["errors"]).to include(I18n.t("invalid_access"))
+      expect(topic.reload.closed).to eq(false)
+      expect(post2.reload.custom_fields["jira_issue"]).to be_blank
+    end
+
     it "closes the topic when the issue has resolution" do
       SiteSetting.discourse_jira_close_topic_on_resolve = true
       post "/jira/issues/webhook.json",

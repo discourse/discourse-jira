@@ -148,18 +148,19 @@ module DiscourseJira
     def webhook
       log(params.inspect)
 
-      if SiteSetting.discourse_jira_webhook_token.present?
-        params.require(:t)
-        if !ActiveSupport::SecurityUtils.secure_compare(
-             params[:t],
-             SiteSetting.discourse_jira_webhook_token,
-           )
-          raise Discourse::InvalidAccess
-        end
-      else
+      if SiteSetting.discourse_jira_webhook_token.blank?
         Rails.logger.warn(
           "discourse_jira_webhook_token is empty. Set a token to ensure malicious requests are not handled.",
         )
+        raise Discourse::InvalidAccess
+      end
+
+      params.require(:t)
+      if !ActiveSupport::SecurityUtils.secure_compare(
+           params[:t],
+           SiteSetting.discourse_jira_webhook_token,
+         )
+        raise Discourse::InvalidAccess
       end
 
       event = params[:webhookEvent]
