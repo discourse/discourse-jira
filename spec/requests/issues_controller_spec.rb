@@ -148,6 +148,47 @@ describe DiscourseJira::IssuesController do
       )
     end
 
+    it "does not create a Jira issue for a post the user cannot see" do
+      jira_group = Fabricate(:group)
+      hidden_group = Fabricate(:group)
+      SiteSetting.discourse_jira_allowed_groups = "#{Group::AUTO_GROUPS[:admins]}|#{jira_group.id}"
+      jira_group.add(user)
+      sign_in(user)
+
+      private_category = Fabricate(:private_category, group: hidden_group)
+      hidden_post = Fabricate(:post, topic: Fabricate(:topic, category: private_category))
+
+      stub_request(:post, "https://example.com/rest/api/2/issue").to_return(
+        status: 201,
+        body: '{"id":"10041","key":"DIS-42","self":"https://example.com/rest/api/2/issue/10041"}',
+        headers: {
+        },
+      )
+      stub_request(:get, "https://example.com/rest/api/2/issue/10041").to_return(
+        status: 200,
+        body: issue_response,
+      )
+      stub_request(:post, "https://example.com/rest/api/2/issue/DIS-42/remotelink").to_return(
+        status: 201,
+        body: { id: "1", self: "https://example.com/rest/api/2/issue/DIS-42/remotelink/1" }.to_json,
+      )
+
+      expect do
+        post "/jira/issues.json",
+             params: {
+               project_id: project.id,
+               description: "This is a bug",
+               issue_type_id: issue_type.id,
+               topic_id: hidden_post.topic_id,
+               post_number: hidden_post.post_number,
+               fields: [],
+             }
+      end.not_to change { hidden_post.reload.custom_fields["jira_issue_key"] }
+
+      expect(response.status).to eq(403)
+      expect(response.parsed_body["errors"]).to be_present
+    end
+
     describe "group access" do
       let(:group) { Fabricate(:group) }
 
@@ -349,6 +390,38 @@ describe DiscourseJira::IssuesController do
       expect(response.parsed_body["issue_url"]).to eq("https://example.com/browse/DIS-42")
       expect(post.reload.custom_fields["jira_issue_key"]).to eq("DIS-42")
       expect(Post.last.post_type).to eq(Post.types[:whisper])
+    end
+
+    it "does not attach a Jira issue to a post the user cannot see" do
+      jira_group = Fabricate(:group)
+      hidden_group = Fabricate(:group)
+      SiteSetting.discourse_jira_allowed_groups = "#{Group::AUTO_GROUPS[:admins]}|#{jira_group.id}"
+      jira_group.add(user)
+      sign_in(user)
+
+      private_category = Fabricate(:private_category, group: hidden_group)
+      hidden_post = Fabricate(:post, topic: Fabricate(:topic, category: private_category))
+
+      stub_request(:get, "https://example.com/rest/api/2/issue/10041").to_return(
+        status: 200,
+        body: issue_response,
+      )
+      stub_request(:get, "https://example.com/rest/api/2/issue/DIS-42").to_return(
+        status: 200,
+        body: issue_response,
+      )
+
+      expect do
+        post "/jira/issues/attach.json",
+             params: {
+               issue_key: "DIS-42",
+               topic_id: hidden_post.topic_id,
+               post_number: hidden_post.post_number,
+             }
+      end.not_to change { hidden_post.reload.custom_fields["jira_issue_key"] }
+
+      expect(response.status).to eq(403)
+      expect(response.parsed_body["errors"]).to be_present
     end
   end
 
