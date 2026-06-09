@@ -73,9 +73,6 @@ module DiscourseJira
         info:
           "creating Jira issue for topic #{params[:topic_id]} and post_number #{params[:post_number]}",
       ) do
-        post = Post.find_by(topic_id: params[:topic_id], post_number: params[:post_number])
-        raise Discourse::NotFound if post.blank?
-
         begin
           result = IssueCreator.create(post, current_user, fields)
         rescue InvalidApiResponse => e
@@ -216,9 +213,11 @@ module DiscourseJira
     end
 
     def ensure_can_add_jira_issue_to_post
-      if post.blank?
-        raise Discourse::NotFound
-      elsif post.has_jira_issue?
+      raise Discourse::NotFound if post.blank?
+
+      guardian.ensure_can_see!(post)
+
+      if post.has_jira_issue?
         log "Post #{post.id} already has a Jira issue"
         raise Discourse::InvalidAccess
       end
