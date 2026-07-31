@@ -90,9 +90,10 @@ after_initialize do
     end
   end
 
-  add_to_class(:topic, :formatted_post_history) do |post_number|
+  add_to_class(:topic, :formatted_post_history) do |post_number, guardian = nil|
     last_post_number = post_number.clamp(1, highest_post_number)
     posts = ordered_posts.where("post_number <= ?", last_post_number)
+    posts = posts.select { |post| guardian.can_see_post?(post) } if guardian
 
     args = {}
     args[:topic] = self
