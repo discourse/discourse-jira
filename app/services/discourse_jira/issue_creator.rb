@@ -96,7 +96,7 @@ module DiscourseJira
           key: project.key,
         },
         summary: summary,
-        description: topic.formatted_post_history(post.post_number),
+        description: topic.formatted_post_history(post.post_number, user.guardian),
         issuetype: {
           id: issue_type.uid,
         },

@@ -25,7 +25,7 @@ RSpec.describe ::DiscourseJira::IssueCreator do
             key: "DIS",
           },
           summary: I18n.t("discourse_jira.issue_title", title: topic.title),
-          description: topic.formatted_post_history(post.post_number),
+          description: topic.formatted_post_history(post.post_number, admin.guardian),
           issuetype: {
             id: 2001,
           },
