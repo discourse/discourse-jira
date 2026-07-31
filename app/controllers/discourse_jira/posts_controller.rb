@@ -12,7 +12,7 @@ module DiscourseJira
       raise Discourse::NotFound if !topic
       guardian.ensure_can_see!(topic)
 
-      result = topic.formatted_post_history(params[:post_number].to_i)
+      result = topic.formatted_post_history(params[:post_number].to_i, guardian)
 
       render json: { formatted_post_history: result }
     end
